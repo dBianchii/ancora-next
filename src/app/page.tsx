@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ModeToggle } from "~/components/theme-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
@@ -9,11 +10,12 @@ export default async function HomePage() {
   const session = await getServerAuthSession();
   const users = await db.user.findMany();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
+    <main className="flex min-h-screen flex-col items-center justify-center">
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
+        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Ancora usando Next para o Next :D
         </h1>
+        <ModeToggle />
         <Link
           href={session ? "/api/auth/signout" : "/api/auth/signin"}
           className={cn(buttonVariants())}
