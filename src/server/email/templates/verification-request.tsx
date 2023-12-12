@@ -13,7 +13,7 @@ import {
   Text,
 } from "@react-email/components";
 
-interface KodixMagicLinkEmailProps {
+interface ancoraMagicLinkEmailProps {
   magicLink?: string;
 }
 
@@ -22,18 +22,18 @@ const baseUrl = process.env.VERCEL_URL
   : "";
 
 export const VerificationRequestEmail = ({
-  magicLink = "https://kodix.com",
-}: KodixMagicLinkEmailProps) => (
+  magicLink = "https://ancora.com",
+}: ancoraMagicLinkEmailProps) => (
   <Html>
     <Head />
     <Preview>Log in with this magic link.</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/kodix-logo.png`}
+          src={`${baseUrl}/static/ancora-logo.png`}
           width={48}
           height={48}
-          alt="kodix"
+          alt="ancora"
         />
         <Heading style={heading}>🪄 Your magic link</Heading>
         <Section style={body}>
@@ -48,11 +48,11 @@ export const VerificationRequestEmail = ({
         </Section>
         <Text style={paragraph}>
           Best,
-          <br />- Kodix Team
+          <br />- ancora Team
         </Text>
         <Hr style={hr} />
         <Img
-          src={`${baseUrl}/static/kodix-logo.png`}
+          src={`${baseUrl}/static/ancora-logo.png`}
           width={32}
           height={32}
           style={{
@@ -61,7 +61,7 @@ export const VerificationRequestEmail = ({
             margin: "20px 0",
           }}
         />
-        <Text style={footer}>kodix Technologies Inc.</Text>
+        <Text style={footer}>ancora Technologies Inc.</Text>
         <Text style={footer}>
           2093 Philadelphia Pike #3222, Claymont, DE 19703
         </Text>
@@ -81,7 +81,7 @@ const main = {
 const container = {
   margin: "0 auto",
   padding: "20px 25px 48px",
-  backgroundImage: 'url("/assets/kodix-bg.png")',
+  backgroundImage: 'url("/assets/ancora-bg.png")',
   backgroundPosition: "bottom",
   backgroundRepeat: "no-repeat, no-repeat",
 };

@@ -10,7 +10,7 @@ export const sendVerificationRequest = async (
 ) => {
   try {
     await resend.emails.send({
-      from: "Ancora <ancoraNotification@kodix.com.br>",
+      from: "Ancora <ancoraNotification@ancora.com.br>",
       to: params.identifier,
       subject: "Ancora login verification",
       react: VerificationRequestEmail({
