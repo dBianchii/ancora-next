@@ -50,7 +50,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: "",
-      from: "ancora@ancora.com.br",
+      from: "ancora@kodix.com.br",
       sendVerificationRequest,
     }),
     GoogleProvider({
