@@ -31,7 +31,7 @@ model Events {
     private             Boolean
     invitedPrivateUsers User[]  @relation("InvitedByPrivateEvents")
 
-    fireReminderEmailAt DateTime
+    fireReminderEmailAt DateTime?
 
     Leads Leads[] @relation("EmailLeadsEvents")
 
