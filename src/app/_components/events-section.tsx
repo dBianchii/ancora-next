@@ -3,24 +3,37 @@
 import { PlayIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import Image from "next/image";
-import { type getEvents } from "../actions";
+import { Button } from "~/components/ui/button";
+import { DO_NOT_USE_deleteAllEvents, type getEvents } from "../actions";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData } from "./hooks";
 
-export function EventsSection({
-  events,
-}: {
-  events: Awaited<ReturnType<typeof getEvents>>;
-}) {
-  const { query } = useEventsData({ initialData: events });
+export function EventsSection() {
+  const { query } = useEventsData();
 
   return (
     <div className="gap-2">
       <h2 className="pb-4 text-2xl font-bold">Meus eventos</h2>
       <div className="space-y-2">
-        <CreateEventsButton />
+        <div className="flex justify-between">
+          <CreateEventsButton />
+          {process.env.NODE_ENV === "development" && (
+            <Button
+              variant={"destructive"}
+              onClick={async () => {
+                await DO_NOT_USE_deleteAllEvents();
+                void query.refetch();
+              }}
+            >
+              Delete all events (devmode)
+            </Button>
+          )}
+        </div>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-          {query.data?.map((event) => <EventCard event={event} />)}
+          {query.isError && <p>Erro ao carregar eventos</p>}
+          {query.data?.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
         </div>
       </div>
     </div>

@@ -1,10 +1,9 @@
 import "~/styles/globals.css";
 
 import { Inter as FontSans } from "next/font/google";
-import { ThemeProvider } from "~/components/providers";
+import { ReactQueryProvider, ThemeProvider } from "~/components/providers";
 import { cn } from "~/lib/utils";
 import Header from "./_components/header/header";
-import { ReactQueryProvider } from "./_components/providers";
 import { ModeToggle } from "~/components/theme-toggle";
 import { Toaster } from "~/components/ui/sonner";
 const fontSans = FontSans({

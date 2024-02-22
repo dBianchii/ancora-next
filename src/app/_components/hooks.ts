@@ -4,15 +4,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { createEvent, getEvents } from "../actions";
 import { toast } from "sonner";
 
-export const useEventsData = ({
-  initialData,
-}: {
-  initialData?: Awaited<ReturnType<typeof getEvents>>;
-} = {}) => {
+export const useEventsData = () => {
   const query = useQuery({
     queryKey: ["events"],
     queryFn: () => getEvents(),
-    initialData,
   });
 
   const mutation = useMutation({

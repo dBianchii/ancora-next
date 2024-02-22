@@ -3,6 +3,12 @@ import { getServerAuthSession } from "~/server/auth";
 import { EventsSection } from "./_components/events-section";
 import { getEvents } from "./actions";
 import { Suspense } from "react";
+import {
+  HydrationBoundary,
+  QueryClient,
+  dehydrate,
+} from "@tanstack/react-query";
+import { Skeleton } from "~/components/ui/skeleton";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();
@@ -11,7 +17,7 @@ export default async function HomePage() {
     <main className="flex-1 py-8">
       <MaxWidthWrapper>
         {session ? (
-          <Suspense>
+          <Suspense fallback={LoggedInViewSkeleton()}>
             <LoggedInView />
           </Suspense>
         ) : (
@@ -22,12 +28,29 @@ export default async function HomePage() {
   );
 }
 
+function LoggedInViewSkeleton() {
+  return (
+    <div className="gap-2">
+      <h2 className="pb-4 text-2xl font-bold">Eventos</h2>
+      <Skeleton className="h-6 w-24" />
+      <Skeleton className="h-[200px] w-full" />{" "}
+    </div>
+  );
+}
+
 async function LoggedInView() {
-  const events = await getEvents();
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["events"],
+    queryFn: getEvents,
+  });
 
   return (
     <div className="gap-2">
-      <EventsSection events={events} />
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <EventsSection />
+      </HydrationBoundary>
     </div>
   );
 }

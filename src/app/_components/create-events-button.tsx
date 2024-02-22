@@ -44,11 +44,16 @@ export function CreateEventsButton() {
       description: z.string(),
       datetime: z.date(),
       invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
-        return isPrivate ? values.length > 0 : true;
+        if (isPrivate) {
+          if (values.length > 0) return true;
+          return false;
+        }
+        return true;
       }, "Se o seu evento é privado, você deve convidar pelo menos um usuário."),
     }),
     defaultValues: {
       datetime: dayjs().add(1, "day").toDate(),
+      invitedPrivateUsers: [],
     },
   });
 
@@ -62,6 +67,7 @@ export function CreateEventsButton() {
       open={dialogOpen}
       onOpenChange={(open) => {
         form.reset();
+        setIsPrivate(false);
         setDialogOpen(open);
       }}
     >
@@ -168,9 +174,12 @@ export function CreateEventsButton() {
                   <Switch
                     id="private"
                     onCheckedChange={(value) => {
-                      form.setValue("invitedPrivateUsers", []);
+                      if (value === false)
+                        form.setValue("invitedPrivateUsers", []);
+
                       setIsPrivate(value);
                     }}
+                    checked={isPrivate}
                   />
                 </div>
                 <div ref={parent}>

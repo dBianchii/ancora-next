@@ -8,6 +8,9 @@ export const getEvents = async () => {
   const session = await enforceLoggedIn();
 
   const events = await db.events.findMany({
+    orderBy: {
+      datetime: "asc",
+    },
     where: {
       adminId: session.user.id,
     },
@@ -49,4 +52,8 @@ export const createEvent = async (input: {
   await db.events.create({
     data,
   });
+};
+
+export const DO_NOT_USE_deleteAllEvents = async () => {
+  await db.events.deleteMany({});
 };
