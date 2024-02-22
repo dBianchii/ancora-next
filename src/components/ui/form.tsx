@@ -2,16 +2,33 @@ import * as React from "react";
 import type * as LabelPrimitive from "@radix-ui/react-label";
 import { Slot } from "@radix-ui/react-slot";
 import {
+  useForm as __useForm,
   Controller,
   type ControllerProps,
   type FieldPath,
   type FieldValues,
   FormProvider,
   useFormContext,
+  type UseFormProps,
 } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { cn } from "~/lib/utils";
 import { Label } from "~/components/ui/label";
+import { type ZodType } from "zod";
+
+function useForm<TSchema extends ZodType>(
+  props: Omit<UseFormProps<TSchema["_input"]>, "resolver"> & {
+    schema: TSchema;
+  },
+) {
+  const form = __useForm<TSchema["_input"]>({
+    ...props,
+    resolver: zodResolver(props.schema, undefined),
+  });
+
+  return form;
+}
 
 const Form = FormProvider;
 
@@ -174,4 +191,5 @@ export {
   FormDescription,
   FormMessage,
   FormField,
+  useForm,
 };

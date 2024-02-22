@@ -1,14 +1,45 @@
-import { ModeToggle } from "~/components/theme-toggle";
+import MaxWidthWrapper from "~/components/max-width-wrapper";
+import { Button } from "~/components/ui/button";
+import { getServerAuthSession } from "~/server/auth";
+import { CreateEventsButton } from "./_components/create-events-button";
+import { getEvents } from "./actions";
 
 export default async function HomePage() {
+  const session = await getServerAuthSession();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
-        <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
-          Ancora usando Next para o Next :D
-        </h1>
-        <ModeToggle />
-      </div>
+    <main className="flex-1 py-8">
+      <MaxWidthWrapper>
+        {session ? <LoggedInView /> : <NotLoggedInView />}
+      </MaxWidthWrapper>
     </main>
+  );
+}
+
+async function LoggedInView() {
+  const events = await getEvents();
+
+  return (
+    <>
+      <div className="flex justify-end">
+        <CreateEventsButton />
+      </div>
+      <div>
+        <h2>Meus eventos</h2>
+        <ul>
+          {events.map((evt) => (
+            <div>{evt.id}</div>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+}
+
+function NotLoggedInView() {
+  return (
+    <div className="flex justify-end">
+      <Button>Entrar</Button>
+    </div>
   );
 }
