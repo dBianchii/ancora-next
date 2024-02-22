@@ -1,6 +1,12 @@
 "use client";
 
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { ClockIcon } from "@radix-ui/react-icons";
+import { useMutation } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import { z } from "zod";
 import { Button } from "~/components/ui/button";
+import { DatePicker } from "~/components/ui/date-picker";
 import {
   Dialog,
   DialogContent,
@@ -10,13 +16,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { useMutation } from "@tanstack/react-query";
-import { createEvent } from "../actions";
-import dayjs from "dayjs";
-import { Checkbox } from "~/components/ui/checkbox";
 import {
+  Form,
   FormControl,
   FormDescription,
   FormField,
@@ -24,16 +25,13 @@ import {
   FormLabel,
   FormMessage,
   useForm,
-  Form,
 } from "~/components/ui/form";
-import { z } from "zod";
-import { DatePicker } from "~/components/ui/date-picker";
-import { ClockIcon, TimerIcon } from "@radix-ui/react-icons";
-import { TimePickerInput } from "~/components/ui/time-picker/time-picker-input";
-import { Textarea } from "~/components/ui/textarea";
-import { Switch } from "~/components/ui/switch";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Input } from "~/components/ui/input";
 import { MultiSelect } from "~/components/ui/multi-select";
+import { Switch } from "~/components/ui/switch";
+import { Textarea } from "~/components/ui/textarea";
+import { TimePickerInput } from "~/components/ui/time-picker/time-picker-input";
+import { createEvent } from "../actions";
 
 export function CreateEventsButton() {
   const mutation = useMutation({
@@ -181,12 +179,14 @@ export function CreateEventsButton() {
                           <FormLabel>Participantes</FormLabel>
                           <FormControl>
                             <MultiSelect
-                              selected={field.value}
                               options={[
                                 { label: "User 1", value: "user1" },
                                 { label: "User 2", value: "user2" },
                                 { label: "User 3", value: "user3" },
                               ]}
+                              customValues
+                              customValuesSchema={z.string().email()}
+                              selected={field.value}
                               onChange={(newValues: string[]) => {
                                 form.setValue("invitedPrivateUsers", newValues);
                               }}
