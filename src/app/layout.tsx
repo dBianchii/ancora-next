@@ -5,6 +5,7 @@ import { ThemeProvider } from "~/components/providers";
 import { cn } from "~/lib/utils";
 import Header from "./_components/header/header";
 import { ReactQueryProvider } from "./_components/providers";
+import { ModeToggle } from "~/components/theme-toggle";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,14 +33,17 @@ export default function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="light"
+          // enableSystem
           disableTransitionOnChange
         >
           <div className="flex min-h-screen flex-col">
             <ReactQueryProvider>
               <Header />
               {children}
+              <div className="fixed bottom-1 z-50 flex flex-row items-center space-x-1">
+                <ModeToggle />
+              </div>
             </ReactQueryProvider>
           </div>
         </ThemeProvider>

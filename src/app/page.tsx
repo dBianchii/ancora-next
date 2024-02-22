@@ -39,7 +39,7 @@ async function LoggedInView() {
 function NotLoggedInView() {
   return (
     <div className="flex justify-end">
-      <Button>Entrar</Button>
+      <CreateEventsButton />
     </div>
   );
 }
