@@ -22,14 +22,13 @@ model Events {
     adminId String
     admin   User   @relation("AdminEvents", fields: [adminId], references: [id])
 
-    name         String
+    title        String
     description  String?
     thumbnailUrl String?
 
     datetime DateTime
 
-    private             Boolean
-    invitedPrivateUsers User[]  @relation("InvitedByPrivateEvents")
+    invitedPrivateUsers String[]
 
     fireReminderEmailAt DateTime?
 
@@ -86,9 +85,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
-    AdministeredEvents     Events[] @relation("AdminEvents")
-    InvitedByPrivateEvents Events[] @relation("InvitedByPrivateEvents")
-    eventsId               String?
+    AdministeredEvents Events[] @relation("AdminEvents")
+    eventsId           String?
 }
 
 model VerificationToken {

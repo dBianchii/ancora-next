@@ -1,10 +1,9 @@
 "use client";
+import { signOut } from "next-auth/react";
 
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
-import { PersonIcon } from "@radix-ui/react-icons";
+import { LogOut } from "lucide-react";
 import type { Session } from "next-auth";
-import Link from "next/link";
-import { AvatarFallback } from "~/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
@@ -12,7 +11,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 
@@ -23,14 +21,7 @@ export function UserProfileButton({ session }: { session: Session }) {
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={session.user.image ?? ""} />
-            <AvatarFallback>
-              {session.user.name
-                ?.split(" ")
-                .slice(0, 2)
-                .map((n) => n[0])
-                .join("")
-                .toUpperCase()}
-            </AvatarFallback>
+            <AvatarFallback>{session.user.name}</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -46,15 +37,11 @@ export function UserProfileButton({ session }: { session: Session }) {
           </div>
         </DropdownMenuLabel>
         <DropdownMenuGroup>
-          <DropdownMenuItem asChild>
-            <Link href="/account">
-              <PersonIcon className="mr-2 h-4 w-4" />
-              <span>Account</span>
-            </Link>
+          <DropdownMenuItem onClick={() => void signOut()}>
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
           </DropdownMenuItem>
-          <DropdownMenuSeparator className="mb-2" />
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
       </DropdownMenuContent>
     </DropdownMenu>
   );

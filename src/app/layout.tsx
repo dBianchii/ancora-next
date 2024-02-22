@@ -6,7 +6,7 @@ import { cn } from "~/lib/utils";
 import Header from "./_components/header/header";
 import { ReactQueryProvider } from "./_components/providers";
 import { ModeToggle } from "~/components/theme-toggle";
-
+import { Toaster } from "~/components/ui/sonner";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
@@ -39,6 +39,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <ReactQueryProvider>
+              <Toaster richColors />
               <Header />
               {children}
               <div className="fixed bottom-1 z-50 flex flex-row items-center space-x-1">

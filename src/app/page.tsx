@@ -1,8 +1,8 @@
 import MaxWidthWrapper from "~/components/max-width-wrapper";
-import { Button } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
-import { CreateEventsButton } from "./_components/create-events-button";
+import { EventsSection } from "./_components/events-section";
 import { getEvents } from "./actions";
+import { Suspense } from "react";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();
@@ -10,7 +10,13 @@ export default async function HomePage() {
   return (
     <main className="flex-1 py-8">
       <MaxWidthWrapper>
-        {session ? <LoggedInView /> : <NotLoggedInView />}
+        {session ? (
+          <Suspense>
+            <LoggedInView />
+          </Suspense>
+        ) : (
+          <NotLoggedInView />
+        )}
       </MaxWidthWrapper>
     </main>
   );
@@ -20,26 +26,12 @@ async function LoggedInView() {
   const events = await getEvents();
 
   return (
-    <>
-      <div className="flex justify-end">
-        <CreateEventsButton />
-      </div>
-      <div>
-        <h2>Meus eventos</h2>
-        <ul>
-          {events.map((evt) => (
-            <div>{evt.id}</div>
-          ))}
-        </ul>
-      </div>
-    </>
+    <div className="gap-2">
+      <EventsSection events={events} />
+    </div>
   );
 }
 
 function NotLoggedInView() {
-  return (
-    <div className="flex justify-end">
-      <CreateEventsButton />
-    </div>
-  );
+  return <div className="flex justify-end">Vc ta desloggado. Logga ai!</div>;
 }

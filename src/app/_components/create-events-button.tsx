@@ -1,9 +1,9 @@
 "use client";
 
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { ClockIcon } from "@radix-ui/react-icons";
-import { useMutation } from "@tanstack/react-query";
+import { ClockIcon, PlusIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
+import { useState } from "react";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { DatePicker } from "~/components/ui/date-picker";
@@ -27,43 +27,58 @@ import {
   useForm,
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import { MultiSelect } from "~/components/ui/multi-select";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { TimePickerInput } from "~/components/ui/time-picker/time-picker-input";
-import { createEvent } from "../actions";
+import { useEventsData } from "./hooks";
+import { Loader2 } from "lucide-react";
 
 export function CreateEventsButton() {
-  const mutation = useMutation({
-    mutationFn: (data: Parameters<typeof createEvent>[0]) => createEvent(data),
-  });
+  const [isPrivate, setIsPrivate] = useState(false);
 
   const form = useForm({
     schema: z.object({
       title: z.string(),
       description: z.string(),
       datetime: z.date(),
-      private: z.boolean(),
-      invitedPrivateUsers: z.array(z.string()),
+      invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
+        return isPrivate ? values.length > 0 : true;
+      }, "Se o seu evento é privado, você deve convidar pelo menos um usuário."),
     }),
     defaultValues: {
       datetime: dayjs().add(1, "day").toDate(),
-      private: false,
     },
   });
 
   const [parent] = useAutoAnimate();
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const { mutation } = useEventsData();
 
   return (
-    <Dialog onOpenChange={() => form.reset()}>
+    <Dialog
+      open={dialogOpen}
+      onOpenChange={(open) => {
+        form.reset();
+        setDialogOpen(open);
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="outline">Criar novo evento</Button>
+        <Button variant="outline">
+          <PlusIcon className="mr-2 h-4 w-4" /> Criar novo evento
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(() => {
-              mutation.mutate(form.getValues());
+              mutation.mutate(form.getValues(), {
+                onSuccess: () => {
+                  setDialogOpen(false);
+                },
+              });
             })}
           >
             <DialogHeader>
@@ -148,29 +163,18 @@ export function CreateEventsButton() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="private"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Evento privado?</FormLabel>
-                      <FormControl>
-                        <div>
-                          <Switch
-                            checked={field.value}
-                            onCheckedChange={(value) => {
-                              form.setValue("invitedPrivateUsers", []);
-                              field.onChange(value);
-                            }}
-                          />
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="private">Evento privado?</Label>
+                  <Switch
+                    id="private"
+                    onCheckedChange={(value) => {
+                      form.setValue("invitedPrivateUsers", []);
+                      setIsPrivate(value);
+                    }}
+                  />
+                </div>
                 <div ref={parent}>
-                  {form.getValues().private && (
+                  {isPrivate && (
                     <FormField
                       control={form.control}
                       name="invitedPrivateUsers"
@@ -180,13 +184,13 @@ export function CreateEventsButton() {
                           <FormControl>
                             <MultiSelect
                               options={[
-                                { label: "User 1", value: "user1" },
-                                { label: "User 2", value: "user2" },
-                                { label: "User 3", value: "user3" },
+                                { label: "User 1", value: "joao@gmail.com" },
+                                { label: "User 2", value: "joao@gmail.com" },
+                                { label: "User 3", value: "joao@gmail.com" },
                               ]}
                               customValues
                               customValuesSchema={z.string().email()}
-                              selected={field.value}
+                              selected={field.value ?? []}
                               onChange={(newValues: string[]) => {
                                 form.setValue("invitedPrivateUsers", newValues);
                               }}
@@ -201,19 +205,12 @@ export function CreateEventsButton() {
               </div>
             </div>
             <DialogFooter>
-              <Button
-                onClick={() => {
-                  mutation.mutate({
-                    name: "Meu evento",
-                    datetime: dayjs().add(1, "day").toDate(),
-                    description: "A cool event",
-                    private: false,
-                    fireReminderEmailAt: new Date(),
-                    invitedPrivateUsers: [],
-                  });
-                }}
-              >
-                Agendar
+              <Button type="submit">
+                {mutation.isPending ? (
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                ) : (
+                  "Agendar"
+                )}
               </Button>
             </DialogFooter>
           </form>

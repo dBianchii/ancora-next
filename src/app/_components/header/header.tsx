@@ -1,10 +1,10 @@
-import { getServerSession } from "next-auth";
-import { buttonVariants } from "~/components/ui/button";
-import { UserProfileButton } from "./user-profile-button";
 import Link from "next/link";
+import { buttonVariants } from "~/components/ui/button";
+import { getServerAuthSession } from "~/server/auth";
+import { UserProfileButton } from "./user-profile-button";
 
 export default async function Header() {
-  const session = await getServerSession();
+  const session = await getServerAuthSession();
   return (
     <header className="border-b px-4 py-2">
       <div className="mx-auto flex max-w-screen-2xl items-center">

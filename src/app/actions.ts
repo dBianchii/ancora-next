@@ -1,5 +1,6 @@
 "use server";
 
+import { type Prisma } from "@prisma/client";
 import { db } from "~/server/db";
 import { enforceLoggedIn } from "~/server/utils";
 
@@ -10,31 +11,42 @@ export const getEvents = async () => {
     where: {
       adminId: session.user.id,
     },
+    include: {
+      admin: {
+        select: {
+          name: true,
+          image: true,
+        },
+      },
+    },
   });
   return events;
 };
 
 export const createEvent = async (input: {
-  name: string;
+  title: string;
   datetime: Date;
   description: string;
-  private: boolean;
-  fireReminderEmailAt: Date;
   invitedPrivateUsers: string[];
 }) => {
   const session = await enforceLoggedIn();
 
-  await db.events.create({
-    data: {
-      adminId: session.user.id,
-      name: input.name,
-      datetime: input.datetime,
-      description: input.description,
-      private: input.private,
-      fireReminderEmailAt: input.fireReminderEmailAt,
-      invitedPrivateUsers: {
-        connect: input.invitedPrivateUsers.map((id) => ({ id })),
+  const data: Prisma.EventsCreateInput = {
+    admin: {
+      connect: {
+        id: session.user.id,
       },
     },
+    title: input.title,
+    datetime: input.datetime,
+    description: input.description,
+  };
+
+  if (input.invitedPrivateUsers.length > 0) {
+    data.invitedPrivateUsers = input.invitedPrivateUsers;
+  }
+
+  await db.events.create({
+    data,
   });
 };
