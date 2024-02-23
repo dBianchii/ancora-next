@@ -14,6 +14,7 @@ Para começar, copie as variáveis de ambiente do arquivo `.env.example` para um
 
 ```
 pnpm i
+pnpm prisma generate
 ```
 
 ### Rodando o projeto:
