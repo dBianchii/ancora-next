@@ -40,7 +40,7 @@ export default function RootLayout({
         >
           <div className="flex min-h-screen flex-col">
             <ReactQueryProvider>
-              {/* <Header /> */}
+              <Header />
               <Toaster richColors />
 			  <AuthProvider>
               	{children}
