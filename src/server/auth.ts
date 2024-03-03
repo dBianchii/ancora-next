@@ -4,9 +4,8 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import CredentialProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
+import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { sendVerificationRequest } from "~/server/email/send-verification-request";
@@ -74,6 +73,7 @@ export const authOptions: NextAuthOptions = {
     // error: "/auth/error",
     // verifyRequest: "/auth/verify-request",
     // newUser: "/auth/new-user",
+    signIn: "/login",
   },
 };
 

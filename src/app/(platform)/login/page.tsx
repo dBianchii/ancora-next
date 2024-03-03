@@ -2,7 +2,6 @@
 import { type Metadata } from "next";
 // import { Command } from "lucide-react";
 import UserLoginForm from "../../../components/user-login-auth";
-import AuthButton from "../../../components/auth-button";
 import { getServerAuthSession } from "~/server/auth";
 import { redirect } from "next/navigation";
 
@@ -18,7 +17,6 @@ export default async function LoginPage() {
   return (
     <>
       <div className="container relative grid h-dvh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <AuthButton page="login" session={session} />
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <img
             alt="Imagem de fundo"
