@@ -1,16 +1,15 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-import { cn } from "../lib/utils";
 import { useState } from "react";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { cn } from "../lib/utils";
 import { Icons } from "./icons";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 
-import { ToastAction } from "./ui/toast";
 import { toast } from "sonner";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;

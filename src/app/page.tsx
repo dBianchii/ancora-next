@@ -1,14 +1,14 @@
-import MaxWidthWrapper from "~/components/max-width-wrapper";
-import { getServerAuthSession } from "~/server/auth";
-import { EventsSection } from "./_components/events-section";
-import { getEvents } from "./actions";
-import { Suspense } from "react";
 import {
   HydrationBoundary,
   QueryClient,
   dehydrate,
 } from "@tanstack/react-query";
+import { Suspense } from "react";
+import MaxWidthWrapper from "~/components/max-width-wrapper";
 import { Skeleton } from "~/components/ui/skeleton";
+import { getServerAuthSession } from "~/server/auth";
+import { EventsSection } from "./_components/events-section";
+import { getEvents } from "./actions";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();
