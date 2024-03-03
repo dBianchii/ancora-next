@@ -4,6 +4,7 @@ import { type Metadata } from "next";
 import UserLoginForm from "../../../components/user-login-auth";
 import { getServerAuthSession } from "~/server/auth";
 import { redirect } from "next/navigation";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -18,10 +19,12 @@ export default async function LoginPage() {
     <>
       <div className="container relative grid h-dvh flex-col items-center justify-center lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-          <img
+          <Image
             alt="Imagem de fundo"
             src="/bg.png"
             className="absolute inset-0 h-full w-full object-cover"
+            width={2000}
+            height={1500}
           />
         </div>
         <div className="min-w-[400px] lg:p-8">
