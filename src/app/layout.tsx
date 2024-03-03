@@ -42,9 +42,7 @@ export default function RootLayout({
             <ReactQueryProvider>
               <Header />
               <Toaster richColors />
-			  <AuthProvider>
-              	{children}
-			  </AuthProvider>
+              {children}
               <div className="fixed bottom-1 z-50 flex flex-row items-center space-x-1">
                 <ModeToggle />
               </div>

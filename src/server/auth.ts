@@ -1,8 +1,8 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import {
-	getServerSession,
-	type DefaultSession,
-	type NextAuthOptions,
+  getServerSession,
+  type DefaultSession,
+  type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialProvider from "next-auth/providers/credentials";
@@ -18,18 +18,18 @@ import { sendVerificationRequest } from "~/server/email/send-verification-reques
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
 declare module "next-auth" {
-	interface Session extends DefaultSession {
-		user: {
-			id: string;
-			// ...other properties
-			// role: UserRole;
-		} & DefaultSession["user"];
-	}
+  interface Session extends DefaultSession {
+    user: {
+      id: string;
+      // ...other properties
+      // role: UserRole;
+    } & DefaultSession["user"];
+  }
 
-	// interface User {
-	//   // ...other properties
-	//   // role: UserRole;
-	// }
+  // interface User {
+  //   // ...other properties
+  //   // role: UserRole;
+  // }
 }
 
 /**
@@ -38,71 +38,43 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-	callbacks: {
-		session: ({ session, user }) => ({
-			...session,
-			user: {
-				...session.user,
-				id: user.id,
-			},
-		}),
-	},
-	adapter: PrismaAdapter(db),
-	providers: [
-		CredentialProvider({
-			name: "credentials",
-			credentials: {
-				email: { label: "email", type: "email" },
-				password: { label: "Password", type: "password" },
-			},
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			async authorize(credentials) : Promise<any> {
-				
-				console.log("Authorize method", credentials);
+  callbacks: {
+    session: ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id,
+      },
+    }),
+  },
+  adapter: PrismaAdapter(db),
+  providers: [
+    EmailProvider({
+      server: "",
+      from: "ancora@kodix.com.br",
+      sendVerificationRequest,
+    }),
+    GoogleProvider({
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    }),
 
-				if(!credentials?.email || !credentials.password) throw new Error('Invalid credentials');
-
-				const user = await db.user.findUnique({
-					where: {
-						email: credentials.email,
-					},
-				});
-
-				if (!user) {
-					throw new Error("No user found in credentials database");
-				}
-
-				return user;
-
-			},
-		}),
-		EmailProvider({
-			server: "",
-			from: "ancora@kodix.com.br",
-			sendVerificationRequest,
-		}),
-		GoogleProvider({
-			clientId: env.GOOGLE_CLIENT_ID,
-			clientSecret: env.GOOGLE_CLIENT_SECRET,
-		}),
-
-		/**
-		 * ...add more providers here.
-		 *
-		 * Most other providers require a bit more work than the Discord provider. For example, the
-		 * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-		 * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-		 *
-		 * @see https://next-auth.js.org/providers/github
-		 */
-	],
-	pages: {
-		signIn: "/login",
-		// signOut: "/auth/signout",
-		// error: "/auth/error",
-		// verifyRequest: "/auth/verify-request",
-		// newUser: "/auth/new-user",
-	}
+    /**
+     * ...add more providers here.
+     *
+     * Most other providers require a bit more work than the Discord provider. For example, the
+     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
+     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
+     *
+     * @see https://next-auth.js.org/providers/github
+     */
+  ],
+  pages: {
+    // signOut: "/auth/signout",
+    // error: "/auth/error",
+    // verifyRequest: "/auth/verify-request",
+    // newUser: "/auth/new-user",
+  },
 };
 
 /**
