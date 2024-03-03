@@ -1,10 +1,14 @@
 /* eslint-disable @next/next/no-img-element */
 import { type Metadata } from "next";
 // import { Command } from "lucide-react";
-import UserLoginForm from "../../../components/user-login-auth";
-import { getServerAuthSession } from "~/server/auth";
-import { redirect } from "next/navigation";
+import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { buttonVariants } from "~/components/ui/button";
+import { cn } from "~/lib/utils";
+import { getServerAuthSession } from "~/server/auth";
+import UserLoginForm from "../../../components/user-login-auth";
 
 export const metadata: Metadata = {
   title: "Login",
@@ -27,13 +31,34 @@ export default async function LoginPage() {
             height={1500}
           />
         </div>
-        <div className="min-w-[400px] lg:p-8">
+        <div className="h-full min-w-[400px] lg:p-8">
+          <Link
+            href={"/"}
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "left-4 top-4",
+            )}
+          >
+            {<ArrowLeftIcon className="h-5 w-5" />}
+          </Link>
+          <div className="flex h-1/3 w-full items-center">
+            <Link
+              href="/"
+              className="mx-auto bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent"
+            >
+              Nome do Nosso App
+            </Link>
+          </div>
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">Entrar</h1>
-              <p className="text-sm text-muted-foreground">
-                Entre com os seus dados
-              </p>
+              <div>
+                <h1 className="text-2xl font-semibold tracking-tight">
+                  Entrar
+                </h1>
+                <p className="text-sm text-muted-foreground">
+                  Entre com os seus dados
+                </p>
+              </div>
             </div>
             <UserLoginForm />
           </div>

@@ -11,6 +11,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
 import { toast } from "sonner";
+import { set } from "date-fns";
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>;
 
@@ -106,7 +107,10 @@ export default function UserLoginForm({
         </div>
       </div>
       <Button
-        onClick={() => signIn("google", { callbackUrl: "/" })}
+        onClick={async () => {
+          setIsLoading(true);
+          await signIn("google", { callbackUrl: "/" });
+        }}
         variant="outline"
         type="button"
         disabled={isLoading}
