@@ -151,7 +151,7 @@ export default function UserRegisterForm({ className, ...props }: UserAuthFormPr
 				</div>
 			</div>
 			<Button
-				onClick={() => signIn("github", { callbackUrl: "/" })}
+				onClick={() => signIn("google", { callbackUrl: "/" })}
 				variant="outline"
 				type="button"
 				disabled={isLoading}
