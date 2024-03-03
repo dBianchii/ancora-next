@@ -18,7 +18,7 @@ export default async function Header() {
           {!!session && <UserProfileButton session={session} />}
           {!session && (
             <div className="mr-5 space-x-2">
-              <Link href="/api/auth/signin" className={buttonVariants()}>
+              <Link href="/login" className={buttonVariants()}>
                 Login
               </Link>
             </div>

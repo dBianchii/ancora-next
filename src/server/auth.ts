@@ -5,6 +5,7 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import CredentialProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -57,6 +58,7 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
     }),
+
     /**
      * ...add more providers here.
      *
@@ -67,6 +69,12 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  pages: {
+    // signOut: "/auth/signout",
+    // error: "/auth/error",
+    // verifyRequest: "/auth/verify-request",
+    // newUser: "/auth/new-user",
+  },
 };
 
 /**
