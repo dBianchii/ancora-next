@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { type Metadata } from "next";
 // import { Command } from "lucide-react";
 import UserLoginForm from "../../../components/user-login-auth";
@@ -15,20 +16,11 @@ export default function LoginPage() {
 				<AuthButton page="login" />
 
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
-					<div className="absolute inset-0 bg-zinc-900" />
-					{/* <div className="relative z-20 flex items-center text-lg font-medium">
-						<Command className="mr-2 h-6 w-6" /> {`<NOME DO APP>`}
-					</div>
-					<div className="relative z-20 mt-auto">
-						<blockquote className="space-y-2">
-							<p className="text-lg">
-                				&ldquo;This library has saved me countless hours of work and
-                				helped me deliver stunning designs to my clients faster than
-                				ever before.&rdquo;
-							</p>
-							<footer className="text-sm">{`<NOME DO APP>`}</footer>
-						</blockquote>
-					</div> */}
+					<img
+						alt="Imagem de fundo"
+						src="/bg.png"
+						className="absolute inset-0 w-full h-full object-cover"
+					/>
 				</div>
 				<div className="lg:p-8 min-w-[400px]">
 					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">
