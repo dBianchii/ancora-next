@@ -2,6 +2,7 @@ import { type Metadata } from "next";
 import Link from "next/link";
 // import { Command } from "lucide-react";
 import UserRegisterForm from "../../../components/user-register-auth";
+import AuthButton from "~/components/auth-button";
 
 export const metadata: Metadata = {
 	title: "Cadastro",
@@ -12,7 +13,7 @@ export default function RegisterPage() {
 	return (
 		<>
 			<div className="container relative h-dvh flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-				{/* <AuthButton page="register" /> */}
+				<AuthButton page="register" />
 
 				<div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
 					<div className="absolute inset-0 bg-zinc-900" />
