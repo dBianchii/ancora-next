@@ -55,7 +55,10 @@ function EventCard({
         alt="Stream thumbnail"
         className="aspect-[16/9] w-full rounded-lg object-cover transition-transform duration-200 group-hover:z-10 group-hover:scale-[1.05]"
         height="225"
-        src="https://generated.vusercontent.net/placeholder.svg"
+        src={
+          event.thumbnailUrl ??
+          "https://generated.vusercontent.net/placeholder.svg"
+        }
         width="400"
       />
       <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">

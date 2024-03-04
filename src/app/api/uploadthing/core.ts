@@ -5,7 +5,15 @@ import { db } from "~/server/db";
 const f = createUploadthing();
 
 export const ourFileRouter = {
-  thumbnailUploader: f({
+  genericImageUpload: f({
+    image: {
+      maxFileSize: "4MB",
+      maxFileCount: 1,
+    },
+  }).onUploadComplete(async ({ file }) => {
+    return { fileUrl: file.url };
+  }),
+  thumbnailEdit: f({
     image: {
       maxFileSize: "4MB",
       maxFileCount: 1,

@@ -33,7 +33,9 @@ import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { TimePickerInput } from "~/components/ui/time-picker/time-picker-input";
 import { useEventsData } from "./hooks";
-import { Loader2 } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { UploadDropzone } from "~/server/utils/uploadthing";
+import Image from "next/image";
 
 export function CreateEventsButton() {
   const [isPrivate, setIsPrivate] = useState(false);
@@ -50,6 +52,7 @@ export function CreateEventsButton() {
         }
         return true;
       }, "Se o seu evento é privado, você deve convidar pelo menos um usuário."),
+      thumbnailUrl: z.string().optional(),
     }),
     defaultValues: {
       datetime: dayjs().add(1, "day").toDate(),
@@ -211,6 +214,44 @@ export function CreateEventsButton() {
                     />
                   )}
                 </div>
+                {form.getValues().thumbnailUrl ? (
+                  <div className="relative flex">
+                    <Image
+                      className="hover:opacity- transition-opacity duration-300"
+                      src={form.getValues().thumbnailUrl!}
+                      alt="Thumbnail"
+                      width={200}
+                      height={200}
+                    />
+                    <div className="absolute min-w-fit p-3">
+                      <Button
+                        onClick={() => form.setValue("thumbnailUrl", undefined)}
+                        variant={"outline"}
+                        size="icon"
+                        className="p-2"
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Remove image</span>
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <UploadDropzone
+                    endpoint="genericImageUpload"
+                    appearance={{
+                      label: {
+                        color: "#FFFFFF",
+                      },
+                      allowedContent: {
+                        color: "#FFFFFF",
+                      },
+                    }}
+                    onClientUploadComplete={(res) => {
+                      res[0]?.url &&
+                        form.setValue("thumbnailUrl", res?.[0]?.url);
+                    }}
+                  />
+                )}
               </div>
             </div>
             <DialogFooter>

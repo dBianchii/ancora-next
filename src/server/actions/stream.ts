@@ -31,6 +31,7 @@ export const createEvent = async (input: {
   datetime: Date;
   description: string;
   invitedPrivateUsers: string[];
+  thumbnailUrl?: string;
 }) => {
   const session = await enforceLoggedIn();
 
@@ -43,6 +44,7 @@ export const createEvent = async (input: {
     title: input.title,
     datetime: input.datetime,
     description: input.description,
+    thumbnailUrl: input.thumbnailUrl,
   };
 
   if (input.invitedPrivateUsers.length > 0) {
