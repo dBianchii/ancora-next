@@ -18,16 +18,14 @@ type CustomStream = {
   isChatDelayed: boolean;
   isLive: boolean;
   thumbnailUrl: string | null;
-  name: string;
+  title: string;
 };
 
 type CustomUser = {
   id: string;
   name: string | null;
   bio: string | null;
-  Stream: CustomStream | null;
   image: string | null;
-  _count: { followedBy: number };
 };
 
 export const StreamPlayer = ({
@@ -65,12 +63,12 @@ export const StreamPlayer = ({
             hostName={user.name ?? ""}
             hostIdentity={user.id}
             imageUrl={user.image ?? ""}
-            name={stream.name}
+            name={stream.title}
           />
           <InfoCard
             hostIdentity={user.id}
             viewerIdentity={identity}
-            name={stream.name}
+            name={stream.title}
             thumbnailUrl={stream.thumbnailUrl}
           />
           <AboutCard
@@ -78,7 +76,6 @@ export const StreamPlayer = ({
             hostIdentity={user.id}
             viewerIdentity={identity}
             bio={user.bio}
-            followedByCount={user._count.followedBy}
           />
         </div>
         <div className={cn("col-span-1", collapsed && "hidden")}>

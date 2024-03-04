@@ -4,7 +4,6 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { type AdapterUser } from "next-auth/adapters";
 
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
@@ -50,18 +49,13 @@ export const authOptions: NextAuthOptions = {
   },
   adapter: {
     ...PrismaAdapter(db),
-    createUser: async (data) => {
-      return db.user.create({
-        data: {
-          ...data,
-          Stream: {
-            create: {
-              name: `${data.name}'s stream`,
-            },
-          },
-        },
-      }) as Promise<AdapterUser>; // Add the type assertion to ensure the correct return type
-    },
+    // createUser: async (data) => {
+    //   return db.user.create({
+    //     data: {
+    //       ...data,
+    //     },
+    //   }) as Promise<AdapterUser>; // Add the type assertion to ensure the correct return type
+    // },
   },
   providers: [
     EmailProvider({

@@ -16,15 +16,41 @@ datasource db {
     directUrl    = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Events {
+// model Events {
+//     id String @id @default(cuid())
+
+//     adminId String
+//     admin   User   @relation("AdminEvents", fields: [adminId], references: [id])
+
+//     title        String
+//     description  String?
+//     thumbnailUrl String?
+
+//     datetime            DateTime
+//     invitedPrivateUsers String[]
+//     fireReminderEmailAt DateTime?
+
+//     Leads Leads[] @relation("EmailLeadsEvents")
+
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
+
+//     @@index([adminId])
+// }
+
+model Stream {
     id String @id @default(cuid())
 
-    adminId String
-    admin   User   @relation("AdminEvents", fields: [adminId], references: [id])
+    userId String
+    User   User   @relation("AdminEvents", fields: [userId], references: [id])
 
     title        String
     description  String?
     thumbnailUrl String?
+
+    isLive        Boolean @default(false)
+    isChatEnabled Boolean @default(true)
+    isChatDelayed Boolean @default(false)
 
     datetime            DateTime
     invitedPrivateUsers String[]
@@ -35,36 +61,13 @@ model Events {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([adminId])
-}
-
-model Stream {
-    id           String  @id @default(uuid())
-    name         String  @db.Text
-    thumbnailUrl String? @db.Text
-
-    ingressId String? @unique
-    serverUrl String? @db.Text
-    streamKey String? @db.Text
-
-    isLive        Boolean @default(false)
-    isChatEnabled Boolean @default(true)
-    isChatDelayed Boolean @default(false)
-
-    userId String @unique
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
     @@index([userId])
-    @@index([ingressId])
 }
 
 model Leads {
     email String @id @default(cuid())
 
-    Events   Events[] @relation("EmailLeadsEvents")
+    Events   Stream[] @relation("EmailLeadsEvents")
     eventsId String?
 
     @@index([eventsId])
@@ -110,28 +113,13 @@ model User {
     accounts      Account[]
     sessions      Session[]
 
-    Stream             Stream?
-    AdministeredEvents Events[] @relation("AdminEvents")
+    AdministeredEvents Stream[] @relation("AdminEvents")
     eventsId           String?
 
-    following  Follow[] @relation("Following")
-    followedBy Follow[] @relation("FollowedBy")
-}
-
-model Follow {
-    id          String @id @default(uuid())
-    followerId  String
-    followingId String
-
-    follower  User @relation(name: "Following", fields: [followerId], references: [id], onDelete: Cascade)
-    following User @relation(name: "FollowedBy", fields: [followingId], references: [id], onDelete: Cascade)
-
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    @@unique([followerId, followingId])
-    @@index([followerId])
-    @@index([followingId])
+    //LiveKit
+    ingressId String? @unique
+    serverUrl String? //@db.Text
+    streamKey String? //@db.Text
 }
 
 model VerificationToken {

@@ -1,9 +1,11 @@
 "use client";
 
-import { toast } from "sonner";
-import { useState, useTransition, useRef, type ElementRef } from "react";
-import { AlertTriangle } from "lucide-react";
 import { IngressInput } from "livekit-server-sdk";
+import { AlertTriangle } from "lucide-react";
+import { useRef, useState, useTransition, type ElementRef } from "react";
+import { toast } from "sonner";
+import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,15 +14,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Button } from "~/components/ui/button";
 import {
   Select,
-  SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "~/components/ui/select";
-import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { createIngress } from "~/server/actions/ingress";
 
 const RTMP = String(IngressInput.RTMP_INPUT);
@@ -61,10 +60,10 @@ export const ConnectModal = () => {
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Ingress Type" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContRTMPent>
             <SelectItem value={RTMP}>RTMP</SelectItem>
             <SelectItem value={WHIP}>WHIP</SelectItem>
-          </SelectContent>
+          </SelectContRTMPent>
         </Select>
         <Alert>
           <AlertTriangle className="h-4 w-4" />

@@ -73,8 +73,8 @@ export const createIngress = async (ingressType: IngressInput) => {
     throw new Error("Failed to create ingress");
   }
 
-  await db.stream.updateMany({
-    where: { userId: session.user.id },
+  await db.user.update({
+    where: { id: session.user.id },
     data: {
       ingressId: ingress.ingressId,
       serverUrl: ingress.url,

@@ -38,16 +38,20 @@ export default async function KeysPage() {
 }
 
 async function Cards({ session }: { session: Session }) {
-  const stream = await db.stream.findFirst({
+  const user = await db.user.findFirst({
     where: {
-      userId: session.user.id,
+      id: session.user.id,
+    },
+    select: {
+      streamKey: true,
+      serverUrl: true,
     },
   });
-  if (!stream) throw new Error("Stream not found");
+  if (!user) throw new Error("User not found");
   return (
     <>
-      <UrlCard value={stream.serverUrl} />
-      <KeyCard value={stream.streamKey} />
+      <UrlCard value={user.serverUrl} />
+      <KeyCard value={user.streamKey} />
     </>
   );
 }

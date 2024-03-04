@@ -21,22 +21,29 @@ import { Button } from "~/components/ui/button";
 interface InfoModalProps {
   initialName: string;
   initialThumbnailUrl: string | null;
+  streamId: string;
 }
 
 export const InfoModal = ({
-  initialName,
+  initialName: initialTitle,
   initialThumbnailUrl,
+  streamId,
 }: InfoModalProps) => {
   // const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
   const [isPending, startTransition] = useTransition();
 
-  const [name, setName] = useState(initialName);
+  const [title, setTitle] = useState(initialTitle);
   const [thumbnailUrl, setThumbnailUrl] = useState(initialThumbnailUrl);
 
   const onRemove = () => {
     startTransition(() => {
-      updateStream({ thumbnailUrl: null })
+      updateStream({
+        streamId,
+        values: {
+          thumbnailUrl: null,
+        },
+      })
         .then(() => {
           toast.success("Thumbnail removed");
           setThumbnailUrl("");
@@ -50,7 +57,12 @@ export const InfoModal = ({
     e.preventDefault();
 
     startTransition(() => {
-      updateStream({ name: name })
+      updateStream({
+        streamId,
+        values: {
+          title,
+        },
+      })
         .then(() => {
           toast.success("Stream updated");
           closeRef?.current?.click();
@@ -60,7 +72,7 @@ export const InfoModal = ({
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setName(e.target.value);
+    setTitle(e.target.value);
   };
 
   return (
@@ -81,7 +93,7 @@ export const InfoModal = ({
               disabled={isPending}
               placeholder="Stream name"
               onChange={onChange}
-              value={name}
+              value={title}
             />
           </div>
           <div className="space-y-2">

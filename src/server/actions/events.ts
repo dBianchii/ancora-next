@@ -7,15 +7,15 @@ import { enforceLoggedIn } from "../utils/enforceLoggedIn";
 export const getEvents = async () => {
   const session = await enforceLoggedIn();
 
-  const events = await db.events.findMany({
+  const events = await db.stream.findMany({
     orderBy: {
       datetime: "asc",
     },
     where: {
-      adminId: session.user.id,
+      userId: session.user.id,
     },
     include: {
-      admin: {
+      User: {
         select: {
           name: true,
           image: true,
@@ -34,8 +34,8 @@ export const createEvent = async (input: {
 }) => {
   const session = await enforceLoggedIn();
 
-  const data: Prisma.EventsCreateInput = {
-    admin: {
+  const data: Prisma.StreamCreateInput = {
+    User: {
       connect: {
         id: session.user.id,
       },
@@ -49,11 +49,12 @@ export const createEvent = async (input: {
     data.invitedPrivateUsers = input.invitedPrivateUsers;
   }
 
-  await db.events.create({
+  await db.stream.create({
     data,
   });
 };
 
+//TODO deletar
 export const DO_NOT_USE_deleteAllEvents = async () => {
-  await db.events.deleteMany({});
+  await db.stream.deleteMany({});
 };

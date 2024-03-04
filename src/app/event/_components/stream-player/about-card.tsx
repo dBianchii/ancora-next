@@ -8,7 +8,6 @@ interface AboutCardProps {
   hostIdentity: string;
   viewerIdentity: string;
   bio: string | null;
-  followedByCount: number;
 }
 
 export const AboutCard = ({
@@ -16,12 +15,9 @@ export const AboutCard = ({
   hostIdentity,
   viewerIdentity,
   bio,
-  followedByCount,
 }: AboutCardProps) => {
   const hostAsViewer = `host-${hostIdentity}`;
   const isHost = viewerIdentity === hostAsViewer;
-
-  const followedByLabel = followedByCount === 1 ? "follower" : "followers";
 
   return (
     <div className="px-4">
@@ -32,10 +28,6 @@ export const AboutCard = ({
             <VerifiedMark />
           </div>
           {isHost && <BioModal initialValue={bio} />}
-        </div>
-        <div className="text-sm text-muted-foreground">
-          <span className="font-semibold text-primary">{followedByCount}</span>{" "}
-          {followedByLabel}
         </div>
         <p className="text-sm">
           {bio ?? "This user prefers to keep an air of mystery about them."}

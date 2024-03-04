@@ -65,7 +65,7 @@ function EventCard({
           {event.title}
         </h3>
         <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-          Hosted by <span className="font-bold">{event.admin.name}</span>
+          Hosted by <span className="font-bold">{event.User.name}</span>
         </p>
         <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
           Starts at{" "}
