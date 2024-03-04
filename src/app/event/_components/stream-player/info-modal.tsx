@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useState, useTransition, useRef, type ElementRef } from "react";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import { updateStream } from "~/server/actions/stream";
+import { updateStream } from "~/server/actions/events";
 import {
   Dialog,
   DialogClose,

@@ -8,7 +8,7 @@ import MaxWidthWrapper from "~/components/max-width-wrapper";
 import { Skeleton } from "~/components/ui/skeleton";
 import { getServerAuthSession } from "~/server/auth";
 import { EventsSection } from "./_components/events-section";
-import { getEvents } from "../server/actions/events";
+import { getEvents } from "../server/actions/stream";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();

@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import {
   DO_NOT_USE_deleteAllEvents,
   type getEvents,
-} from "../../server/actions/events";
+} from "../../server/actions/stream";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData } from "./hooks";
 
