@@ -24,8 +24,8 @@ export const createViewerToken = async (hostIdentity: string) => {
 
   const host = await db.user.findUnique({
     where: { id: hostIdentity },
-    include: {
-      AdministeredEvents: true,
+    select: {
+      id: true,
     },
   });
 

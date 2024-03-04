@@ -2,6 +2,7 @@
 import { signOut } from "next-auth/react";
 
 import { LogOut } from "lucide-react";
+import { Key } from "lucide-react";
 import type { Session } from "next-auth";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -13,6 +14,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export function UserProfileButton({ session }: { session: Session }) {
   return (
@@ -38,8 +40,14 @@ export function UserProfileButton({ session }: { session: Session }) {
         </DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem onClick={() => void signOut()}>
-            <LogOut className="mr-2 h-4 w-4" />
+            <LogOut className="mr-2 size-4" />
             <span>Log out</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href="/user/keys">
+              <Key className="mr-2 size-4" />
+              <span>Chaves</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
