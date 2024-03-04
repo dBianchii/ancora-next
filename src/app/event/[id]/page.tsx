@@ -25,7 +25,6 @@ const UserPage = async ({ params }: UserPageProps) => {
           isLive: true,
           isChatDelayed: true,
           isChatEnabled: true,
-          isChatFollowersOnly: true,
           thumbnailUrl: true,
           name: true,
         },

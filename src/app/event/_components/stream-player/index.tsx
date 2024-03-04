@@ -16,7 +16,6 @@ type CustomStream = {
   id: string;
   isChatEnabled: boolean;
   isChatDelayed: boolean;
-  isChatFollowersOnly: boolean;
   isLive: boolean;
   thumbnailUrl: string | null;
   name: string;
