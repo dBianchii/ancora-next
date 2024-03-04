@@ -16,6 +16,7 @@ import {
 } from "~/components/ui/dialog";
 import {
   Select,
+  SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -60,10 +61,10 @@ export const ConnectModal = () => {
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Ingress Type" />
           </SelectTrigger>
-          <SelectContRTMPent>
+          <SelectContent>
             <SelectItem value={RTMP}>RTMP</SelectItem>
             <SelectItem value={WHIP}>WHIP</SelectItem>
-          </SelectContRTMPent>
+          </SelectContent>
         </Select>
         <Alert>
           <AlertTriangle className="h-4 w-4" />
