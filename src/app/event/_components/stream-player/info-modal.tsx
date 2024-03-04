@@ -126,7 +126,7 @@ export const InfoModal = ({
               <div className="rounded-xl border outline-dashed outline-muted">
                 <UploadDropzone
                   input={{ id: streamId }}
-                  endpoint="thumbnailUploader"
+                  endpoint="thumbnailEdit"
                   appearance={{
                     label: {
                       color: "#FFFFFF",
