@@ -1,10 +1,13 @@
 "use client";
 
-import { toast } from "sonner";
-import { useState, useTransition, useRef, type ElementRef } from "react";
+import { Label } from "@radix-ui/react-dropdown-menu";
 import { Trash } from "lucide-react";
 import Image from "next/image";
-import { updateStream } from "~/server/actions/events";
+import { useRouter } from "next/navigation";
+import { useRef, useState, useTransition, type ElementRef } from "react";
+import { toast } from "sonner";
+import { Hint } from "~/components/hint";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -13,10 +16,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
-import { Label } from "@radix-ui/react-dropdown-menu";
-import { Hint } from "~/components/hint";
 import { Input } from "~/components/ui/input";
-import { Button } from "~/components/ui/button";
+import { updateStream } from "~/server/actions/stream";
+import { UploadDropzone } from "~/server/utils/uploadthing";
 
 interface InfoModalProps {
   initialName: string;
@@ -74,6 +76,7 @@ export const InfoModal = ({
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
+  const router = useRouter();
 
   return (
     <Dialog>
@@ -121,7 +124,8 @@ export const InfoModal = ({
               </div>
             ) : (
               <div className="rounded-xl border outline-dashed outline-muted">
-                {/* <UploadDropzone
+                <UploadDropzone
+                  input={{ id: streamId }}
                   endpoint="thumbnailUploader"
                   appearance={{
                     label: {
@@ -132,11 +136,11 @@ export const InfoModal = ({
                     },
                   }}
                   onClientUploadComplete={(res) => {
-                    setThumbnailUrl(res?.[0]?.url);
+                    res[0]?.url && setThumbnailUrl(res?.[0]?.url);
                     router.refresh();
                     closeRef?.current?.click();
                   }}
-                /> */}
+                />
               </div>
             )}
           </div>

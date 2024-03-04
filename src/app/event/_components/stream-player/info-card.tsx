@@ -11,6 +11,7 @@ interface InfoCardProps {
   thumbnailUrl: string | null;
   hostIdentity: string;
   viewerIdentity: string;
+  streamId: string;
 }
 
 export const InfoCard = ({
@@ -18,6 +19,7 @@ export const InfoCard = ({
   thumbnailUrl,
   hostIdentity,
   viewerIdentity,
+  streamId,
 }: InfoCardProps) => {
   const hostAsViewer = `host-${hostIdentity}`;
   const isHost = viewerIdentity === hostAsViewer;
@@ -39,7 +41,11 @@ export const InfoCard = ({
               Maximize your visibility
             </p>
           </div>
-          <InfoModal initialName={name} initialThumbnailUrl={thumbnailUrl} />
+          <InfoModal
+            initialName={name}
+            initialThumbnailUrl={thumbnailUrl}
+            streamId={streamId}
+          />
         </div>
         <Separator />
         <div className="space-y-4 p-4 lg:p-6">

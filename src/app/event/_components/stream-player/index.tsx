@@ -70,6 +70,7 @@ export const StreamPlayer = ({
             viewerIdentity={identity}
             name={stream.title}
             thumbnailUrl={stream.thumbnailUrl}
+            streamId={stream.id}
           />
           <AboutCard
             hostName={user.image ?? ""}
