@@ -4,7 +4,10 @@ import { PlayIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
-import { DO_NOT_USE_deleteAllEvents, type getEvents } from "../actions";
+import {
+  DO_NOT_USE_deleteAllEvents,
+  type getEvents,
+} from "../../server/actions/events";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData } from "./hooks";
 

@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { buttonVariants } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
+import { cn } from "~/components/ui/lib/utils";
 import { getServerAuthSession } from "~/server/auth";
 import UserLoginForm from "../../../components/user-login-auth";
 

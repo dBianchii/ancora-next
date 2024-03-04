@@ -1,4 +1,4 @@
-import { getServerAuthSession } from "./auth";
+import { getServerAuthSession } from "../auth";
 
 export const enforceLoggedIn = async () => {
   const session = await getServerAuthSession();

@@ -4,7 +4,7 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";
-import { cn } from "../lib/utils";
+import { cn } from "./ui/lib/utils";
 import { Icons } from "./icons";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";

@@ -4,7 +4,7 @@ import { Inter as FontSans } from "next/font/google";
 import { ReactQueryProvider, ThemeProvider } from "~/components/providers";
 import { ModeToggle } from "~/components/theme-toggle";
 import { Toaster } from "~/components/ui/sonner";
-import { cn } from "~/lib/utils";
+import { cn } from "~/components/ui/lib/utils";
 import Header from "./_components/header/header";
 
 const fontSans = FontSans({

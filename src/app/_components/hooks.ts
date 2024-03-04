@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { createEvent, getEvents } from "../actions";
+import { createEvent, getEvents } from "../../server/actions/events";
 import { toast } from "sonner";
 
 export const useEventsData = () => {

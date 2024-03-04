@@ -10,7 +10,7 @@ import {
   getDateByType,
   setDateByType,
 } from "./time-picker-utils";
-import { cn } from "~/lib/utils";
+import { cn } from "~/components/ui/lib/utils";
 
 export interface TimePickerInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {

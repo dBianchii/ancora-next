@@ -3,7 +3,7 @@ import * as React from "react";
 
 import { PlusCircle } from "lucide-react";
 import { type z } from "zod";
-import { cn } from "~/lib/utils";
+import { cn } from "~/components/ui/lib/utils";
 import { Badge } from "./badge";
 import { Button } from "./button";
 import {

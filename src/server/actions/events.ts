@@ -2,7 +2,7 @@
 
 import { type Prisma } from "@prisma/client";
 import { db } from "~/server/db";
-import { enforceLoggedIn } from "~/server/utils";
+import { enforceLoggedIn } from "../utils/enforceLoggedIn";
 
 export const getEvents = async () => {
   const session = await enforceLoggedIn();
