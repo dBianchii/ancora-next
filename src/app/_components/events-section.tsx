@@ -10,12 +10,13 @@ import {
 } from "../../server/actions/stream";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData } from "./hooks";
+import Link from "next/link";
 
 export function EventsSection() {
   const { query } = useEventsData();
 
   return (
-    <div className="gap-2">
+    <section className="gap-2">
       <h2 className="pb-4 text-2xl font-bold">Meus eventos</h2>
       <div className="space-y-2">
         <div className="flex justify-between">
@@ -39,7 +40,7 @@ export function EventsSection() {
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -49,7 +50,7 @@ function EventCard({
   event: Awaited<ReturnType<typeof getEvents>>[number];
 }) {
   return (
-    <div className="group relative">
+    <Link className="group relative" href={`/events/${event.id}`}>
       <Image
         alt="Stream thumbnail"
         className="aspect-[16/9] w-full rounded-lg object-cover transition-transform duration-200 group-hover:z-10 group-hover:scale-[1.05]"
@@ -74,6 +75,6 @@ function EventCard({
           </span>
         </p>
       </div>
-    </div>
+    </Link>
   );
 }
