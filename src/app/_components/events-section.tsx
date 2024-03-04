@@ -50,7 +50,7 @@ function EventCard({
   event: Awaited<ReturnType<typeof getEvents>>[number];
 }) {
   return (
-    <Link className="group relative" href={`/events/${event.id}`}>
+    <Link className="group relative" href={`/event/${event.id}`}>
       <Image
         alt="Stream thumbnail"
         className="aspect-[16/9] w-full rounded-lg object-cover transition-transform duration-200 group-hover:z-10 group-hover:scale-[1.05]"
