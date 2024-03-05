@@ -39,15 +39,15 @@ export default function UserLoginForm({
 			redirect: false,
 		});
 
-		if (response?.ok) {
-			toast("Por favor, verifique o seu email para continuar.");
-			router.push("/");
-		}
+		// if (response?.ok) {
+		// 	toast("Por favor, verifique o seu email para continuar.");
+		// 	router.push("/login/confirm-email");
+		// }
 
 		if (response?.error) {
 			toast.error("Houve um erro ao tentar entrar. Tente novamente.");
 		} else {
-			router.push("/");
+			router.push("/login/confirm-email");
 		}
 
 		setData({
