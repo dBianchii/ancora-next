@@ -10,7 +10,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { EventsSection } from "./_components/events-section";
 import { getEvents } from "../server/actions/stream";
 import { Button } from "~/components/ui/button";
-import Image from "next/image";
+import { SidebarNav } from "./_components/sidebar-nav";
+import { Separator } from "~/components/ui/separator";
 
 export default async function HomePage() {
 	const session = await getServerAuthSession();
@@ -33,7 +34,7 @@ export default async function HomePage() {
 function LoggedInViewSkeleton() {
 	return (
 		<div className="gap-2">
-			<h2 className="pb-4 text-2xl font-bold">Eventos</h2>
+			<h2 className="pb-4 text-2xl font-bold">Meus eventos</h2>
 			<Skeleton className="h-6 w-24" />
 			<Skeleton className="h-[200px] w-full" />{" "}
 		</div>
@@ -43,6 +44,25 @@ function LoggedInViewSkeleton() {
 async function LoggedInView() {
 	const queryClient = new QueryClient();
 
+	const sidebarNavItems = [
+		{
+			href: "/",
+			title: "Página inicial",
+		},
+		{
+			href: "/biblioteca",
+			title: "Biblioteca",
+		},
+		{
+			href: "/destinos",
+			title: "Destinos",
+		},
+		{
+			href: "/equipes",
+			title: "Equipes",
+		},
+	];
+
 	await queryClient.prefetchQuery({
 		queryKey: ["events"],
 		queryFn: getEvents,
@@ -51,7 +71,22 @@ async function LoggedInView() {
 	return (
 		<div className="gap-2">
 			<HydrationBoundary state={dehydrate(queryClient)}>
-				<EventsSection />
+				<div className="space-y-6 px-10 pb-16 md:block ">
+					<div className="space-y-0.5">
+						<h2 className="text-2xl font-bold tracking-tight">Minha área</h2>
+					</div>
+					<Separator className="my-6" />
+					<div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+						<aside className="-mx-4 lg:w-1/5">
+							<SidebarNav items={sidebarNavItems} />
+						</aside>
+						<div className="flex-1 lg:max-w-2xl">
+
+							<EventsSection />
+
+						</div>
+					</div>
+				</div>
 			</HydrationBoundary>
 		</div>
 	);
