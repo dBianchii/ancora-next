@@ -1,7 +1,6 @@
 import { type Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
-import MaxWidthWrapper from "~/components/max-width-wrapper";
 import { Skeleton } from "~/components/ui/skeleton";
 import { getServerAuthSession } from "~/server/auth";
 import { db } from "~/server/db";
@@ -14,26 +13,24 @@ export default async function KeysPage() {
   if (!session) redirect("/login");
 
   return (
-    <MaxWidthWrapper>
-      <div className="p-6">
-        <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Keys & URLs</h1>
-          <ConnectModal />
-        </div>
-        <div className="space-y-4">
-          <Suspense
-            fallback={
-              <div className="space-y-6">
-                <Skeleton className="h-20 bg-card" />
-                <Skeleton className="h-32 bg-card" />
-              </div>
-            }
-          >
-            <Cards session={session} />
-          </Suspense>
-        </div>
+    <div className="p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Keys & URLs</h1>
+        <ConnectModal />
       </div>
-    </MaxWidthWrapper>
+      <div className="space-y-4">
+        <Suspense
+          fallback={
+            <div className="space-y-6">
+              <Skeleton className="h-20 bg-card" />
+              <Skeleton className="h-32 bg-card" />
+            </div>
+          }
+        >
+          <Cards session={session} />
+        </Suspense>
+      </div>
+    </div>
   );
 }
 

@@ -1,15 +1,12 @@
 import "~/styles/globals.css";
 
 import { Inter as FontSans } from "next/font/google";
+import MaxWidthWrapper from "~/components/max-width-wrapper";
 import { ReactQueryProvider, ThemeProvider } from "~/components/providers";
 import { ModeToggle } from "~/components/theme-toggle";
-import { Toaster } from "~/components/ui/sonner";
 import { cn } from "~/components/ui/lib/utils";
+import { Toaster } from "~/components/ui/sonner";
 import Header from "./_components/header/header";
-import { SidebarNav } from "./_components/sidebar-nav";
-import { Separator } from "~/components/ui/separator";
-import { getServerAuthSession } from "~/server/auth";
-import MaxWidthWrapper from "~/components/max-width-wrapper";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,8 +24,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerAuthSession();
-
   return (
     <html lang="en">
       <body
@@ -48,24 +43,7 @@ export default async function RootLayout({
               <MaxWidthWrapper>
                 <Header />
                 <Toaster richColors />
-                {session ? (
-                  <div className="space-y-6 p-10 pb-16 md:block ">
-                    <div className="space-y-0.5">
-                      <h2 className="text-2xl font-bold tracking-tight">
-                        Minha área
-                      </h2>
-                    </div>
-                    <Separator className="my-6" />
-                    <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-                      <aside className="-mx-4 lg:w-1/5">
-                        <SidebarNav />
-                      </aside>
-                      <div className="flex-1">{children}</div>
-                    </div>
-                  </div>
-                ) : (
-                  children
-                )}
+                {children}
               </MaxWidthWrapper>
               <div className="fixed bottom-1 z-50 flex flex-row items-center space-x-1">
                 <ModeToggle />

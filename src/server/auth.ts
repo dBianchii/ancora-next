@@ -7,6 +7,7 @@ import {
 
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
+import { cache } from "react";
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { sendVerificationRequest } from "~/server/email/send-verification-request";
@@ -92,4 +93,4 @@ export const authOptions: NextAuthOptions = {
  *
  * @see https://next-auth.js.org/configuration/nextjs
  */
-export const getServerAuthSession = () => getServerSession(authOptions);
+export const getServerAuthSession = cache(() => getServerSession(authOptions));

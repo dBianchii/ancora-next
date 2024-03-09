@@ -13,37 +13,40 @@ import {
 import { cn } from "../../components/ui/lib/utils";
 
 export function SidebarNav() {
+  const prefix = "/dashboard";
   const items = [
     {
-      href: "/",
+      href: `${prefix}/`,
       title: "Página inicial",
     },
     {
-      href: "/biblioteca",
+      href: `${prefix}/biblioteca`,
       title: "Biblioteca",
     },
     {
-      href: "/destinos",
+      href: `${prefix}/destinos`,
       title: "Destinos",
     },
     {
-      href: "/equipes",
+      href: `${prefix}/equipes`,
       title: "Equipes",
     },
   ];
 
   return (
-    <NavigationMenu className="flex w-full max-w-4xl self-start">
-      <NavigationMenuList
-        className={cn("flex w-full flex-row space-y-2 lg:flex-col")}
-      >
-        {items.map((item, i) => (
-          <NavigationItem key={i} href={item.href}>
-            {item.title}
-          </NavigationItem>
-        ))}
-      </NavigationMenuList>
-    </NavigationMenu>
+    <aside>
+      <NavigationMenu className="flex w-full max-w-4xl self-start">
+        <NavigationMenuList
+          className={cn("flex w-full flex-row space-y-2 lg:flex-col")}
+        >
+          {items.map((item, i) => (
+            <NavigationItem key={i} href={item.href}>
+              {item.title}
+            </NavigationItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
+    </aside>
   );
 }
 

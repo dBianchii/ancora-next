@@ -11,7 +11,7 @@ export default async function Header() {
       <header className="border-b px-4 py-2">
         <div className="mx-auto flex max-w-screen-2xl items-center">
           <Link
-            href={"/"}
+            href={session ? "/dashboard" : "/"}
             className="text-bold text-xl font-medium text-primary"
           >
             <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text font-extrabold tracking-tight text-transparent">
