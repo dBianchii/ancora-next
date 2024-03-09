@@ -32,7 +32,7 @@ export default async function HomePage() {
 function LoggedInViewSkeleton() {
   return (
     <div className="gap-2">
-      <h2 className="pb-4 text-2xl font-bold">Meus eventos</h2>
+      <h2 className="pb-4 text-2xl font-bold text-center sm:text-start">Meus eventos</h2>
       <Skeleton className="h-6 w-24" />
       <Skeleton className="h-[200px] w-full" />{" "}
     </div>

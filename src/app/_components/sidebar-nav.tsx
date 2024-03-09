@@ -25,46 +25,46 @@ export function SidebarNav() {
     {
       href: `${prefix}`,
       title: (
-        <>
-          <HomeIcon className="mr-2 size-4 text-primary/70" />
-          <span>Dashboard</span>
-        </>
+        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+          <HomeIcon className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Dashboard</span>
+        </div>
       ),
     },
     {
       href: `${prefix}/biblioteca`,
       title: (
-        <>
-          <LibraryIcon className="mr-2 size-4 text-primary/70" />
-          <span>Biblioteca</span>
-        </>
+        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+          <LibraryIcon className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Biblioteca</span>
+        </div>
       ),
     },
     {
       href: `${prefix}/destinos`,
       title: (
-        <>
-          <RadioTowerIcon className="mr-2 size-4 text-primary/70" />
-          <span>Destinos</span>
-        </>
+        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+          <RadioTowerIcon className="size-4 text-primary/70 flex" />
+          <span className="hidden sm:block">Destinos</span>
+        </div>
       ),
     },
     {
       href: `${prefix}/equipes`,
       title: (
-        <>
-          <Users2Icon className="mr-2 size-4 text-primary/70" />
-          <span>Equipes</span>
-        </>
+        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+          <Users2Icon className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Equipes</span>
+        </div>
       ),
     },
     {
       href: `${prefix}/chaves`,
       title: (
-        <>
-          <Key className="mr-2 size-4 text-primary/70" />
-          <span>Chaves</span>
-        </>
+        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+          <Key className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Chaves</span>
+        </div>
       ),
     },
   ];

@@ -20,7 +20,7 @@ export function EventsSection() {
 
 	return (
 		<section className="gap-2">
-			<h2 className="pb-4 text-2xl font-bold">Meus eventos</h2>
+			<h2 className="pb-4 text-2xl font-bold text-center sm:text-start">Meus eventos</h2>
 			<Tabs defaultValue="proximos" className="w-full flex flex-col gap-4">
 				<TabsList>
 					<TabsTrigger value="proximos">Próximos</TabsTrigger>
