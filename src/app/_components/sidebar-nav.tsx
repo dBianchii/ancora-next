@@ -11,28 +11,63 @@ import {
   navigationMenuTriggerStyle,
 } from "~/components/ui/navigation-menu";
 import { cn } from "../../components/ui/lib/utils";
+import {
+  HomeIcon,
+  Key,
+  LibraryIcon,
+  RadioTowerIcon,
+  Users2Icon,
+} from "lucide-react";
 
 export function SidebarNav() {
   const prefix = "/dashboard";
   const items = [
     {
-      href: `${prefix}/`,
-      title: "Página inicial",
+      href: `${prefix}`,
+      title: (
+        <>
+          <HomeIcon className="mr-2 size-4 text-primary/70" />
+          <span>Dashboard</span>
+        </>
+      ),
     },
     {
       href: `${prefix}/biblioteca`,
-      title: "Biblioteca",
+      title: (
+        <>
+          <LibraryIcon className="mr-2 size-4 text-primary/70" />
+          <span>Biblioteca</span>
+        </>
+      ),
     },
     {
       href: `${prefix}/destinos`,
-      title: "Destinos",
+      title: (
+        <>
+          <RadioTowerIcon className="mr-2 size-4 text-primary/70" />
+          <span>Destinos</span>
+        </>
+      ),
     },
     {
       href: `${prefix}/equipes`,
-      title: "Equipes",
+      title: (
+        <>
+          <Users2Icon className="mr-2 size-4 text-primary/70" />
+          <span>Equipes</span>
+        </>
+      ),
+    },
+    {
+      href: `${prefix}/chaves`,
+      title: (
+        <>
+          <Key className="mr-2 size-4 text-primary/70" />
+          <span>Chaves</span>
+        </>
+      ),
     },
   ];
-
   return (
     <aside>
       <NavigationMenu className="flex w-full max-w-4xl self-start">
@@ -63,10 +98,10 @@ function NavigationItem({
     <NavigationMenuItem>
       <Link href={href} legacyBehavior passHref>
         <NavigationMenuLink
-          active={pathname === href}
           className={cn(
             navigationMenuTriggerStyle(),
             "justify-start text-center font-bold lg:w-60",
+            pathname.endsWith(href) && "bg-muted",
           )}
         >
           {children}

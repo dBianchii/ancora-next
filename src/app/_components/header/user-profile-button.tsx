@@ -43,12 +43,12 @@ export function UserProfileButton({ session }: { session: Session }) {
             <LogOut className="mr-2 size-4" />
             <span>Log out</span>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          {/* <DropdownMenuItem asChild>
             <Link href="/user/keys">
               <Key className="mr-2 size-4" />
               <span>Chaves</span>
             </Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>
