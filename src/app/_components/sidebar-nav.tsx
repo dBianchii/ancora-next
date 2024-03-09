@@ -1,44 +1,74 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { cn } from "../../components/ui/lib/utils"
-import { buttonVariants } from "../../components/ui/button"
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "~/components/ui/navigation-menu";
+import { cn } from "../../components/ui/lib/utils";
 
-interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
-  items: {
-    href: string
-    title: string
-  }[]
-}
-
-export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname()
+export function SidebarNav() {
+  const items = [
+    {
+      href: "/",
+      title: "Página inicial",
+    },
+    {
+      href: "/biblioteca",
+      title: "Biblioteca",
+    },
+    {
+      href: "/destinos",
+      title: "Destinos",
+    },
+    {
+      href: "/equipes",
+      title: "Equipes",
+    },
+  ];
 
   return (
-    <nav
-      className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
-        className
-      )}
-      {...props}
-    >
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
+    <NavigationMenu className="flex w-full max-w-4xl self-start">
+      <NavigationMenuList
+        className={cn("flex w-full flex-row space-y-2 lg:flex-col")}
+      >
+        {items.map((item, i) => (
+          <NavigationItem key={i} href={item.href}>
+            {item.title}
+          </NavigationItem>
+        ))}
+      </NavigationMenuList>
+    </NavigationMenu>
+  );
+}
+
+function NavigationItem({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  const pathname = usePathname();
+
+  return (
+    <NavigationMenuItem>
+      <Link href={href} legacyBehavior passHref>
+        <NavigationMenuLink
+          active={pathname === href}
           className={cn(
-            buttonVariants({ variant: "ghost" }),
-            pathname === item.href
-              ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start"
+            navigationMenuTriggerStyle(),
+            "justify-start text-center font-bold lg:w-60",
           )}
         >
-          {item.title}
-        </Link>
-      ))}
-    </nav>
-  )
+          {children}
+        </NavigationMenuLink>
+      </Link>
+    </NavigationMenuItem>
+  );
 }
