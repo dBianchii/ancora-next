@@ -9,9 +9,6 @@ const config = {
   images: {
     domains: ["utfs.io"],
   },
-  experimental: {
-    ppr: true,
-  },
 };
 
 export default config;
