@@ -76,6 +76,7 @@ export const AlterModal = ({ team }: { team: ITeam }) => {
 
   return (
     <Dialog>
+      <></>
       <DialogTrigger asChild>
         <Button variant="ghost">
           <UserRound className="cursor-pointer text-primary/70" />

@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/dialog";
 import { createTeam } from "~/server/actions/team";
 import { Icons } from "~/components/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const CreateTeamModal = () => {
   // useTransition fake (não consegui implementar, o isPending continua true mesmo após a requisição ser finalizada)
@@ -21,25 +22,30 @@ export const CreateTeamModal = () => {
   const closeRef = useRef<ElementRef<"button">>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: createTeam,
+    onSuccess: async (res) => {
+      toast.success(`Equipe ${res.name} criada`);
+      closeRef.current?.click();
+      void queryClient.invalidateQueries({ queryKey: ["getTeams"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSettled: () => {
+      inputRef.current!.value = "";
+      startTransition(false);
+    },
+  });
+
   const onSubmit = async () => {
     const inputValue = inputRef.current?.value;
     if (!inputValue) {
       toast.error("O nome da equipe é obrigatório");
       return;
     }
-    startTransition(true);
-    await createTeam(inputValue)
-      .then((res) => {
-        toast.success(`Equipe ${res.name} criada`);
-        closeRef.current?.click();
-      })
-      .catch((error: Error) => {
-        toast.error(error.message);
-      })
-      .finally(() => {
-        inputRef.current!.value = "";
-        startTransition(false);
-      });
+    mutation.mutate(inputValue);
   };
 
   return (
