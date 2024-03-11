@@ -14,7 +14,7 @@ export function NoTeam() {
 					Nenhuma equipe encontrada
 				</CardTitle>
 				<CardDescription>
-					Crie uma nova equipe para começar a adicionar membros.
+					Crie uma nova equipe para começar a adicionar e-mails.
 				</CardDescription>
 			</CardHeader>
 		</Card>

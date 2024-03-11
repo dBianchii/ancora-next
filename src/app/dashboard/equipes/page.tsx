@@ -1,23 +1,26 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { CreateTeamModal } from "./_components/create-team-modal";
 import { NoTeam } from "./_components/no-team";
 import { TeamTable } from "./_components/team-table";
+import { getTeams } from "~/server/actions/team";
+import type { ITeam } from "./_components/model";
 
 export default function EquipesPage() {
-	const Equipes = [
-		{
-			name: "Funcionários",
-			members: []
-		},
-		{
-			name: "Colaboradores",
-			members: []
-		},
-		{
-			name: "Afiliadas",
-			members: []
-		}
-	];
+	const [teams, setTeams] = useState<ITeam[]>([]);
+
+	useEffect(() => {
+		getTeams()
+		.then((team) => {	
+			setTeams(team);
+		}).catch(
+			(err) => {
+				console.log(err);
+			}
+		);
+	}, [teams]);
+
 
 	return <>
 		<div >
@@ -27,10 +30,10 @@ export default function EquipesPage() {
 			</div>
 			<div className="space-y-4">
 				{
-					Equipes.length === 0
+					teams?.length === 0
 						? <NoTeam />
 						: <>
-						<TeamTable teams={Equipes}/>
+						<TeamTable teams={teams}/>
 						</>
 				}
 			</div>

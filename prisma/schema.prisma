@@ -62,6 +62,9 @@ model Stream {
     updatedAt DateTime @updatedAt
 
     @@index([userId])
+
+	// private 		Boolean @default(false)
+	// invitedTeams 	Team[]
 }
 
 model Leads {
@@ -110,7 +113,7 @@ model User {
     emailVerified DateTime?
     bio           String?
     image         String?
-	// teams 	   	  Team[] 
+	teams 	   	  Team[] 
     accounts      Account[]
     sessions      Session[]
 
@@ -131,20 +134,11 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// model Team {
-// 	id 			String @id @default(cuid()) 
-// 	name 		String
-// 	members 	TeamMember[] 
+model Team {
+	id 				String @id @default(cuid()) 
+	name 			String @unique
+	usersEmails 	String[] 
 
-// 	user 		User @relation(fields: [userId], references: [id])
-// 	userId 		String
-// }
-
-// model TeamMember {
-// 	id 			String @id @default(cuid())
-// 	name 		String
-// 	email 		String
-
-// 	team 		Team @relation(fields: [teamId], references: [id])
-// 	teamId 		String
-// }
+	userId 			String
+	user 			User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
