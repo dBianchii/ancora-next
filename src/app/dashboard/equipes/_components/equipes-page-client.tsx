@@ -26,7 +26,7 @@ export function EquipesPageClient({
           <CreateTeamModal />
         </div>
         <div className="space-y-4">
-          {query.isFetching && <>Loading...</>}
+          {/* {query.isFetching && <>Loading...</>} */}
           {query.data?.length === 0 ? (
             <NoTeam />
           ) : (

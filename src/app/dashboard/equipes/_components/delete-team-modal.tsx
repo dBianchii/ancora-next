@@ -16,7 +16,7 @@ import { deleteTeam, type getTeams } from "~/server/actions/team";
 export const DeleteModal = ({
   team,
 }: {
-  team: Awaited<ReturnType<typeof getTeams>>;
+  team: Awaited<ReturnType<typeof getTeams>>[0];
 }) => {
   const [isPending, startTransition] = useTransition();
   const closeRef = useRef<ElementRef<"button">>(null);

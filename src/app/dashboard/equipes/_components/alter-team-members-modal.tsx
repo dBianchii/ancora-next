@@ -22,12 +22,15 @@ import { Card, CardHeader, CardTitle } from "~/components/ui/card";
 import { X } from "lucide-react";
 import { Icons } from "~/components/icons";
 import { toast } from "sonner";
-import { updateTeam } from "~/server/actions/team";
-import type { ITeam } from "./model";
+import { updateTeam, type getTeams } from "~/server/actions/team";
 import { UserRound } from "lucide-react";
 import { Input } from "~/components/ui/input";
 
-export const AlterModal = ({ team }: { team: ITeam }) => {
+export const AlterModal = ({ 
+	team 
+}: { 
+	team: Awaited<ReturnType<typeof getTeams>>[0]
+}) => {
   // useTransition fake (não consegui implementar, o isPending continua true mesmo após a requisição ser finalizada)
   const [isPending, startTransition] = useState(false);
   const closeRef = useRef<ElementRef<"button">>(null);

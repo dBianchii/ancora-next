@@ -7,7 +7,6 @@ import {
   TableRow,
 } from "~/components/ui/table";
 
-import type { ITeam } from "./model";
 import { DeleteModal } from "./delete-team-modal";
 import { AlterModal } from "./alter-team-members-modal";
 import { type getTeams } from "~/server/actions/team";
