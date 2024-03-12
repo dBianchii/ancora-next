@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type ElementRef } from "react";
+import { useRef, type ElementRef, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -17,8 +17,7 @@ import { Icons } from "~/components/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const CreateTeamModal = () => {
-  // useTransition fake (não consegui implementar, o isPending continua true mesmo após a requisição ser finalizada)
-  const [isPending, startTransition] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const closeRef = useRef<ElementRef<"button">>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -35,7 +34,6 @@ export const CreateTeamModal = () => {
     },
     onSettled: () => {
       inputRef.current!.value = "";
-      startTransition(false);
     },
   });
 
@@ -45,7 +43,9 @@ export const CreateTeamModal = () => {
       toast.error("O nome da equipe é obrigatório");
       return;
     }
-    mutation.mutate(inputValue);
+    startTransition(() => {
+      mutation.mutate(inputValue);
+    });
   };
 
   return (
