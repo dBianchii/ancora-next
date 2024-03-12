@@ -32,12 +32,13 @@ import { MultiSelect } from "~/components/ui/multi-select";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 import { TimePickerInput } from "~/components/ui/time-picker/time-picker-input";
-import { useEventsData } from "./hooks";
+import { useEventsData, useTeamsData } from "./hooks";
 import { Loader2, X } from "lucide-react";
 import { UploadDropzone } from "~/server/utils/uploadthing";
 import Image from "next/image";
 
 export function CreateEventsButton() {
+  const { query } = useTeamsData();
   const [isPrivate, setIsPrivate] = useState(false);
 
   const form = useForm({
@@ -45,7 +46,14 @@ export function CreateEventsButton() {
       title: z.string(),
       description: z.string(),
       datetime: z.date(),
-      invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
+			// invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
+      //   if (isPrivate) {
+      //     if (values.length > 0) return true;
+      //     return false;
+      //   }
+      //   return true;
+      // }, "Se o seu evento é privado, você deve convidar pelo menos um usuário."),
+      invitedPrivateUsers: z.array(z.string()).refine((values) => {
         if (isPrivate) {
           if (values.length > 0) return true;
           return false;
@@ -195,13 +203,20 @@ export function CreateEventsButton() {
                           <FormLabel>Participantes</FormLabel>
                           <FormControl>
                             <MultiSelect
-                              options={[
-                                { label: "User 1", value: "joao@gmail.com" },
-                                { label: "User 2", value: "joao@gmail.com" },
-                                { label: "User 3", value: "joao@gmail.com" },
-                              ]}
+                              options={
+                                query.data?.map((team) => ({
+                                  label: team.name,
+                                  value: JSON.stringify(team.usersEmails),
+                                })) ?? []
+                              }
+                              // options={[
+                              //   { label: "User 1", value: "joao@gmail.com" },
+                              //   { label: "User 2", value: "joao@gmail.com" },
+                              //   { label: "User 3", value: "joao@gmail.com" },
+                              // ]}
                               customValues
-                              customValuesSchema={z.string().email()}
+															customValuesSchema={z.string()}
+                              // customValuesSchema={z.string().email()}
                               selected={field.value ?? []}
                               onChange={(newValues: string[]) => {
                                 form.setValue("invitedPrivateUsers", newValues);
