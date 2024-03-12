@@ -9,6 +9,7 @@ import { buttonVariants } from "~/components/ui/button";
 import { cn } from "~/components/ui/lib/utils";
 import { getServerAuthSession } from "~/server/auth";
 import UserLoginForm from "./_components/user-login-auth";
+import { Anchor } from "lucide-react";
 
 export const metadata: Metadata = {
 	title: "Login",
@@ -44,9 +45,12 @@ export default async function LoginPage() {
 					<div className="flex h-1/3 w-full items-center">
 						<Link
 							href="/"
-							className="mx-auto bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent"
+							className="flex gap-2 items-center mx-auto bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent"
 						>
-							Nome do Nosso App
+							<Anchor color="white" size={'32px'}/>
+            <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text font-extrabold tracking-tight text-transparent">
+              ANC.
+            </span>
 						</Link>
 					</div>
 					<div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[400px]">

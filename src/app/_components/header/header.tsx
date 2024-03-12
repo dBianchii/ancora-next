@@ -3,6 +3,7 @@ import { buttonVariants } from "~/components/ui/button";
 import { getServerAuthSession } from "~/server/auth";
 import { UserProfileButton } from "./user-profile-button";
 import HeaderRemover from "~/components/header-remover";
+import { Anchor } from "lucide-react";
 
 export default async function Header() {
   const session = await getServerAuthSession();
@@ -12,10 +13,11 @@ export default async function Header() {
         <div className="mx-auto flex max-w-screen-2xl items-center">
           <Link
             href={session ? "/dashboard" : "/"}
-            className="text-bold text-xl font-medium text-primary"
+            className="flex gap-2 text-bold text-xl font-medium text-primary"
           >
+						<Anchor color="white"/>
             <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text font-extrabold tracking-tight text-transparent">
-              Nome do Nosso App
+              ANC.
             </span>
           </Link>
 
