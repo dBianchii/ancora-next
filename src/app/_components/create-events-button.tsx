@@ -63,7 +63,7 @@ export function CreateEventsButton() {
       thumbnailUrl: z.string().optional(),
     }),
     defaultValues: {
-      datetime: dayjs().add(1, "day").toDate(),
+      datetime: dayjs().toDate(),
       invitedPrivateUsers: [],
     },
   });
@@ -144,13 +144,13 @@ export function CreateEventsButton() {
                         <div className="flex flex-row gap-2">
                           <DatePicker
                             disabledDate={(date) =>
-                              dayjs(date).isBefore(dayjs(new Date()))
+                              dayjs(date).isBefore(dayjs(), 'day')
                             }
                             date={field.value}
                             setDate={(newDate) =>
                               form.setValue(
                                 "datetime",
-                                newDate ?? dayjs(new Date()).toDate(),
+                                newDate ?? dayjs().toDate(),
                               )
                             }
                           />
