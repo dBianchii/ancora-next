@@ -20,9 +20,8 @@ export default async function HomePage() {
         </p>
         <Link
           href="/login"
-          className="text-bold flex h-12 gap-2 rounded-md px-6 text-xl font-medium text-primary"
         >
-          Comece já: é grátis!
+          <Button size={'custom'} className="text-bold text-lg text-black">Comece já: é grátis!</Button>
         </Link>
       </div>
 
