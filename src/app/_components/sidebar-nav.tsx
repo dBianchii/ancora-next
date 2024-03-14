@@ -17,6 +17,7 @@ import {
   LibraryIcon,
   RadioTowerIcon,
   Users2Icon,
+  UserRound,
 } from "lucide-react";
 
 export function SidebarNav() {
@@ -25,7 +26,7 @@ export function SidebarNav() {
     {
       href: `${prefix}`,
       title: (
-        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
           <HomeIcon className="size-4 text-primary/70" />
           <span className="hidden sm:block">Dashboard</span>
         </div>
@@ -34,7 +35,7 @@ export function SidebarNav() {
     {
       href: `${prefix}/biblioteca`,
       title: (
-        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
           <LibraryIcon className="size-4 text-primary/70" />
           <span className="hidden sm:block">Biblioteca</span>
         </div>
@@ -43,8 +44,8 @@ export function SidebarNav() {
     {
       href: `${prefix}/destinos`,
       title: (
-        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
-          <RadioTowerIcon className="size-4 text-primary/70 flex" />
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
+          <RadioTowerIcon className="flex size-4 text-primary/70" />
           <span className="hidden sm:block">Destinos</span>
         </div>
       ),
@@ -52,7 +53,7 @@ export function SidebarNav() {
     {
       href: `${prefix}/equipes`,
       title: (
-        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
           <Users2Icon className="size-4 text-primary/70" />
           <span className="hidden sm:block">Equipes</span>
         </div>
@@ -61,9 +62,18 @@ export function SidebarNav() {
     {
       href: `${prefix}/chaves`,
       title: (
-        <div className="m-auto sm:m-0 sm:flex sm:gap-4 sm:align-middle sm:items-center">
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
           <Key className="size-4 text-primary/70" />
           <span className="hidden sm:block">Chaves</span>
+        </div>
+      ),
+    },
+    {
+      href: `${prefix}/perfil`,
+      title: (
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
+          <UserRound className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Perfil</span>
         </div>
       ),
     },
