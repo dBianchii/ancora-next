@@ -1,6 +1,3 @@
-import { PlusCircledIcon } from "@radix-ui/react-icons";
-
-import { Button } from "../../../components/ui/button";
 import { ScrollArea, ScrollBar } from "../../../components/ui/scroll-area";
 import { Separator } from "../../../components/ui/separator";
 import {

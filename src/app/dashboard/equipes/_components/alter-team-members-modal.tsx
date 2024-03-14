@@ -43,7 +43,7 @@ export const AlterModal = ({
       .then(() => {
         toast.success("Membros atualizados");
       })
-      .catch((e) => {
+      .catch(() => {
         toast.error("Erro ao atualizar membros");
       })
       .finally(() => {

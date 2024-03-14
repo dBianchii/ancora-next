@@ -41,8 +41,8 @@ export function AlbumArtwork({
               width={width}
               height={height}
               className={cn(
-                "h-auto w-auto object-cover transition-all hover:scale-105",
-                aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square",
+                "h-auto w-auto rounded-md object-cover transition-all hover:scale-105",
+                aspectRatio === "portrait" ? "aspect-[16/9]" : "aspect-square",
               )}
             />
           </div>

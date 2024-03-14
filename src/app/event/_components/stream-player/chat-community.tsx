@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useDebounce } from "usehooks-ts";
 import { useParticipants } from "@livekit/components-react";
 import { type LocalParticipant, type RemoteParticipant } from "livekit-client";
+import { useMemo, useState } from "react";
+import { useDebounce } from "usehooks-ts";
 
 import { Input } from "~/components/ui/input";
 import { ScrollArea } from "~/components/ui/scroll-area";
@@ -71,10 +71,7 @@ export const ChatCommunity = ({
         {filteredParticipants.map((participant) => (
           <CommunityItem
             key={participant.identity}
-            hostName={hostName}
-            viewerName={viewerName}
             participantName={participant.name}
-            participantIdentity={participant.identity}
           />
         ))}
       </ScrollArea>

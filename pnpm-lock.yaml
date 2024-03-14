@@ -127,10 +127,13 @@ dependencies:
     version: 14.1.3(react-dom@18.2.0)(react@18.2.0)
   next-auth:
     specifier: ^4.24.6
-    version: 4.24.6(next@14.1.3)(react-dom@18.2.0)(react@18.2.0)
+    version: 4.24.6(next@14.1.3)(nodemailer@6.9.12)(react-dom@18.2.0)(react@18.2.0)
   next-themes:
     specifier: ^0.2.1
     version: 0.2.1(next@14.1.3)(react-dom@18.2.0)(react@18.2.0)
+  nodemailer:
+    specifier: ^6.9.12
+    version: 6.9.12
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -144,8 +147,8 @@ dependencies:
     specifier: ^7.50.1
     version: 7.50.1(react@18.2.0)
   resend:
-    specifier: ^2.0.0
-    version: 2.0.0
+    specifier: 2.1.0-canary.1
+    version: 2.1.0-canary.1
   sonner:
     specifier: ^1.4.0
     version: 1.4.0(react-dom@18.2.0)(react@18.2.0)
@@ -439,7 +442,7 @@ packages:
       next-auth: ^4
     dependencies:
       '@prisma/client': 5.11.0(prisma@5.11.0)
-      next-auth: 4.24.6(next@14.1.3)(react-dom@18.2.0)(react@18.2.0)
+      next-auth: 4.24.6(next@14.1.3)(nodemailer@6.9.12)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /@next/env@14.1.3:
@@ -2767,7 +2770,7 @@ packages:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.5.4
+      semver: 7.6.0
     dev: false
 
   /electron-to-chromium@1.4.610:
@@ -3267,15 +3270,21 @@ packages:
     resolution: {integrity: sha512-W+oqK4H+r5sITxfxpSU+MMdr/YSWGvgZMQDIsNoBDGGy4i7GBPTtvFKibQzW06n3U3TqHjhvBJsirShsEJ6eeQ==}
     dev: false
 
-  /js-beautify@1.14.11:
-    resolution: {integrity: sha512-rPogWqAfoYh1Ryqqh2agUpVfbxAhbjuN1SmU86dskQUKouRiggUTCO4+2ym9UPXllc2WAp0J+T5qxn7Um3lCdw==}
+  /js-beautify@1.15.1:
+    resolution: {integrity: sha512-ESjNzSlt/sWE8sciZH8kBF8BPlwXPwhR6pWKAw8bw4Bwj+iZcnKW6ONWUutJ7eObuBZQpiIb8S7OYspWrKt7rA==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
       config-chain: 1.1.13
       editorconfig: 1.0.4
       glob: 10.3.10
+      js-cookie: 3.0.5
       nopt: 7.2.0
+    dev: false
+
+  /js-cookie@3.0.5:
+    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
+    engines: {node: '>=14'}
     dev: false
 
   /js-tokens@4.0.0:
@@ -3577,7 +3586,7 @@ packages:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
     dev: true
 
-  /next-auth@4.24.6(next@14.1.3)(react-dom@18.2.0)(react@18.2.0):
+  /next-auth@4.24.6(next@14.1.3)(nodemailer@6.9.12)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-djQt3ZEaWEIxcsuh3HTW2uuzLfXMRjHH+ugAsichlQSbH4iA5MRcgMA2HvTNvsDTDLh44tyU72+/gWsxgTbAKg==}
     peerDependencies:
       next: ^12.2.5 || ^13 || ^14
@@ -3593,6 +3602,7 @@ packages:
       cookie: 0.5.0
       jose: 4.15.4
       next: 14.1.3(react-dom@18.2.0)(react@18.2.0)
+      nodemailer: 6.9.12
       oauth: 0.9.15
       openid-client: 5.6.4
       preact: 10.19.5
@@ -3672,6 +3682,11 @@ packages:
   /node-releases@2.0.14:
     resolution: {integrity: sha512-y10wOWt8yZpqXmOgRo77WaHEmhYQYGNA6y421PKsKYWEK8aW+cqAphborZDhqfyKrbZEN92CN1X2KbafY2s7Yw==}
     dev: true
+
+  /nodemailer@6.9.12:
+    resolution: {integrity: sha512-pnLo7g37Br3jXbF0bl5DekBJihm2q+3bB3l2o/B060sWmb5l+VqeScAQCBqaQ+5ezRZFzW5SciZNGdRDEbq89w==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
@@ -3988,7 +4003,7 @@ packages:
     dependencies:
       condense-newlines: 0.2.1
       extend-shallow: 2.0.1
-      js-beautify: 1.14.11
+      js-beautify: 1.15.1
     dev: false
 
   /prisma@5.11.0:
@@ -4174,8 +4189,8 @@ packages:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
     dev: false
 
-  /resend@2.0.0:
-    resolution: {integrity: sha512-jAh0DN84ZjjmzGM2vMjJ1hphPBg1mG98dzopF7kJzmin62v8ESg4og2iCKWdkAboGOT2SeO5exbr/8Xh8gLddw==}
+  /resend@2.1.0-canary.1:
+    resolution: {integrity: sha512-MYB50lpc4x4bxasymfJSzFFdUxMIzJ4pa8N2az5HvpEN731jUFOs5jtOCiTTnEMtFJ4bocs9LX1rGrT48TBFOg==}
     engines: {node: '>=18'}
     dependencies:
       '@react-email/render': 0.0.9
@@ -4251,6 +4266,7 @@ packages:
     hasBin: true
     dependencies:
       lru-cache: 6.0.0
+    dev: true
 
   /semver@7.6.0:
     resolution: {integrity: sha512-EnwXhrlwXMk9gKu5/flx5sv/an57AkRplG3hTK68W7FRDN+k+OWBj65M7719OkA82XLBxrcX0KSHj+X5COhOVg==}

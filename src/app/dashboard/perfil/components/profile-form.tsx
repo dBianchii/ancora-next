@@ -1,11 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Session } from "next-auth";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
-import type { Session } from "next-auth";
-import { cn } from "../../../../components/ui/lib/utils";
 import { Button } from "../../../../components/ui/button";
 import {
   Form,
@@ -17,13 +15,8 @@ import {
   FormMessage,
 } from "../../../../components/ui/form";
 import { Input } from "../../../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select";
+import { cn } from "../../../../components/ui/lib/utils";
+import { Select } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
 import { toast } from "../../../../components/ui/use-toast";
 
@@ -83,7 +76,7 @@ export function ProfileForm({ session }: { session: Session }) {
         <FormField
           control={form.control}
           name="username"
-          render={({ field }) => (
+          render={({ field: _ }) => (
             <FormItem>
               <FormLabel>Nome Completo</FormLabel>
               <FormControl>
