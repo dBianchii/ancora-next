@@ -26,10 +26,10 @@ import { updateTeam, type getTeams } from "~/server/actions/team";
 import { UserRound } from "lucide-react";
 import { Input } from "~/components/ui/input";
 
-export const AlterModal = ({ 
-	team 
-}: { 
-	team: Awaited<ReturnType<typeof getTeams>>[0]
+export const AlterModal = ({
+  team,
+}: {
+  team: Awaited<ReturnType<typeof getTeams>>[number];
 }) => {
   // useTransition fake (não consegui implementar, o isPending continua true mesmo após a requisição ser finalizada)
   const [isPending, startTransition] = useState(false);
@@ -104,7 +104,11 @@ export const AlterModal = ({
 
         {emails.length > 0 ? (
           <div className="h-32 overflow-y-auto">
-            <TableOfMembers members={emails} removeMember={removeMember} />
+            <TableOfMembers
+              members={emails}
+              removeMember={true}
+              removeMemberFn={removeMember}
+            />
           </div>
         ) : (
           <NoMembers />
@@ -129,31 +133,38 @@ export const AlterModal = ({
   );
 };
 
-function TableOfMembers({
+export function TableOfMembers({
   members,
-  removeMember,
+  removeMember = true,
+  removeMemberFn,
 }: {
   members: string[];
-  removeMember: (email: string) => void;
+  removeMember: boolean;
+  removeMemberFn: ((email: string) => void) | null;
 }) {
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>E-mails</TableHead>
-          <TableHead className="text-right">Excluir</TableHead>
+          {removeMember && (
+            <TableHead className="text-right">Excluir</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
         {members.map((member) => (
           <TableRow key={member}>
             <TableCell className="font-medium">{member}</TableCell>
-            <TableCell className="flex justify-end">
-              <X
-                className="cursor-pointer text-red-500"
-                onClick={() => removeMember(member)}
-              />
-            </TableCell>
+
+            {removeMember && (
+              <TableCell className="flex justify-end">
+                <X
+                  className="cursor-pointer text-red-500"
+                  onClick={() => removeMemberFn && removeMemberFn(member)}
+                />
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

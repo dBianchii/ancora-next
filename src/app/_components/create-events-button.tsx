@@ -206,7 +206,7 @@ export function CreateEventsButton() {
                               options={
                                 query.data?.map((team) => ({
                                   label: team.name,
-                                  value: JSON.stringify(team.usersEmails),
+                                  value: team.id,
                                 })) ?? []
                               }
                               // options={[
