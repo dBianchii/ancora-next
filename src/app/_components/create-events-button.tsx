@@ -46,7 +46,7 @@ export function CreateEventsButton() {
       title: z.string(),
       description: z.string(),
       datetime: z.date(),
-			// invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
+      // invitedPrivateUsers: z.array(z.string().email()).refine((values) => {
       //   if (isPrivate) {
       //     if (values.length > 0) return true;
       //     return false;
@@ -87,7 +87,7 @@ export function CreateEventsButton() {
           <PlusIcon className="mr-2 h-4 w-4" /> Criar novo evento
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-screen overflow-y-auto">
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(() => {
@@ -144,7 +144,7 @@ export function CreateEventsButton() {
                         <div className="flex flex-row gap-2">
                           <DatePicker
                             disabledDate={(date) =>
-                              dayjs(date).isBefore(dayjs(), 'day')
+                              dayjs(date).isBefore(dayjs(), "day")
                             }
                             date={field.value}
                             setDate={(newDate) =>
@@ -215,7 +215,7 @@ export function CreateEventsButton() {
                               //   { label: "User 3", value: "joao@gmail.com" },
                               // ]}
                               customValues
-															customValuesSchema={z.string()}
+                              customValuesSchema={z.string()}
                               // customValuesSchema={z.string().email()}
                               selected={field.value ?? []}
                               onChange={(newValues: string[]) => {
@@ -252,6 +252,7 @@ export function CreateEventsButton() {
                   </div>
                 ) : (
                   <UploadDropzone
+									className="border-gray-700 rounded cursor-pointer"
                     endpoint="genericImageUpload"
                     appearance={{
                       label: {
