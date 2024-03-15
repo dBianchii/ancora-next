@@ -33,11 +33,11 @@ export function EventsSection() {
   const { query } = useEventsData();
 
   return (
-    <section className="gap-2">
-      <h2 className="pb-4 text-center text-2xl font-bold sm:text-start">
+    <section className="h-full py-6 lg:pl-8 lg:border-l">
+      <h2 className="space-y-1 text-2xl font-semibold tracking-tight pb-4">
         Meus eventos
       </h2>
-      <Tabs defaultValue="proximos" className="flex w-full flex-col gap-4">
+      <Tabs defaultValue="proximos" className="h-full space-y-6" >
         <TabsList>
           <TabsTrigger value="proximos">Próximos</TabsTrigger>
           <TabsTrigger value="antigos">Antigos</TabsTrigger>

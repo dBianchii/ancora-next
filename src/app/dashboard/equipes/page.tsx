@@ -15,7 +15,7 @@ async function EquipesPageSuspense() {
 
   return (
     <Suspense>
-      <EquipesPageClient initialTeams={initialTeams} />;
+      <EquipesPageClient initialTeams={initialTeams} />
     </Suspense>
   );
 }

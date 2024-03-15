@@ -20,7 +20,7 @@ export function EquipesPageClient({
 
   return (
     <>
-      <div>
+      <section className="h-full py-6 lg:pl-8 lg:border-l">
         <div className="mb-4 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Equipes</h1>
           <CreateTeamModal />
@@ -35,7 +35,7 @@ export function EquipesPageClient({
             </>
           )}
         </div>
-      </div>
+      </section>
     </>
-  );
+  )
 }
