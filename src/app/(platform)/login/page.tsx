@@ -47,7 +47,7 @@ export default async function LoginPage() {
 							href="/"
 							className="flex gap-2 items-center mx-auto bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text text-4xl font-extrabold tracking-tight text-transparent"
 						>
-							<Anchor color="white" size={'32px'}/>
+							<Anchor className="dark:text-white text-black" size={'32px'}/>
             <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text font-extrabold tracking-tight text-transparent">
               ANC.
             </span>

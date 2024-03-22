@@ -15,7 +15,7 @@ export default async function Header() {
             href={session ? "/dashboard" : "/"}
             className="flex gap-2 text-bold text-xl font-medium text-primary"
           >
-						<Anchor color="white"/>
+						<Anchor className="dark:text-white text-black"/>
             <span className="bg-gradient-to-r from-emerald-500 to-emerald-600 bg-clip-text font-extrabold tracking-tight text-transparent">
               ANC.
             </span>
