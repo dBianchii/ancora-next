@@ -105,8 +105,8 @@ function EventCard({
           </div>
         </Link>
       </div>
-      <div className="flex items-center justify-between p-1">
-        <div className=" mt-2 flex flex-col gap-1.5">
+      <div className="flex justify-between p-1">
+        <div className=" mt-2 flex flex-col gap-1.5 ">
           <h3 className="font-semibold leading-none tracking-tight">
 					{event.title.length > 50 ? event.title.substring(0, 50) + '...' : event.title}
           </h3>
@@ -120,7 +120,7 @@ function EventCard({
             </span>
           </p>
         </div>
-        <div className="w-1/5 flex justify-end">
+        <div className="w-1/5 flex justify-end mt-2">
           <ConfigEvent event={event} />
         </div>
       </div>
