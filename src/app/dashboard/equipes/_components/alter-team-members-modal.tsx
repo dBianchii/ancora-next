@@ -79,17 +79,16 @@ export const AlterModal = ({
 
   return (
     <Dialog>
-      <></>
       <DialogTrigger asChild>
         <Button variant="ghost">
           <UserRound className="cursor-pointer text-primary/70" />
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[calc(100vh-96px)] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Alterar membros</DialogTitle>
         </DialogHeader>
-        <p>Equipe {`${team.name}`}:</p>
+        <p>Equipe '{`${team.name}`}':</p>
 
         <Input
           disabled={isPending}
@@ -103,7 +102,7 @@ export const AlterModal = ({
         </div>
 
         {emails.length > 0 ? (
-          <div className="h-32 overflow-y-auto">
+          <div>
             <TableOfMembers
               members={emails}
               removeMember={true}
@@ -153,7 +152,7 @@ export function TableOfMembers({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {members.map((member) => (
+        {[...members].reverse().map((member) => (
           <TableRow key={member}>
             <TableCell className="font-medium">{member}</TableCell>
 
