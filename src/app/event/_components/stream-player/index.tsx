@@ -57,7 +57,7 @@ export const StreamPlayer = ({
           collapsed && "lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-2",
         )}
       >
-        <div className="hidden-scrollbar col-span-1 space-y-4 pb-10 lg:col-span-2 lg:overflow-y-auto xl:col-span-2 2xl:col-span-5">
+        <div className="hidden-scrollbar col-span-1 space-y-4 pb-4 lg:col-span-2 lg:overflow-y-auto xl:col-span-2 2xl:col-span-5">
           <Video hostName={user.name ?? ""} hostIdentity={user.id} />
           <Header
             hostName={user.name ?? ""}
@@ -73,7 +73,7 @@ export const StreamPlayer = ({
             streamId={stream.id}
           />
           <AboutCard
-            hostName={user.image ?? ""}
+            hostName={user.name ?? ""}
             hostIdentity={user.id}
             viewerIdentity={identity}
             bio={user.bio}

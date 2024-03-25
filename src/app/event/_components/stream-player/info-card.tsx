@@ -27,18 +27,18 @@ export const InfoCard = ({
   if (!isHost) return null;
 
   return (
-    <div className="px-4">
-      <div className="rounded-xl bg-background">
+    <div className="px-4 ">
+      <div className="rounded-xl p-2 bg-zinc-900">
         <div className="flex items-center gap-x-2.5 p-4">
           <div className="h-auto w-auto rounded-md bg-blue-600 p-2">
             <Pencil className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold capitalize lg:text-lg">
-              Edit your stream info
+            <h2 className="text-sm font-semibold lg:text-lg">
+              Editar informações do evento
             </h2>
             <p className="text-xs text-muted-foreground lg:text-sm">
-              Maximize your visibility
+              Maximize sua visibilidade
             </p>
           </div>
           <InfoModal
@@ -50,7 +50,7 @@ export const InfoCard = ({
         <Separator />
         <div className="space-y-4 p-4 lg:p-6">
           <div>
-            <h3 className="mb-2 text-sm text-muted-foreground">Name</h3>
+            <h3 className="mb-2 text-sm text-muted-foreground">Nome</h3>
             <p className="text-sm font-semibold">{name}</p>
           </div>
           <div>

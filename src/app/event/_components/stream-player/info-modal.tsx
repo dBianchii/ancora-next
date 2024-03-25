@@ -81,17 +81,17 @@ export const InfoModal = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="link" size="sm" className="ml-auto">
-          Edit
+				<Button variant="link" className="ml-auto">
+          Editar
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit stream info</DialogTitle>
+          <DialogTitle>Editar informações do evento</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-14">
           <div className="space-y-2">
-            <Label>Name</Label>
+            <Label>Nome</Label>
             <Input
               disabled={isPending}
               placeholder="Stream name"
@@ -147,11 +147,11 @@ export const InfoModal = ({
           <div className="flex justify-between">
             <DialogClose ref={closeRef} asChild>
               <Button type="button" variant="ghost">
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
             <Button disabled={isPending} type="submit">
-              Save
+              Salvar
             </Button>
           </div>
         </form>

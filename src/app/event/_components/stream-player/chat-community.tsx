@@ -52,7 +52,7 @@ export const ChatCommunity = ({
   if (isHidden) {
     return (
       <div className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-muted-foreground">Community is disabled</p>
+        <p className="text-sm text-muted-foreground">Comunidade desabilitada</p>
       </div>
     );
   }

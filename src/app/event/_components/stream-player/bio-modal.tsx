@@ -41,17 +41,17 @@ export const BioModal = ({ initialValue }: BioModalProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="link" size="sm" className="ml-auto">
-          Edit
+        <Button variant="link" className="ml-auto">
+          Editar
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit user bio</DialogTitle>
+          <DialogTitle>Editar bio do usuário</DialogTitle>
         </DialogHeader>
         <form onSubmit={onSubmit} className="space-y-4">
           <Textarea
-            placeholder="User bio"
+            placeholder="Digite a sua bio aqui..."
             onChange={(e) => setValue(e.target.value)}
             value={value}
             disabled={isPending}
@@ -60,11 +60,11 @@ export const BioModal = ({ initialValue }: BioModalProps) => {
           <div className="flex justify-between">
             <DialogClose ref={closeRef} asChild>
               <Button type="button" variant="ghost">
-                Cancel
+                Cancelar
               </Button>
             </DialogClose>
             <Button disabled={isPending} type="submit">
-              Save
+              Salvar
             </Button>
           </div>
         </form>
