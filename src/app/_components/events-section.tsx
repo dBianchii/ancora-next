@@ -29,6 +29,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
+import { UpdateEventModal } from "./update-event-modal";
+import { Separator } from "~/components/ui/separator";
 
 export function EventsSection() {
   const { query } = useEventsData();
@@ -108,7 +110,9 @@ function EventCard({
       <div className="flex justify-between p-1">
         <div className=" mt-2 flex flex-col gap-1.5 ">
           <h3 className="font-semibold leading-none tracking-tight">
-					{event.title.length > 50 ? event.title.substring(0, 50) + '...' : event.title}
+            {event.title.length > 50
+              ? event.title.substring(0, 50) + "..."
+              : event.title}
           </h3>
           <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
             Hosted by <span className="font-bold">{event.User.name}</span>
@@ -120,9 +124,11 @@ function EventCard({
             </span>
           </p>
         </div>
-        <div className="w-1/5 flex justify-end mt-2">
-          <ConfigEvent event={event} />
-        </div>
+        {new Date(event.datetime) > new Date() && (
+          <div className="mt-2 flex w-1/5 justify-end">
+            <ConfigEvent event={event} />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -135,6 +141,9 @@ function ConfigEvent({
 }) {
   const { query } = useTeamsData();
 
+  const initialName = event.title;
+  const initialThumbnailUrl = event.thumbnailUrl;
+
   const teamEmails = event.invitedPrivateUsers?.flatMap((teamId) => {
     const team = query.data?.find((team) => team.id === teamId);
     const usersEmails = team?.usersEmails;
@@ -144,16 +153,19 @@ function ConfigEvent({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Settings className="h-6 w-6 cursor-pointer text-gray-500 dark:text-gray-400" />
+        <Settings className="h-6 w-6 cursor-pointer text-gray-500 transition-colors hover:text-white dark:text-gray-400 dark:hover:text-white" />
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Configurações</DialogTitle>
         </DialogHeader>
-        <p className="text-yellow-600">
-          ToDo: possibilitar alterações do nome/data/thumbnail
-        </p>
+        <UpdateEventModal
+          initialName={initialName}
+          initialThumbnailUrl={initialThumbnailUrl}
+          streamId={event.id}
+        />
+        <Separator />
         {teamEmails.length > 0 && (
           <>
             <div className="rounded bg-zinc-900 p-4">
