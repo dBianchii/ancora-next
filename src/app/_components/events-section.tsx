@@ -37,7 +37,7 @@ export function EventsSection() {
 
   return (
     <section className="h-full py-6 lg:border-l lg:pl-8">
-      <h2 className="space-y-1 text-2xl font-semibold tracking-tight ">
+      <h2 className="mb-2 space-y-1 text-2xl font-semibold tracking-tight ">
         Meus eventos
       </h2>
       <Tabs defaultValue="proximos" className="h-full space-y-6">

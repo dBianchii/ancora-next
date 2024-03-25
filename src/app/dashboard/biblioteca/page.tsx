@@ -19,6 +19,9 @@ export default function Biblioteca() {
           <div className="grid lg:grid-cols-1">
             <div className="col-span-3 lg:col-span-4 lg:border-l">
               <div className="h-full py-6 lg:pl-8">
+                <h2 className="mb-2 space-y-1 text-2xl font-semibold tracking-tight ">
+                  Biblioteca
+                </h2>
                 <Tabs defaultValue="lives" className="h-full space-y-6">
                   <div className="space-between flex items-center">
                     <TabsList>

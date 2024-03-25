@@ -102,7 +102,7 @@ export const AlterModal = ({
         </div>
 
         {emails.length > 0 ? (
-          <div>
+          <div className="max-h-[200px] overflow-auto">
             <TableOfMembers
               members={emails}
               removeMember={true}

@@ -78,7 +78,7 @@ export function ProfileForm({ session }: { session: Session }) {
           name="username"
           render={({ field: _ }) => (
             <FormItem>
-              <FormLabel>Nome Completo</FormLabel>
+              <FormLabel className="text-gray-500 dark:text-gray-400">Nome Completo</FormLabel>
               <FormControl>
                 <p>{session.user.name}</p>
               </FormControl>
@@ -91,7 +91,7 @@ export function ProfileForm({ session }: { session: Session }) {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-gray-500 dark:text-gray-400">Email</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <p>{session.user.email}</p>
               </Select>
@@ -105,7 +105,7 @@ export function ProfileForm({ session }: { session: Session }) {
           name="bio"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Biografia</FormLabel>
+              <FormLabel className="text-gray-500 dark:text-gray-400">Biografia</FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Conte um pouco sobre você..."

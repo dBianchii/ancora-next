@@ -13,9 +13,9 @@ export default async function KeysPage() {
   if (!session) redirect("/login");
 
   return (
-    <div className="p-6">
-      <div className="mb-4 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Keys & URLs</h1>
+    <div className="h-full py-6 lg:border-l lg:pl-8">
+      <div className="mb-2 space-y-1 text-2xl font-semibold tracking-tight flex items-center justify-between">
+        <h2 className="">Keys & URLs</h2>
         <ConnectModal />
       </div>
       <div className="space-y-4">

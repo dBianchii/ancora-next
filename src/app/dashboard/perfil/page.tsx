@@ -7,12 +7,11 @@ export default async function Perfil() {
   const session = await getServerAuthSession();
   if (!session) redirect("/");
   return (
-    <div className="space-y-6">
-      <div className="flex">
-        <h3 className="text-lg font-medium">Perfil de usuário</h3>
-      </div>
-      <Separator />
+    <section className="h-full py-6 lg:border-l lg:pl-8">
+        <h2 className="mb-4 space-y-1 text-2xl font-semibold tracking-tight ">
+          Perfil do Usuário
+        </h2>
       <ProfileForm session={session} />
-    </div>
+    </section>
   );
 }
