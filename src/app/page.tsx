@@ -18,15 +18,27 @@ export default async function HomePage() {
           A ANC. é um estúdio de transmissão ao vivo profissional no seu
           navegador. Engage com a sua audiência e obtenha métricas.
         </p>
-        <Link
-          href="/login"
-        >
-          <Button size={'custom'} className="text-bold text-lg text-black">Comece já: é grátis!</Button>
+        <Link href="/login">
+          <Button size={"custom"} className="text-bold text-lg text-black mb-4">
+            Comece já: é grátis!
+          </Button>
         </Link>
       </div>
 
-      <div className="container mx-auto flex min-h-[250px] items-center justify-center rounded-md border-2 md:h-[400px] lg:h-[612px]">
-        <h1>IMAGE / VIDEO</h1>
+      <div className="container mx-auto flex min-h-[250px] items-center justify-center overflow-hidden md:h-[400px] lg:h-[612px]">
+        <div
+          className="h-full w-full overflow-hidden"
+          style={{ marginTop: "-170px" }}
+        >
+          <video
+            className="h-full w-full object-contain"
+            src="/video.mov"
+            autoPlay
+            muted
+            loop
+            playsInline
+          ></video>
+        </div>
       </div>
     </main>
   );
