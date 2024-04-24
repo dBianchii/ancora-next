@@ -56,15 +56,34 @@ model Stream {
     invitedPrivateUsers String[]
     fireReminderEmailAt DateTime?
 
-    Leads Leads[] @relation("EmailLeadsEvents")
+    Leads    Leads[]    @relation("EmailLeadsEvents")
+    Comments Comments[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 
-    @@index([userId])
+    // private 		Boolean @default(false)
+    // invitedTeams 	Team[]
 
-	// private 		Boolean @default(false)
-	// invitedTeams 	Team[]
+    @@index([userId])
+}
+
+model Comments {
+    id String @id @default(cuid())
+
+    streamId String
+    Stream   Stream @relation(fields: [streamId], references: [id])
+
+    userId String?
+    User   User?   @relation(fields: [userId], references: [id])
+
+    text String
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@index([streamId])
+    @@index([userId])
 }
 
 model Leads {
@@ -113,7 +132,7 @@ model User {
     emailVerified DateTime?
     bio           String?
     image         String?
-	teams 	   	  Team[] 
+    teams         Team[]
     accounts      Account[]
     sessions      Session[]
 
@@ -121,9 +140,10 @@ model User {
     eventsId           String?
 
     //LiveKit
-    ingressId String? @unique
+    ingressId String?    @unique
     serverUrl String? //@db.Text
     streamKey String? //@db.Text
+    Comments  Comments[]
 }
 
 model VerificationToken {
@@ -135,10 +155,10 @@ model VerificationToken {
 }
 
 model Team {
-	id 				String @id @default(cuid()) 
-	name 			String @unique
-	usersEmails 	String[] 
+    id          String   @id @default(cuid())
+    name        String   @unique
+    usersEmails String[]
 
-	userId 			String
-	user 			User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId String
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
