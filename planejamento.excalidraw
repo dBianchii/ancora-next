@@ -4,40 +4,448 @@
   "source": "https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor",
   "elements": [
     {
-      "id": "8Z_H3ZCzMUJHW-bBp9abQ",
       "type": "text",
-      "x": 441.4863840352907,
-      "y": 153.67539316068053,
-      "width": 745.830078125,
-      "height": 414,
-      "angle": 0,
-      "strokeColor": "#1e1e1e",
-      "backgroundColor": "transparent",
+      "version": 1194,
+      "versionNonce": 1204112006,
+      "isDeleted": false,
+      "id": "8Z_H3ZCzMUJHW-bBp9abQ",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
       "roughness": 1,
       "opacity": 100,
+      "angle": 0,
+      "x": 535.319468141736,
+      "y": 143.76876169095397,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "width": 745.830078125,
+      "height": 414,
+      "seed": 296656462,
       "groupIds": [],
       "frameId": null,
       "roundness": null,
-      "seed": 296656462,
-      "version": 858,
-      "versionNonce": 2041264462,
-      "isDeleted": false,
-      "boundElements": null,
-      "updated": 1713917816886,
+      "boundElements": [],
+      "updated": 1714469661531,
       "link": null,
-      "locked": false,
-      "text": "Destinos: Feature em desenvolvimento\n\nMonitoramento de stream:\n- entrada e saida\n- comentários no chat\n- quantidade de mensagens enviadas por tempo\n- \"qual seu nome?\" + armazenar mensagens \n- proibir envio de mensagens antes do evento começar\n\n- Trocar \"Mariana Macêdo está offline\" por \"este evento acontecerá tal dia e horário\"\n\n- Armazenar numero máximo de visualizadores simultaneos\n\n- Ajeitar cores tema claro\n\n- Gráfico tempo x número de participantes\n\n- Perfil do usuário",
+      "locked": true,
       "fontSize": 20,
       "fontFamily": 2,
+      "text": "Destinos: Feature em desenvolvimento\n\nMonitoramento de stream:\n- entrada e saida\n- comentários no chat\n- quantidade de mensagens enviadas por tempo\n- \"qual seu nome?\" + armazenar mensagens \n- proibir envio de mensagens antes do evento começar\n\n- Trocar \"Mariana Macêdo está offline\" por \"este evento acontecerá tal dia e horário\"\n\n- Armazenar numero máximo de visualizadores simultaneos\n\n- Ajeitar cores tema claro\n\n- Gráfico tempo x número de participantes\n\n- Perfil do usuário",
       "textAlign": "left",
       "verticalAlign": "top",
-      "baseline": 408,
       "containerId": null,
       "originalText": "Destinos: Feature em desenvolvimento\n\nMonitoramento de stream:\n- entrada e saida\n- comentários no chat\n- quantidade de mensagens enviadas por tempo\n- \"qual seu nome?\" + armazenar mensagens \n- proibir envio de mensagens antes do evento começar\n\n- Trocar \"Mariana Macêdo está offline\" por \"este evento acontecerá tal dia e horário\"\n\n- Armazenar numero máximo de visualizadores simultaneos\n\n- Ajeitar cores tema claro\n\n- Gráfico tempo x número de participantes\n\n- Perfil do usuário",
-      "lineHeight": 1.15
+      "lineHeight": 1.15,
+      "baseline": 408
+    },
+    {
+      "type": "freedraw",
+      "version": 47,
+      "versionNonce": 2045708506,
+      "isDeleted": false,
+      "id": "L6GE8y9A8zXODaeuVgy5M",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 508.2035166036501,
+      "y": 454.2430811489618,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "width": 38.326934814453125,
+      "height": 24.291168212890625,
+      "seed": 463077491,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "boundElements": [],
+      "updated": 1714469661531,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0.19378662109375,
+          0.333251953125
+        ],
+        [
+          0.38427734375,
+          0.523681640625
+        ],
+        [
+          0.955718994140625,
+          1.095184326171875
+        ],
+        [
+          1.146240234375,
+          1.47613525390625
+        ],
+        [
+          1.5272064208984375,
+          1.85711669921875
+        ],
+        [
+          2.28912353515625,
+          2.61907958984375
+        ],
+        [
+          2.6700897216796875,
+          3.000030517578125
+        ],
+        [
+          3.641265869140625,
+          4.456695556640625
+        ],
+        [
+          4.126800537109375,
+          5.18505859375
+        ],
+        [
+          4.99334716796875,
+          6.29437255859375
+        ],
+        [
+          5.564788818359375,
+          7.05633544921875
+        ],
+        [
+          5.7552642822265625,
+          7.437286376953125
+        ],
+        [
+          5.94573974609375,
+          7.818267822265625
+        ],
+        [
+          6.517181396484375,
+          8.580230712890625
+        ],
+        [
+          6.707672119140625,
+          8.961181640625
+        ],
+        [
+          6.8981475830078125,
+          9.15167236328125
+        ],
+        [
+          7.088623046875,
+          9.3421630859375
+        ],
+        [
+          7.27911376953125,
+          9.532623291015625
+        ],
+        [
+          7.4695892333984375,
+          9.532623291015625
+        ],
+        [
+          7.660064697265625,
+          9.532623291015625
+        ],
+        [
+          7.660064697265625,
+          9.723114013671875
+        ],
+        [
+          7.850555419921875,
+          9.723114013671875
+        ],
+        [
+          7.850555419921875,
+          9.532623291015625
+        ],
+        [
+          8.526611328125,
+          8.423309326171875
+        ],
+        [
+          8.865447998046875,
+          7.06787109375
+        ],
+        [
+          9.54315185546875,
+          5.712493896484375
+        ],
+        [
+          10.898529052734375,
+          3.001708984375
+        ],
+        [
+          11.57623291015625,
+          1.646331787109375
+        ],
+        [
+          13.839874267578125,
+          -1.2950439453125
+        ],
+        [
+          14.856414794921875,
+          -2.31158447265625
+        ],
+        [
+          16.0703125,
+          -3.525482177734375
+        ],
+        [
+          16.79864501953125,
+          -4.011016845703125
+        ],
+        [
+          19.112945556640625,
+          -5.686065673828125
+        ],
+        [
+          24.504852294921875,
+          -8.845703125
+        ],
+        [
+          26.487335205078125,
+          -9.638702392578125
+        ],
+        [
+          28.469757080078125,
+          -10.431671142578125
+        ],
+        [
+          33.061981201171875,
+          -12.926025390625
+        ],
+        [
+          35.6717529296875,
+          -13.795928955078125
+        ],
+        [
+          37.7554931640625,
+          -14.377532958984375
+        ],
+        [
+          38.136444091796875,
+          -14.56805419921875
+        ],
+        [
+          38.326934814453125,
+          -14.56805419921875
+        ],
+        [
+          38.326934814453125,
+          -14.56805419921875
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "simulatePressure": true,
+      "pressures": []
+    },
+    {
+      "type": "freedraw",
+      "version": 184,
+      "versionNonce": 1608450906,
+      "isDeleted": false,
+      "id": "b5bJW7qmQA6vkHIGmo5wn",
+      "fillStyle": "solid",
+      "strokeWidth": 1,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "angle": 0,
+      "x": 503.74005377406024,
+      "y": 155.1627131069696,
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "transparent",
+      "width": 38.326934814453125,
+      "height": 24.291168212890625,
+      "seed": 964087878,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": null,
+      "boundElements": [],
+      "updated": 1714469675692,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0.19378662109375,
+          0.333251953125
+        ],
+        [
+          0.38427734375,
+          0.523681640625
+        ],
+        [
+          0.955718994140625,
+          1.095184326171875
+        ],
+        [
+          1.146240234375,
+          1.47613525390625
+        ],
+        [
+          1.5272064208984375,
+          1.85711669921875
+        ],
+        [
+          2.28912353515625,
+          2.61907958984375
+        ],
+        [
+          2.6700897216796875,
+          3.000030517578125
+        ],
+        [
+          3.641265869140625,
+          4.456695556640625
+        ],
+        [
+          4.126800537109375,
+          5.18505859375
+        ],
+        [
+          4.99334716796875,
+          6.29437255859375
+        ],
+        [
+          5.564788818359375,
+          7.05633544921875
+        ],
+        [
+          5.7552642822265625,
+          7.437286376953125
+        ],
+        [
+          5.94573974609375,
+          7.818267822265625
+        ],
+        [
+          6.517181396484375,
+          8.580230712890625
+        ],
+        [
+          6.707672119140625,
+          8.961181640625
+        ],
+        [
+          6.8981475830078125,
+          9.15167236328125
+        ],
+        [
+          7.088623046875,
+          9.3421630859375
+        ],
+        [
+          7.27911376953125,
+          9.532623291015625
+        ],
+        [
+          7.4695892333984375,
+          9.532623291015625
+        ],
+        [
+          7.660064697265625,
+          9.532623291015625
+        ],
+        [
+          7.660064697265625,
+          9.723114013671875
+        ],
+        [
+          7.850555419921875,
+          9.723114013671875
+        ],
+        [
+          7.850555419921875,
+          9.532623291015625
+        ],
+        [
+          8.526611328125,
+          8.423309326171875
+        ],
+        [
+          8.865447998046875,
+          7.06787109375
+        ],
+        [
+          9.54315185546875,
+          5.712493896484375
+        ],
+        [
+          10.898529052734375,
+          3.001708984375
+        ],
+        [
+          11.57623291015625,
+          1.646331787109375
+        ],
+        [
+          13.839874267578125,
+          -1.2950439453125
+        ],
+        [
+          14.856414794921875,
+          -2.31158447265625
+        ],
+        [
+          16.0703125,
+          -3.525482177734375
+        ],
+        [
+          16.79864501953125,
+          -4.011016845703125
+        ],
+        [
+          19.112945556640625,
+          -5.686065673828125
+        ],
+        [
+          24.504852294921875,
+          -8.845703125
+        ],
+        [
+          26.487335205078125,
+          -9.638702392578125
+        ],
+        [
+          28.469757080078125,
+          -10.431671142578125
+        ],
+        [
+          33.061981201171875,
+          -12.926025390625
+        ],
+        [
+          35.6717529296875,
+          -13.795928955078125
+        ],
+        [
+          37.7554931640625,
+          -14.377532958984375
+        ],
+        [
+          38.136444091796875,
+          -14.56805419921875
+        ],
+        [
+          38.326934814453125,
+          -14.56805419921875
+        ],
+        [
+          38.326934814453125,
+          -14.56805419921875
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "simulatePressure": true,
+      "pressures": []
     }
   ],
   "appState": {
