@@ -21,7 +21,7 @@ export const AboutCard = ({
 
   return (
     <div className="px-4">
-      <div className="group flex flex-col gap-y-3 rounded-xl bg-zinc-900 p-6 lg:p-10">
+      <div className="group flex flex-col gap-y-3 rounded-xl dark:bg-zinc-900 bg-zinc-100 p-6 lg:p-10">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-x-2 text-lg font-semibold lg:text-2xl">
             About {hostName}

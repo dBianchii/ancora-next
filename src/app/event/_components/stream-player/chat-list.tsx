@@ -22,7 +22,7 @@ export const ChatList = ({ messages, isHidden }: ChatListProps) => {
   }
 
   return (
-    <div className="flex h-full flex-1 flex-col-reverse overflow-y-auto p-3">
+    <div className="flex h-full flex-1 flex-col-reverse overflow-y-auto p-3 ">
       {messages.map((message) => (
         <ChatMessage key={message.timestamp} data={message} />
       ))}
