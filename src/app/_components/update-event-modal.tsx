@@ -123,7 +123,7 @@ export const UpdateEventModal = ({
                 />
               </div>
             ) : (
-              <div className="rounded-xl border outline-dashed outline-muted">
+              <div className="rounded-xl outline-muted">
                 <UploadDropzone
                   input={{ id: streamId }}
                   endpoint="thumbnailEdit"
