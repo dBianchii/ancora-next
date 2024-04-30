@@ -8,7 +8,7 @@ import {
 
 export default function ConfirmEmailPage() {
 	return (
-		<div className="container relative grid m-auto flex-col items-center justify-items-center">
+		<div className="container relative grid m-auto flex-col items-center justify-items-center mt-20">
 			<Card className="w-[350px]">
 				<CardHeader>
 					<CardTitle>
