@@ -20,7 +20,6 @@ import {
 } from "../../server/actions/stream";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData, useTeamsData } from "./hooks";
-import Link from "next/link";
 import { Settings } from "lucide-react";
 
 import {
@@ -31,6 +30,11 @@ import {
 } from "../../components/ui/tabs";
 import { UpdateEventModal } from "./update-event-modal";
 import { Separator } from "~/components/ui/separator";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+
+const TEN_MINUTES = 10 * 60 * 1000;
+const SIXTY_MINUTES = 60 * 60 * 1000;
 
 export function EventsSection() {
   const { query } = useEventsData();
@@ -65,7 +69,7 @@ export function EventsSection() {
             <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
               {query.isError && <p>Erro ao carregar eventos</p>}
               {query.data
-                ?.filter((event) => new Date(event.datetime) > new Date())
+                ?.filter((event) => verifyEventTime(event))
                 .map((event) => <EventCard key={event.id} event={event} />)}
             </div>
           </div>
@@ -74,13 +78,43 @@ export function EventsSection() {
           <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
             {query.isError && <p>Erro ao carregar eventos</p>}
             {query.data
-              ?.filter((event) => new Date(event.datetime) < new Date())
+              ?.filter((event) => !verifyEventTime(event))
               .map((event) => <EventCard key={event.id} event={event} />)}
           </div>
         </TabsContent>
       </Tabs>
     </section>
   );
+}
+
+function verifyEventTime(event: Awaited<ReturnType<typeof getEvents>>[number]) {
+  const eventTime = new Date(event.datetime).getTime();
+  const currentTime = new Date().getTime();
+
+	return eventTime > currentTime || currentTime - eventTime < SIXTY_MINUTES;
+}
+
+// possibilitar acesso a live em 10 minutos (10min * 60seg * 1000miliseg) antes do evento
+// e até 60 minutos após o evento iniciado
+function verifyIfUserMayAccessLive(
+  event: Awaited<ReturnType<typeof getEvents>>[number],
+) {
+  const eventTime = new Date(event.datetime).getTime();
+  const currentTime = new Date().getTime();
+
+  if (eventTime - currentTime > TEN_MINUTES) {
+    toast.error(
+      `Acesso negado! A live estará disponível às ${dayjs(eventTime)
+        .subtract(10, "minute")
+        .format("DD/MM/YYYY HH:mm")}`,
+    );
+    return false;
+  } else if (currentTime - eventTime > SIXTY_MINUTES) {
+    toast(`A gravação do evento "${event.title}" estará disponível em breve!`);
+    return false;
+  }
+
+  return true;
 }
 
 function EventCard({
@@ -91,21 +125,7 @@ function EventCard({
   return (
     <div className="">
       <div className="group relative">
-        <Link className="group relative" href={`/event/${event.id}`}>
-          <Image
-            alt="Stream thumbnail"
-            className="aspect-[16/9] w-full rounded-lg object-cover transition-transform duration-200 group-hover:z-10 group-hover:scale-[1.05]"
-            height="225"
-            src={
-              event.thumbnailUrl ??
-              "https://generated.vusercontent.net/placeholder.svg"
-            }
-            width="400"
-          />
-          <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-            <PlayIcon className="h-10 w-10 rounded-full bg-primary p-2" />
-          </div>
-        </Link>
+        <Play event={event} />
       </div>
       <div className="flex justify-between p-1">
         <div className=" mt-2 flex flex-col gap-1.5 ">
@@ -129,6 +149,38 @@ function EventCard({
             <ConfigEvent event={event} />
           </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+function Play({
+  event,
+}: {
+  event: Awaited<ReturnType<typeof getEvents>>[number];
+}) {
+  const navigate = useRouter();
+
+  function verify(event: Awaited<ReturnType<typeof getEvents>>[number]) {
+    if (verifyIfUserMayAccessLive(event)) navigate.push(`/event/${event.id}`);
+  }
+
+  return (
+    <div onClick={() => verify(event)}>
+      <div className="group relative">
+        <Image
+          alt="Stream thumbnail"
+          className="aspect-[16/9] w-full rounded-lg object-cover transition-transform duration-200 group-hover:z-10 group-hover:scale-[1.05]"
+          height="225"
+          src={
+            event.thumbnailUrl ??
+            "https://generated.vusercontent.net/placeholder.svg"
+          }
+          width="400"
+        />
+        <div className="absolute inset-0 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <PlayIcon className="h-10 w-10 rounded-full bg-primary p-2" />
+        </div>
       </div>
     </div>
   );
