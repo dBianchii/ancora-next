@@ -91,7 +91,7 @@ function verifyEventTime(event: Awaited<ReturnType<typeof getEvents>>[number]) {
   const eventTime = new Date(event.datetime).getTime();
   const currentTime = new Date().getTime();
 
-	return eventTime > currentTime || currentTime - eventTime < SIXTY_MINUTES;
+  return eventTime > currentTime || currentTime - eventTime < SIXTY_MINUTES;
 }
 
 // possibilitar acesso a live em 10 minutos (10min * 60seg * 1000miliseg) antes do evento
@@ -144,7 +144,7 @@ function EventCard({
             </span>
           </p>
         </div>
-        {new Date(event.datetime) > new Date() && (
+        {verifyEventTime(event) && (
           <div className="mt-2 flex w-1/5 justify-end">
             <ConfigEvent event={event} />
           </div>
@@ -217,9 +217,9 @@ function ConfigEvent({
           initialThumbnailUrl={initialThumbnailUrl}
           streamId={event.id}
         />
-        <Separator />
         {teamEmails.length > 0 && (
           <>
+            <Separator />
             <div className="rounded bg-zinc-900 p-4">
               <h1 className="text-bold mb-4">Convidados:</h1>
               <div className="h-32 overflow-y-auto">
