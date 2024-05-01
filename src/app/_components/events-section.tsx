@@ -115,10 +115,10 @@ function EventCard({
               : event.title}
           </h3>
           <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-            Hosted by <span className="font-bold">{event.User.name}</span>
+            Criado por: <span className="font-bold">{event.User.name}</span>
           </p>
           <p className="text-sm leading-none text-gray-500 dark:text-gray-400">
-            Starts at{" "}
+            Início:{" "}
             <span className="font-bold">
               {dayjs(event.datetime).format("DD/MM/YYYY HH:mm")}
             </span>
