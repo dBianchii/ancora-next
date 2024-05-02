@@ -13,9 +13,5 @@ export default async function EquipesPage() {
 async function EquipesPageSuspense() {
   const initialTeams = await getTeams();
 
-  return (
-    <Suspense>
-      <EquipesPageClient initialTeams={initialTeams} />
-    </Suspense>
-  );
+  return <EquipesPageClient initialTeams={initialTeams} />;
 }
