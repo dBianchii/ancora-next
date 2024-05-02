@@ -19,15 +19,22 @@ import { cn } from "../../../../components/ui/lib/utils";
 import { Select } from "../../../../components/ui/select";
 import { Textarea } from "../../../../components/ui/textarea";
 import { toast } from "../../../../components/ui/use-toast";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
+import Image from "next/image";
 
 const profileFormSchema = z.object({
   username: z
     .string()
     .min(2, {
-      message: "Username precisará ser maior do que 2 caracteres",
+      message: "O nome do usuário precisa ser maior do que 2 caracteres",
     })
     .max(30, {
-      message: "Username precisará ser menor do que 30 caracteres",
+      message: "O nome do usuário precisa ser menor do que 30 caracteres",
     }),
   email: z
     .string({
@@ -38,15 +45,13 @@ const profileFormSchema = z.object({
   urls: z
     .array(
       z.object({
-        value: z.string().url({ message: "" }),
+        value: z.string().url({ message: "Por favor, informe uma URL válida" }),
       }),
     )
     .optional(),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
-
-// This can come from your database or API.
 
 export function ProfileForm({ session }: { session: Session }) {
   const form = useForm<ProfileFormValues>({
@@ -71,90 +76,132 @@ export function ProfileForm({ session }: { session: Session }) {
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field: _ }) => (
-            <FormItem>
-              <FormLabel className="text-gray-500 dark:text-gray-400">Nome Completo</FormLabel>
-              <FormControl>
-                <p>{session.user.name}</p>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-500 dark:text-gray-400">Email</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <p>{session.user.email}</p>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field: _ }) => (
+              <FormItem>
+                <FormLabel className="text-gray-500 dark:text-gray-400">
+                  Nome Completo
+                </FormLabel>
+                <FormControl>
+                  <p>{session.user.name}</p>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-500 dark:text-gray-400">
+                  Email
+                </FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <p>{session.user.email}</p>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="bio"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="text-gray-500 dark:text-gray-400">Biografia</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Conte um pouco sobre você..."
-                  className=" w-1/2 resize-none"
-                  disabled
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="bio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-500 dark:text-gray-400">
+                  Biografia
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Conte um pouco sobre você..."
+                    className=" w-1/2 resize-none"
+                    disabled
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <div>
-          {fields.map((field, index) => (
-            <FormField
-              control={form.control}
-              key={field.id}
-              name={`urls.${index}.value`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className={cn(index !== 0 && "sr-only")}>
-                    URLs
-                  </FormLabel>
-                  <FormDescription className={cn(index !== 0 && "sr-only")}>
-                    Adicione links de suas redes sociais, blogs ou websites
-                  </FormDescription>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          ))}
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => append({ value: "" })}
-          >
-            Add URL
+          <div>
+            {fields.map((field, index) => (
+              <FormField
+                control={form.control}
+                key={field.id}
+                name={`urls.${index}.value`}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className={cn(index !== 0 && "sr-only")}>
+                      URLs
+                    </FormLabel>
+                    <FormDescription className={cn(index !== 0 && "sr-only")}>
+                      Adicione links de suas redes sociais, blogs ou websites
+                    </FormDescription>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ))}
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-2"
+              onClick={() => append({ value: "" })}
+            >
+              Add URL
+            </Button>
+          </div>
+          <Button type="button" className="mt-2">
+            Configurações
           </Button>
-        </div>
-        <Button type="button" className="mt-2">
-          Configurações
-        </Button>
-      </form>
-    </Form>
+        </form>
+      </Form>
+    </>
+  );
+}
+
+export function ProfileCard({ session }: { session: Session }) {
+  const name = session.user.name ?? "";
+  const email = session.user.email ?? "";
+
+  return (
+    <>
+      <div className="">
+        <Card className="w-[350px]">
+          <CardHeader>
+            <Image
+              src={session.user.image ?? "/bg.png"}
+              alt={name}
+              className="mx-auto h-24 w-24 rounded-full"
+              width={100}
+              height={100}
+            />
+            <CardTitle className="text-center font-bold md:text-xl lg:text-2xl">
+              {name}
+            </CardTitle>
+            <CardDescription className="m-1 text-center text-sm">
+              {email.length > 30
+                ? session.user.email?.substring(0, 30) + "..."
+                : session.user.email}
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
+    </>
   );
 }
