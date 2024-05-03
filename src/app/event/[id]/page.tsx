@@ -9,6 +9,22 @@ interface UserPageProps {
   };
 }
 
+const TEN_MINUTES = 10 * 60 * 1000;
+const SIXTY_MINUTES = 60 * 60 * 1000;
+
+function verifyIfUserMayAccessLive(event: Date) {
+  const eventTime = new Date(event).getTime();
+  const currentTime = new Date().getTime();
+
+  if (eventTime - currentTime > TEN_MINUTES) {
+    return false;
+  } else if (currentTime - eventTime > SIXTY_MINUTES) {
+    return false;
+  }
+
+  return true;
+}
+
 const UserPage = async ({ params }: UserPageProps) => {
   const stream = await db.stream.findUnique({
     where: {
@@ -38,6 +54,10 @@ const UserPage = async ({ params }: UserPageProps) => {
   if (!stream) notFound();
 
   if (!stream.User) {
+    notFound();
+  }
+
+  if (!verifyIfUserMayAccessLive(stream.datetime)) {
     notFound();
   }
 
