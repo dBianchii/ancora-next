@@ -182,12 +182,12 @@ export function ProfileCard({ session }: { session: Session }) {
   return (
     <>
       <div className="">
-        <Card className="w-[350px]">
+        <Card className="w-full">
           <CardHeader>
             <Image
               src={session.user.image ?? "/bg.png"}
               alt={name}
-              className="mx-auto h-24 w-24 rounded-full"
+              className="mx-auto h-24 w-24 rounded-full object-cover mb-4"
               width={100}
               height={100}
             />
