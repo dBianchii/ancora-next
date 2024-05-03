@@ -79,83 +79,95 @@ export const UpdateEventModal = ({
   const router = useRouter();
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="default" size="lg" className="w-full">
-          Editar informações do evento
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Editar informações do evento</DialogTitle>
-        </DialogHeader>
-        <form onSubmit={onSubmit} className="space-y-14">
-          <div className="space-y-2">
-            <Label>Nome</Label>
-            <Input
-              disabled={isPending}
-              placeholder="Stream name"
-              onChange={onChange}
-              value={title}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Thumbnail</Label>
-            {thumbnailUrl ? (
-              <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10">
-                <div className="absolute right-2 top-2 z-[10]">
-                  <Hint label="Remove thumbnail" asChild side="left">
-                    <Button
-                      type="button"
-                      disabled={isPending}
-                      onClick={onRemove}
-                      className="h-auto w-auto p-1.5"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
-                  </Hint>
+    <>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="default" size="lg" className="w-full">
+            Editar informações do evento
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Editar informações do evento</DialogTitle>
+          </DialogHeader>
+          <form onSubmit={onSubmit} className="space-y-14">
+            <div className="space-y-2">
+              <Label>Nome</Label>
+              <Input
+                disabled={isPending}
+                placeholder="Stream name"
+                onChange={onChange}
+                value={title}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Thumbnail</Label>
+              {thumbnailUrl ? (
+                <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10">
+                  <div className="absolute right-2 top-2 z-[10]">
+                    <Hint label="Remove thumbnail" asChild side="left">
+                      <Button
+                        type="button"
+                        disabled={isPending}
+                        onClick={onRemove}
+                        className="h-auto w-auto p-1.5"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </Hint>
+                  </div>
+                  <Image
+                    alt="Thumbnail"
+                    src={thumbnailUrl}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <Image
-                  alt="Thumbnail"
-                  src={thumbnailUrl}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="rounded-xl outline-muted">
-                <UploadDropzone
-                  input={{ id: streamId }}
-                  endpoint="thumbnailEdit"
-                  appearance={{
-                    label: {
-                      color: "#FFFFFF",
-                    },
-                    allowedContent: {
-                      color: "#FFFFFF",
-                    },
-                  }}
-                  onClientUploadComplete={(res) => {
-                    res[0]?.url && setThumbnailUrl(res?.[0]?.url);
-                    router.refresh();
-                    closeRef?.current?.click();
-                  }}
-                />
-              </div>
-            )}
-          </div>
-          <div className="flex justify-between">
-            <DialogClose ref={closeRef} asChild>
-              <Button type="button" variant="ghost">
-                Cancelar
+              ) : (
+                <div className="rounded-xl outline-muted border border-dashed">
+                  <UploadDropzone
+                    input={{ id: streamId }}
+                    endpoint="thumbnailEdit"
+                    appearance={{
+                      label: {
+                        color: "#FFFFFF",
+                      },
+                      allowedContent: {
+                        color: "#FFFFFF",
+                      },
+                    }}
+                    onClientUploadComplete={(res) => {
+                      res[0]?.url && setThumbnailUrl(res?.[0]?.url);
+                      router.refresh();
+                      closeRef?.current?.click();
+                    }}
+                  />
+                </div>
+              )}
+            </div>
+            <div className="flex justify-between">
+              <DialogClose ref={closeRef} asChild>
+                <Button type="button" variant="ghost">
+                  Cancelar
+                </Button>
+              </DialogClose>
+              <Button disabled={isPending} type="submit">
+                Salvar
               </Button>
-            </DialogClose>
-            <Button disabled={isPending} type="submit">
-              Savar
-            </Button>
-          </div>
-        </form>
-      </DialogContent>
-    </Dialog>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+
+			<Dialog>
+        <DialogTrigger asChild>
+          <Button variant="destructive" size="lg" className="w-full">
+            Apagar evento
+          </Button>
+        </DialogTrigger>
+        {/* ToDo */}
+      </Dialog>
+    </>
   );
 };
