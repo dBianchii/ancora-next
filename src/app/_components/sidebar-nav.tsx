@@ -13,6 +13,7 @@ import {
 import { cn } from "../../components/ui/lib/utils";
 import {
   HomeIcon,
+	VideoIcon,
   Key,
   LibraryIcon,
   RadioTowerIcon,
@@ -29,6 +30,15 @@ export function SidebarNav() {
         <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
           <HomeIcon className="size-4 text-primary/70" />
           <span className="hidden sm:block">Dashboard</span>
+        </div>
+      ),
+    },
+		{
+      href: `${prefix}/eventos`,
+      title: (
+        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
+          <VideoIcon className="size-4 text-primary/70" />
+          <span className="hidden sm:block">Eventos</span>
         </div>
       ),
     },

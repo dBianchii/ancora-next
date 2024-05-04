@@ -4,7 +4,7 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import { getEvents } from "~/server/actions/stream";
-import { DashboardSection } from "../_components/dashboard-section";
+import { EventsSection } from "../../_components/events-section";
 
 export default async function LoggedInView() {
   const queryClient = new QueryClient();
@@ -16,7 +16,7 @@ export default async function LoggedInView() {
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <DashboardSection />
+      <EventsSection />
     </HydrationBoundary>
   );
 }
