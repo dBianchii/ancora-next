@@ -14,9 +14,9 @@ const fontSans = FontSans({
 });
 
 export const metadata = {
-  title: "Ancora app",
+  title: "ANC.",
   description: "O aplicativo de streaming da Ancora",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.png" }],
 };
 
 export default async function RootLayout({
