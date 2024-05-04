@@ -83,8 +83,8 @@ export function CreateEventsButton() {
       }}
     >
       <DialogTrigger asChild>
-        <Button variant="outline">
-          <PlusIcon className="mr-2 h-4 w-4" /> Criar novo evento
+        <Button variant="default">
+          <PlusIcon className="mr-2 h-4 w-4"/> Criar novo evento
         </Button>
       </DialogTrigger>
       <DialogContent className="max-h-screen overflow-y-auto">

@@ -32,6 +32,7 @@ import { UpdateEventModal } from "./update-event-modal";
 import { Separator } from "~/components/ui/separator";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { PlaceholderBanner } from "./placeholder-banner";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 const SIXTY_MINUTES = 60 * 60 * 1000;
@@ -40,50 +41,102 @@ export function EventsSection() {
   const { query } = useEventsData();
 
   return (
-    <section className="h-full py-6 lg:border-l lg:pl-8">
-      <h2 className="mb-2 space-y-1 text-2xl font-semibold tracking-tight ">
-        Meus eventos
-      </h2>
-      <Tabs defaultValue="proximos" className="h-full space-y-6">
-        <TabsList>
-          <TabsTrigger value="proximos">Próximos</TabsTrigger>
-          <TabsTrigger value="antigos">Antigos</TabsTrigger>
-        </TabsList>
-        <TabsContent value="proximos">
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <CreateEventsButton />
-              {process.env.NODE_ENV === "development" && (
-                <Button
-                  variant={"destructive"}
-                  onClick={async () => {
-                    await DO_NOT_USE_deleteAllEvents();
-                    void query.refetch();
-                  }}
-                >
-                  Delete all events (devmode)
-                </Button>
+    <div className="lg:border-l">
+      <section className="min-h-[500px] h-full py-6 lg:pl-8">
+        <h2 className="mb-4 space-y-1 text-2xl font-semibold tracking-tight ">
+          Eventos
+        </h2>
+        <h3 className="mb-4 space-y-1 text-lg font-semibold tracking-tight text-slate-600 dark:text-slate-200">
+          Criados por você
+        </h3>
+        <Tabs defaultValue="proximos" className="h-full space-y-6">
+          <TabsList>
+            <TabsTrigger value="proximos">Próximos</TabsTrigger>
+            <TabsTrigger value="antigos">Antigos</TabsTrigger>
+          </TabsList>
+          <TabsContent value="proximos">
+            <div className="space-y-2">
+              <div className="mb-4 flex justify-between">
+                <CreateEventsButton />
+                {process.env.NODE_ENV === "development" && (
+                  <Button
+                    variant={"destructive"}
+                    onClick={async () => {
+                      await DO_NOT_USE_deleteAllEvents();
+                      void query.refetch();
+                    }}
+                  >
+                    Delete all events (devmode)
+                  </Button>
+                )}
+              </div>
+
+              {query.isError && <p>Erro ao carregar eventos</p>}
+              {query.data?.filter((event) => verifyEventTime(event)).length ===
+              0 ? (
+                <div className="mt-4">
+                  <PlaceholderBanner
+                    text={"Não há eventos próximos criados por você"}
+                  />
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                  {query.data
+                    ?.filter((event) => verifyEventTime(event))
+                    .map((event) => <EventCard key={event.id} event={event} />)}
+                </div>
               )}
             </div>
+          </TabsContent>
+          <TabsContent value="antigos">
+            {query.data?.filter((event) => !verifyEventTime(event)).length ===
+            0 ? (
+              <div className="mt-4">
+                <PlaceholderBanner
+                  text={"Não há eventos antigos criados por você"}
+                />
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+                {query.data
+                  ?.filter((event) => !verifyEventTime(event))
+                  .map((event) => <EventCard key={event.id} event={event} />)}
+              </div>
+            )}
+          </TabsContent>
+        </Tabs>
+      </section>
 
-            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+			<Separator />
+
+			<section className="h-full py-6 lg:pl-8">
+        <h3 className="mb-4 space-y-1 text-lg font-semibold tracking-tight text-slate-600 dark:text-slate-200">
+          Inscritos
+        </h3>
+        <Tabs defaultValue="proximos" className="h-full space-y-6">
+          <TabsList>
+            <TabsTrigger value="proximos">Próximos</TabsTrigger>
+            <TabsTrigger value="antigos">Antigos</TabsTrigger>
+          </TabsList>
+          <TabsContent value="proximos">
+            <div className="space-y-2">
               {query.isError && <p>Erro ao carregar eventos</p>}
-              {query.data
-                ?.filter((event) => verifyEventTime(event))
-                .map((event) => <EventCard key={event.id} event={event} />)}
-            </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="antigos">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {query.isError && <p>Erro ao carregar eventos</p>}
-            {query.data
-              ?.filter((event) => !verifyEventTime(event))
-              .map((event) => <EventCard key={event.id} event={event} />)}
-          </div>
-        </TabsContent>
-      </Tabs>
-    </section>
+              
+                  <PlaceholderBanner
+                    text={"Você não possui eventos próximos inscritos"}
+                  />
+           </div>
+          </TabsContent>
+          <TabsContent value="antigos">
+           
+                <PlaceholderBanner
+                  text={"Você ainda não participou de nenhum evento"}
+                />
+            
+          </TabsContent>
+        </Tabs>
+      </section>
+    </div>
   );
 }
 

@@ -42,15 +42,15 @@ export function SidebarNav() {
         </div>
       ),
     },
-    {
-      href: `${prefix}/biblioteca`,
-      title: (
-        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
-          <LibraryIcon className="size-4 text-primary/70" />
-          <span className="hidden sm:block">Biblioteca</span>
-        </div>
-      ),
-    },
+    // {
+    //   href: `${prefix}/biblioteca`,
+    //   title: (
+    //     <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
+    //       <LibraryIcon className="size-4 text-primary/70" />
+    //       <span className="hidden sm:block">Biblioteca</span>
+    //     </div>
+    //   ),
+    // },
     {
       href: `${prefix}/destinos`,
       title: (

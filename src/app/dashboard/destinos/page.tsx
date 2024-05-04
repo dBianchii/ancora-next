@@ -1,4 +1,5 @@
 import React from "react";
+import { PlaceholderBanner } from "~/app/_components/placeholder-banner";
 
 export default function DestinosPage() {
   return (
@@ -7,18 +8,8 @@ export default function DestinosPage() {
         <h2 className="">Destinos</h2>
       </div>
       <div className="space-y-4">
-        <Card />
+				<PlaceholderBanner text="Feature em desenvolvimento"/>
       </div>
     </div>
   );
 }
-
-const Card = () => {
-  return (
-    <div className="rounded-xl border bg-card p-6">
-      <div className="flex items-center justify-center gap-x-10">
-        <p className="shrink-0 font-semibold animate-pulse">Feature em desenvolvimento</p>
-      </div>
-    </div>
-  );
-};
