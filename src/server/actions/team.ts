@@ -91,6 +91,6 @@ export const updateTeam = async ({
 
     return team;
   } catch {
-    throw new Error("Internal Error");
+    throw new Error("Falha ao criar equipe");
   }
 };
