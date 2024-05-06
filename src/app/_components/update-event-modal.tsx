@@ -175,6 +175,7 @@ export const UpdateEventModal = ({
                 void queryClient.invalidateQueries({
                   queryKey: ["events"],
                 });
+                closeRef?.current?.click();
                 return "Evento deletado com sucesso!";
               },
               error: (err: unknown) => getErrorMessage(err),
