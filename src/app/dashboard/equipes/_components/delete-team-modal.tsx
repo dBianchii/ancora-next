@@ -12,25 +12,32 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { deleteTeam, type getTeams } from "~/server/actions/team";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const DeleteModal = ({
   team,
 }: {
-  team: Awaited<ReturnType<typeof getTeams>>[0];
+  team: Awaited<ReturnType<typeof getTeams>>[number];
 }) => {
   const [isPending, startTransition] = useTransition();
   const closeRef = useRef<ElementRef<"button">>(null);
 
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: deleteTeam,
+		onSuccess: async () => {
+			toast.success(`Equipe ${team.name} excluída`);
+			closeRef.current?.click();
+			void queryClient.invalidateQueries({ queryKey: ["getTeams"] });
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	});
+
   const onSubmit = () => {
     startTransition(() => {
-      deleteTeam(team.id)
-        .then(() => {
-          toast.success("Equipe excluída");
-          closeRef?.current?.click();
-        })
-        .catch((error: Error) => {
-          toast.error(error.message);
-        });
+      mutation.mutate(team.id);
     });
   };
 
