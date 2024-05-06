@@ -19,9 +19,13 @@ import {
 } from "~/components/ui/card";
 import { Overview } from "../dashboard/_components/overview";
 import { Engajados } from "../dashboard/_components/engajados";
+import { howManyMonths } from "../dashboard/_components/metrics";
 
 export function DashboardSection() {
   const { query } = useEventsData();
+	const months = howManyMonths(query.data?.[0]?.datetime, query.data?.[query.data.length - 1]?.datetime);
+	const totalEvents = query.data?.length ?? 0;
+	const eventsPerMonthsAverage = months > 0 ? (totalEvents / months).toFixed(1) : 0;
 
   return (
     <section className="h-full py-6 lg:border-l lg:pl-8">
@@ -45,9 +49,9 @@ export function DashboardSection() {
                 <Video className="dark:text-primary" size={'20px'}/>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">30</div>
+                <div className="text-2xl font-bold">{query.data?.length}</div>
                 <p className="text-xs text-muted-foreground">
-                  média de 2,3 eventos/mês
+                  média de { eventsPerMonthsAverage } eventos criados por mês
                 </p>
               </CardContent>
             </Card>
