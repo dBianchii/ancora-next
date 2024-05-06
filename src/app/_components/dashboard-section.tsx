@@ -1,7 +1,7 @@
 "use client";
 
+import { Users, Video } from "lucide-react";
 import { useEventsData } from "./hooks";
-import { Users, Video } from 'lucide-react';
 
 import {
   Tabs,
@@ -10,6 +10,7 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -17,15 +18,24 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Overview } from "../dashboard/_components/overview";
 import { Engajados } from "../dashboard/_components/engajados";
 import { howManyMonths } from "../dashboard/_components/metrics";
+import { Overview } from "../dashboard/_components/overview";
 
 export function DashboardSection() {
   const { query } = useEventsData();
-	const months = howManyMonths(query.data?.[0]?.datetime, query.data?.[query.data.length - 1]?.datetime);
-	const totalEvents = query.data?.length ?? 0;
-	const eventsPerMonthsAverage = months > 0 ? (totalEvents / months).toFixed(1) : 0;
+  const { months, totalEvents } = useMemo(() => {
+    return {
+      months: howManyMonths(
+        query.data?.[0]?.datetime,
+        query.data?.[query.data.length - 1]?.datetime,
+      ),
+      totalEvents: query.data?.length ?? 0,
+    };
+  }, [query.data]);
+  const eventsPerMonthsAverage = useMemo(() => {
+    return months > 0 ? (totalEvents / months).toFixed(1) : 0;
+  }, [months, totalEvents]);
 
   return (
     <section className="h-full py-6 lg:border-l lg:pl-8">
@@ -35,9 +45,7 @@ export function DashboardSection() {
       <Tabs defaultValue="visao-geral" className="space-y-4">
         <TabsList>
           <TabsTrigger value="visao-geral">Visão geral</TabsTrigger>
-          <TabsTrigger value="por-evento">
-            Por Evento
-          </TabsTrigger>
+          <TabsTrigger value="por-evento">Por Evento</TabsTrigger>
         </TabsList>
         <TabsContent value="visao-geral" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
@@ -46,12 +54,12 @@ export function DashboardSection() {
                 <CardTitle className="text-sm font-medium">
                   Eventos criados
                 </CardTitle>
-                <Video className="dark:text-primary" size={'20px'}/>
+                <Video className="dark:text-primary" size={"20px"} />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{query.data?.length}</div>
                 <p className="text-xs text-muted-foreground">
-                  média de { eventsPerMonthsAverage } eventos criados por mês
+                  média de {eventsPerMonthsAverage} eventos criados por mês
                 </p>
               </CardContent>
             </Card>
@@ -60,7 +68,7 @@ export function DashboardSection() {
                 <CardTitle className="text-sm font-medium">
                   Participantes
                 </CardTitle>
-                <Users className="dark:text-primary" size={'20px'}/>
+                <Users className="dark:text-primary" size={"20px"} />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">3090</div>
@@ -120,25 +128,23 @@ export function DashboardSection() {
             </Card> */}
           </div>
           {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7"> */}
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Participantes / mês</CardTitle>
-              </CardHeader>
-              <CardContent className="pl-2">
-                <Overview />
-              </CardContent>
-            </Card>
-            <Card className="col-span-3 w-full">
-              <CardHeader>
-                <CardTitle>Participantes mais engajados</CardTitle>
-                <CardDescription>
-                  Quem mais participa dos eventos
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Engajados />
-              </CardContent>
-            </Card>
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>Participantes / mês</CardTitle>
+            </CardHeader>
+            <CardContent className="pl-2">
+              <Overview />
+            </CardContent>
+          </Card>
+          <Card className="col-span-3 w-full">
+            <CardHeader>
+              <CardTitle>Participantes mais engajados</CardTitle>
+              <CardDescription>Quem mais participa dos eventos</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Engajados />
+            </CardContent>
+          </Card>
           {/* </div> */}
         </TabsContent>
       </Tabs>

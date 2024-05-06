@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation";
 
 import { db } from "~/server/db";
+import { NotSoFastMyFriendClientComponent } from "../_components/not-so-fast-my-friend-client-component";
 import { StreamPlayer } from "../_components/stream-player";
 
-interface UserPageProps {
+interface EventPage {
   params: {
     id: string;
   };
@@ -25,7 +26,7 @@ function verifyIfUserMayAccessLive(event: Date) {
   return true;
 }
 
-const UserPage = async ({ params }: UserPageProps) => {
+const EventPage = async ({ params }: EventPage) => {
   const stream = await db.stream.findUnique({
     where: {
       id: params.id,
@@ -57,11 +58,10 @@ const UserPage = async ({ params }: UserPageProps) => {
     notFound();
   }
 
-  if (!verifyIfUserMayAccessLive(stream.datetime)) {
-    notFound();
-  }
+  if (!verifyIfUserMayAccessLive(stream.datetime))
+    return <NotSoFastMyFriendClientComponent />;
 
   return <StreamPlayer user={stream.User} stream={stream} />;
 };
 
-export default UserPage;
+EventPage;
