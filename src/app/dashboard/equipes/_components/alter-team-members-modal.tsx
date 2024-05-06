@@ -1,6 +1,6 @@
 "use client";
 
-import { type ElementRef, useRef, useState } from "react";
+import { type ElementRef, useRef, useState, useTransition } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Dialog,
@@ -19,37 +19,46 @@ import {
   TableRow,
 } from "~/components/ui/table";
 import { Card, CardHeader, CardTitle } from "~/components/ui/card";
-import { X } from "lucide-react";
-import { Icons } from "~/components/icons";
-import { toast } from "sonner";
-import { updateTeam, type getTeams } from "~/server/actions/team";
-import { UserRound } from "lucide-react";
 import { Input } from "~/components/ui/input";
+
+import { toast } from "sonner";
+import { Icons } from "~/components/icons";
+import { X } from "lucide-react";
+import { UserRound } from "lucide-react";
+
+import { updateTeam, type getTeams } from "~/server/actions/team";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const AlterModal = ({
   team,
 }: {
   team: Awaited<ReturnType<typeof getTeams>>[number];
 }) => {
-  // useTransition fake (não consegui implementar, o isPending continua true mesmo após a requisição ser finalizada)
-  const [isPending, startTransition] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const closeRef = useRef<ElementRef<"button">>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [emails, setEmail] = useState<string[]>(team.usersEmails);
 
-  const onSubmit = async (teamId: string) => {
-    startTransition(true);
-    await updateTeam({ teamId, emails })
-      .then(() => {
-        toast.success("Membros atualizados");
-      })
-      .catch(() => {
-        toast.error("Erro ao atualizar membros");
-      })
-      .finally(() => {
-        startTransition(false);
-      });
-    closeRef.current?.click();
+	const queryClient = useQueryClient();
+	const mutation = useMutation({
+		mutationFn: updateTeam,
+		onSuccess: async () => {
+			toast.success(`Equipe ${team.name} alterada`);
+			closeRef.current?.click();
+			void queryClient.invalidateQueries({ queryKey: ["getTeams"] });
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	})
+
+  const onSubmit = () => {
+		startTransition(() => {
+			mutation.mutate({
+				teamId: team.id,
+				emails,
+			});
+		});    
   };
 
   function addMember() {
@@ -119,7 +128,7 @@ export const AlterModal = ({
           </DialogClose>
           <Button
             disabled={emails.length === 0 || isPending}
-            onClick={() => onSubmit(team.id)}
+            onClick={onSubmit}
           >
             {isPending && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
