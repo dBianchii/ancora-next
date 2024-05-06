@@ -56,7 +56,6 @@ export const createEvent = async (input: {
   });
 };
 
-//TODO deletar
 export const DO_NOT_USE_deleteAllEvents = async () => {
   await db.stream.deleteMany({});
 };
@@ -91,4 +90,13 @@ export const updateStream = async ({
   } catch {
     throw new Error("Internal Error");
   }
+};
+
+export const deleteEvent = async (streamId: string) => {
+  await db.stream.delete({
+    where: {
+      id: streamId,
+      userId: (await enforceLoggedIn()).user.id,
+    },
+  });
 };

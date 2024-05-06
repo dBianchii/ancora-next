@@ -1,6 +1,7 @@
 "use client";
 
 import { Label } from "@radix-ui/react-dropdown-menu";
+import { useQueryClient } from "@tanstack/react-query";
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -17,8 +18,9 @@ import {
   DialogTrigger,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { updateStream } from "~/server/actions/stream";
+import { deleteEvent, updateStream } from "~/server/actions/stream";
 import { UploadDropzone } from "~/server/utils/uploadthing";
+import { getErrorMessage } from "~/utils/getErrorMessage";
 
 interface InfoModalProps {
   initialName: string;
@@ -77,6 +79,7 @@ export const UpdateEventModal = ({
     setTitle(e.target.value);
   };
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   return (
     <>
@@ -124,7 +127,7 @@ export const UpdateEventModal = ({
                   />
                 </div>
               ) : (
-                <div className="rounded-xl outline-muted border border-dashed">
+                <div className="rounded-xl border border-dashed outline-muted">
                   <UploadDropzone
                     input={{ id: streamId }}
                     endpoint="thumbnailEdit"
@@ -159,15 +162,28 @@ export const UpdateEventModal = ({
         </DialogContent>
       </Dialog>
 
-
-			<Dialog>
-        <DialogTrigger asChild>
-          <Button variant="destructive" size="lg" className="w-full">
-            Apagar evento
-          </Button>
-        </DialogTrigger>
-        {/* ToDo */}
-      </Dialog>
+      <Button
+        variant="destructive"
+        size="lg"
+        className="w-full"
+        disabled={isPending}
+        onClick={() => {
+          startTransition(() => {
+            toast.promise(deleteEvent(streamId), {
+              loading: "Deletando...",
+              success: () => {
+                void queryClient.invalidateQueries({
+                  queryKey: ["events"],
+                });
+                return "Evento deletado com sucesso!";
+              },
+              error: (err: unknown) => getErrorMessage(err),
+            });
+          });
+        }}
+      >
+        Apagar evento
+      </Button>
     </>
   );
 };
