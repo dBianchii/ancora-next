@@ -1,8 +1,7 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "~/components/ui/button";
-import { Skeleton } from "~/components/ui/skeleton";
 import { getServerAuthSession } from "~/server/auth";
-import Link from "next/link";
 
 export default async function HomePage() {
   const session = await getServerAuthSession();
@@ -19,7 +18,7 @@ export default async function HomePage() {
           navegador. Engage com a sua audiência e obtenha métricas.
         </p>
         <Link href="/login">
-          <Button size={"custom"} className="text-bold text-lg text-black mb-4">
+          <Button size={"custom"} className="text-bold mb-4 text-lg text-black">
             Comece já: é grátis!
           </Button>
         </Link>
@@ -41,17 +40,5 @@ export default async function HomePage() {
         </div>
       </div>
     </main>
-  );
-}
-
-function LoggedInViewSkeleton() {
-  return (
-    <div className="gap-2">
-      <h2 className="pb-4 text-center text-2xl font-bold sm:text-start">
-        Meus eventos
-      </h2>
-      <Skeleton className="h-6 w-24" />
-      <Skeleton className="h-[200px] w-full" />{" "}
-    </div>
   );
 }

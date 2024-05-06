@@ -12,13 +12,14 @@ import { useViewerToken } from "~/hooks/use-viewer-token";
 import { useChatSidebar } from "~/store/use-chat-sidebar";
 import { cn } from "~/components/ui/lib/utils";
 
-type CustomStream = {
+export type CustomStream = {
   id: string;
   isChatEnabled: boolean;
   isChatDelayed: boolean;
   isLive: boolean;
   thumbnailUrl: string | null;
   title: string;
+  datetime: Date;
 };
 
 type CustomUser = {
@@ -58,7 +59,11 @@ export const StreamPlayer = ({
         )}
       >
         <div className="hidden-scrollbar col-span-1 space-y-4 pb-4 lg:col-span-2 lg:overflow-y-auto xl:col-span-2 2xl:col-span-5">
-          <Video hostName={user.name ?? ""} hostIdentity={user.id} />
+          <Video
+            hostName={user.name ?? ""}
+            hostIdentity={user.id}
+            stream={stream}
+          />
           <Header
             hostName={user.name ?? ""}
             hostIdentity={user.id}

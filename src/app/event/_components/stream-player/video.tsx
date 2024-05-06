@@ -1,23 +1,25 @@
 "use client";
 
-import { ConnectionState, Track } from "livekit-client";
 import {
   useConnectionState,
   useRemoteParticipant,
   useTracks,
 } from "@livekit/components-react";
+import { ConnectionState, Track } from "livekit-client";
 
-import { OfflineVideo } from "./offline-video";
-import { LoadingVideo } from "./loading-video";
-import { LiveVideo } from "./live-video";
 import { Skeleton } from "~/components/ui/skeleton";
+import { type CustomStream } from ".";
+import { LiveVideo } from "./live-video";
+import { LoadingVideo } from "./loading-video";
+import { OfflineVideo } from "./offline-video";
 
 interface VideoProps {
   hostName: string;
   hostIdentity: string;
+  stream: CustomStream;
 }
 
-export const Video = ({ hostName, hostIdentity }: VideoProps) => {
+export const Video = ({ hostName, hostIdentity, stream }: VideoProps) => {
   const connectionState = useConnectionState();
   const participant = useRemoteParticipant(hostIdentity);
   const tracks = useTracks([
@@ -28,7 +30,7 @@ export const Video = ({ hostName, hostIdentity }: VideoProps) => {
   let content;
 
   if (!participant && connectionState === ConnectionState.Connected) {
-    content = <OfflineVideo username={hostName} />;
+    content = <OfflineVideo username={hostName} stream={stream} />;
   } else if (!participant || tracks.length === 0) {
     content = <LoadingVideo label={connectionState} />;
   } else {
