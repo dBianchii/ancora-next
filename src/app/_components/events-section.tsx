@@ -42,7 +42,7 @@ export function EventsSection() {
 
   return (
     <div className="lg:border-l">
-      <section className="min-h-[500px] h-full py-6 lg:pl-8">
+      <section className="h-full min-h-[500px] py-6 lg:pl-8">
         <h2 className="mb-4 space-y-1 text-2xl font-semibold tracking-tight ">
           Eventos
         </h2>
@@ -107,9 +107,9 @@ export function EventsSection() {
         </Tabs>
       </section>
 
-			<Separator />
+      <Separator />
 
-			<section className="h-full py-6 lg:pl-8">
+      <section className="h-full py-6 lg:pl-8">
         <h3 className="mb-4 space-y-1 text-lg font-semibold tracking-tight text-slate-600 dark:text-slate-200">
           Inscritos
         </h3>
@@ -121,18 +121,16 @@ export function EventsSection() {
           <TabsContent value="proximos">
             <div className="space-y-2">
               {query.isError && <p>Erro ao carregar eventos</p>}
-              
-                  <PlaceholderBanner
-                    text={"Você não possui eventos próximos inscritos"}
-                  />
-           </div>
+
+              <PlaceholderBanner
+                text={"Você não possui eventos próximos inscritos"}
+              />
+            </div>
           </TabsContent>
           <TabsContent value="antigos">
-           
-                <PlaceholderBanner
-                  text={"Você ainda não participou de nenhum evento"}
-                />
-            
+            <PlaceholderBanner
+              text={"Você ainda não participou de nenhum evento"}
+            />
           </TabsContent>
         </Tabs>
       </section>

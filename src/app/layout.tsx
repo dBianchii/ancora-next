@@ -36,7 +36,6 @@ export default async function RootLayout({
           attribute="class"
           defaultTheme="light"
           // enableSystem
-          disableTransitionOnChange
         >
           <div className="flex min-h-screen flex-col">
             <ReactQueryProvider>
