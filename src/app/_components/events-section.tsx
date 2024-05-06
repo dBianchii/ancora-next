@@ -150,7 +150,6 @@ function verifyEventTime(event: Awaited<ReturnType<typeof getEvents>>[number]) {
 function verifyIfUserMayAccessLive(
   event: Awaited<ReturnType<typeof getEvents>>[number],
 ) {
-  alert(event.id);
   const eventTime = new Date(event.datetime).getTime();
   const currentTime = new Date().getTime();
 
