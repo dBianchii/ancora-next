@@ -64,4 +64,4 @@ const EventPage = async ({ params }: EventPage) => {
   return <StreamPlayer user={stream.User} stream={stream} />;
 };
 
-EventPage;
+export default EventPage;
