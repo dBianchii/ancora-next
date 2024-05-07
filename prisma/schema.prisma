@@ -135,7 +135,6 @@ model User {
     sessions      Session[]
 
     AdministeredEvents Stream[] @relation("AdminEvents")
-    eventsId           String?
 
     //LiveKit
     ingressId String?    @unique
