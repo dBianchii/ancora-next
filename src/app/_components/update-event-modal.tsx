@@ -69,6 +69,9 @@ export const UpdateEventModal = ({
       })
         .then(() => {
           toast.success("Stream updated");
+					void queryClient.invalidateQueries({
+						queryKey: ["events"],
+					});
           closeRef?.current?.click();
         })
         .catch(() => toast.error("Something went wrong"));
