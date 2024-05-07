@@ -2,37 +2,38 @@
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "~/components/ui/dialog";
 
-import { TableOfMembers } from "../dashboard/equipes/_components/alter-team-members-modal";
 import { PlayIcon } from "@radix-ui/react-icons";
 import dayjs from "dayjs";
+import { Settings } from "lucide-react";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import {
   DO_NOT_USE_deleteAllEvents,
   type getEvents,
 } from "../../server/actions/stream";
+import { TableOfMembers } from "../dashboard/equipes/_components/alter-team-members-modal";
 import { CreateEventsButton } from "./create-events-button";
 import { useEventsData, useTeamsData } from "./hooks";
-import { Settings } from "lucide-react";
 
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Separator } from "~/components/ui/separator";
+import { getBaseUrl } from "~/utils/getBaseUr";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
-import { UpdateEventModal } from "./update-event-modal";
-import { Separator } from "~/components/ui/separator";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import { CopyButton } from "../dashboard/chaves/_components/copy-button";
 import { PlaceholderBanner } from "./placeholder-banner";
+import { UpdateEventModal } from "./update-event-modal";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 const SIXTY_MINUTES = 60 * 60 * 1000;
@@ -194,12 +195,19 @@ function EventCard({
               {dayjs(event.datetime).format("DD/MM/YYYY HH:mm")}
             </span>
           </p>
-        </div>
-        {verifyEventTime(event) && (
-          <div className="mt-2 flex w-1/5 justify-end">
-            <ConfigEvent event={event} />
+          <div className="flex flex-row items-center">
+            <CopyButton
+              className="w-10"
+              value={`${getBaseUrl()}/participar-de-evento/${event.id}`}
+            />
+            <span className="text-sm font-semibold text-muted-foreground">
+              Link de inscrição
+            </span>
           </div>
-        )}
+        </div>
+        <div className="flex flex-col justify-between gap-2 p-1">
+          {verifyEventTime(event) && <ConfigEvent event={event} />}
+        </div>
       </div>
     </div>
   );
@@ -256,7 +264,7 @@ function ConfigEvent({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Settings className="h-6 w-6 cursor-pointer text-gray-500 transition-colors hover:text-white dark:text-gray-400 dark:hover:text-white" />
+        <Settings className="size-5 cursor-pointer transition-colors hover:text-foreground dark:text-gray-400 dark:hover:text-white" />
       </DialogTrigger>
 
       <DialogContent>

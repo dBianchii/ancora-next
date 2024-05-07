@@ -7,9 +7,10 @@ import { Button } from "../../../../components/ui/button";
 
 interface CopyButtonProps {
   value?: string;
+  className?: string;
 }
 
-export const CopyButton = ({ value }: CopyButtonProps) => {
+export const CopyButton = ({ value, className }: CopyButtonProps) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const onCopy = () => {
@@ -26,6 +27,7 @@ export const CopyButton = ({ value }: CopyButtonProps) => {
 
   return (
     <Button
+      className={className}
       onClick={onCopy}
       disabled={!value || isCopied}
       variant="ghost"
