@@ -35,21 +35,34 @@ export const captureLead = async (data: {
       },
     },
   });
-  if (userFound)
+  if (userFound) {
     if (userFound.Events.some((event) => event.id === data.eventId))
       return { message: "user_already_registered_for_event" };
 
-  await db.leads.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      Events: {
-        connect: {
-          id: data.eventId,
+    await db.leads.update({
+      where: {
+        email: data.email,
+      },
+      data: {
+        Events: {
+          connect: {
+            id: data.eventId,
+          },
         },
       },
-    },
-  });
+    });
+  } else
+    await db.leads.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        Events: {
+          connect: {
+            id: data.eventId,
+          },
+        },
+      },
+    });
 
   await resend.emails.send({
     from: defaultEmailFrom,
