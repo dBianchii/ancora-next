@@ -3,6 +3,7 @@
 import { db } from "~/server/db";
 import { resend } from "~/server/email/send-verification-request";
 import ParticiparDeEventoEmail from "../_components/participar-de-evento-email";
+import { defaultEmailFrom } from "~/utils/constants";
 
 export const captureLead = async (data: {
   name: string;
@@ -34,14 +35,9 @@ export const captureLead = async (data: {
       },
     },
   });
-  if (userFound) {
-    const userAlreadyRegistered = userFound.Events.some(
-      (event) => event.id === data.eventId,
-    );
-    if (userAlreadyRegistered) {
+  if (userFound)
+    if (userFound.Events.some((event) => event.id === data.eventId))
       return { message: "user_already_registered_for_event" };
-    }
-  }
 
   await db.leads.create({
     data: {
@@ -56,7 +52,7 @@ export const captureLead = async (data: {
   });
 
   await resend.emails.send({
-    from: "Ancora <ancoranotification@kodix.com.br>",
+    from: defaultEmailFrom,
     to: data.email,
     subject: "Você se inscreveu no evento!",
     react: <ParticiparDeEventoEmail userFirstname={data.name} event={event} />,
