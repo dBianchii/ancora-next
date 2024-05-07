@@ -22,6 +22,27 @@ export const captureLead = async (data: {
 
   if (!event) throw new Error("Event not found");
 
+  const userFound = await db.leads.findFirst({
+    where: {
+      email: data.email,
+    },
+    select: {
+      Events: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  if (userFound) {
+    const userAlreadyRegistered = userFound.Events.some(
+      (event) => event.id === data.eventId,
+    );
+    if (userAlreadyRegistered) {
+      return { message: "user_already_registered_for_event" };
+    }
+  }
+
   await db.leads.create({
     data: {
       name: data.name,

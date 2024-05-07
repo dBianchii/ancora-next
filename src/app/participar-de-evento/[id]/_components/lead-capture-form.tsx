@@ -15,7 +15,7 @@ import {
 } from "~/components/ui/form";
 import { Input } from "~/components/ui/input";
 import { getErrorMessage } from "~/utils/getErrorMessage";
-import { captureLead } from "../_actions/captureLead";
+import { captureLead } from "../_actions/captureLeadAction";
 
 export function LeadCaptureForm({ eventId }: { eventId: string }) {
   const form = useForm({
@@ -27,12 +27,6 @@ export function LeadCaptureForm({ eventId }: { eventId: string }) {
 
   const mutation = useMutation({
     mutationFn: captureLead,
-    onSuccess: async () => {
-      toast.success("Evento criado com sucesso!");
-    },
-    onError: (error) => {
-      toast.error(getErrorMessage(error));
-    },
   });
 
   return (
@@ -40,7 +34,18 @@ export function LeadCaptureForm({ eventId }: { eventId: string }) {
       <form
         className="flex flex-col space-y-3"
         onSubmit={form.handleSubmit((data) => {
-          mutation.mutate({ ...data, eventId });
+          toast.promise(mutation.mutateAsync({ ...data, eventId }), {
+            loading: "Cadastrando...",
+            success: (res) => {
+              if (res?.message === "user_already_registered_for_event") {
+                return "Parece que você já se inscreveu neste evento. Nos vemos lá!";
+              }
+
+              return "Cadastrado com sucesso Dê uma olhada em seu email para mais informações!";
+            },
+            error: getErrorMessage,
+            position: "top-center",
+          });
         })}
       >
         <FormField
@@ -70,7 +75,7 @@ export function LeadCaptureForm({ eventId }: { eventId: string }) {
           )}
         />
 
-        <Button className="mt-2" type="submit">
+        <Button className="mt-2" type="submit" disabled={mutation.isPending}>
           Quero participar!
         </Button>
       </form>

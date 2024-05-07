@@ -90,10 +90,7 @@ model Leads {
     email String @id @default(cuid())
     name  String
 
-    Events   Stream[] @relation("EmailLeadsEvents")
-    eventsId String?
-
-    @@index([eventsId])
+    Events Stream[] @relation("EmailLeadsEvents")
 }
 
 // Necessary for Next auth
