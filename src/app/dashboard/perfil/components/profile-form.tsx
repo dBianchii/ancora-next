@@ -178,28 +178,30 @@ export function ProfileForm({ session }: { session: Session }) {
 export function ProfileCard({ session }: { session: Session }) {
   const name = session.user.name ?? "";
   const email = session.user.email ?? "";
+	// ToDo: puxar user.channelName
 
   return (
     <>
       <div className="">
-        <Card className="w-full">
+        <Card className="flex w-full items-center">
           <CardHeader>
             <Image
               src={session.user.image ?? "/bg.png"}
               alt={name}
-              className="mx-auto h-24 w-24 rounded-full object-cover mb-4"
+              className="mx-auto h-24 w-24 rounded-full object-cover"
               width={100}
               height={100}
             />
-            <CardTitle className="text-center font-bold md:text-xl lg:text-2xl">
+          </CardHeader>
+          <div className="flex flex-col gap-1">
+            <CardTitle className="font-bold md:text-xl lg:text-2xl">
               {name}
             </CardTitle>
-            <CardDescription className="m-1 text-center text-sm">
-              {email.length > 30
-                ? session.user.email?.substring(0, 30) + "..."
-                : session.user.email}
+            <CardDescription className="text-sm flex flex-col gap-1">
+							<p>@...</p>
+							<p>{email}</p>
             </CardDescription>
-          </CardHeader>
+          </div>
         </Card>
       </div>
     </>
