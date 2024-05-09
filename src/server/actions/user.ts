@@ -22,3 +22,15 @@ export const updateUser = async (values: Partial<User>) => {
 
   return user;
 };
+
+export const getUser = async () => {
+  const session = await enforceLoggedIn();
+
+  const user = await db.user.findUnique({
+    where: {
+      id: session.user.id,
+    },
+  });
+
+  return user;
+};
