@@ -13,70 +13,99 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../../components/ui/form";
-import { Input } from "../../../../components/ui/input";
-import { cn } from "../../../../components/ui/lib/utils";
-import { Textarea } from "../../../../components/ui/textarea";
-import { toast } from "../../../../components/ui/use-toast";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "~/components/ui/dialog";
+
+import { Input } from "~/components/ui/input";
+import { cn } from "~/components/ui/lib/utils";
+import { Textarea } from "~/components/ui/textarea";
+import { toast } from "~/components/ui/use-toast";
 import Image from "next/image";
 import { type getUser } from "~/server/actions/user";
 
-const profileFormSchema = (defaultValues: {name: string}) => z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "O nome do usuário precisa ser maior do que 2 caracteres",
-    })
-    .max(30, {
-      message: "O nome do usuário precisa ser menor do que 30 caracteres",
-    })
-		.default(defaultValues.name),
-	channelName: z
-		.string()
-		.min(2, { message: "O canal deve ter pelo menos 2 caracteres" }),
-  email: z
-    .string({
-      required_error: "Por favor, informe um e-mail valido",
-    })
-    .email()
-		.optional(),
-  bio: z.string().max(160).optional(),
-  urls: z
-    .array(
-      z.object({
-        value: z.string().url({ message: "Por favor, informe uma URL válida" }),
-      }),
-    )
-    .optional(),
-});
+import { ChevronRight, Globe } from "lucide-react";
+import { socialIcons } from "./socialIcons";
+
+const profileFormSchema = (defaultValues: { name: string }) =>
+  z.object({
+    name: z
+      .string()
+      .min(2, {
+        message: "O nome do usuário precisa ser maior do que 2 caracteres",
+      })
+      .max(30, {
+        message: "O nome do usuário precisa ser menor do que 30 caracteres",
+      })
+      .default(defaultValues.name),
+    channelName: z
+      .string()
+      .min(2, { message: "O canal deve ter pelo menos 2 caracteres" }),
+    email: z
+      .string({
+        required_error: "Por favor, informe um e-mail valido",
+      })
+      .email()
+      .optional(),
+    bio: z.string().max(160).optional(),
+    urls: z
+      .array(
+        z.object({
+          value: z
+            .string()
+            .url({ message: "Por favor, informe uma URL válida" }),
+        }),
+      )
+      .optional(),
+  });
 
 type ProfileFormValues = {
   name: string;
   channelName: string;
   email: string;
   bio: string;
-  urls: Array<{ value: string }>;
+  xUrl: string;
+  facebookUrl: string;
+  instagramUrl: string;
+  linkedinUrl: string;
+  youtubeUrl: string;
+  twitchUrl: string;
+  tiktokUrl: string;
 };
 
-export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>>}) {
-
-	const defaultValues: ProfileFormValues = {
-		name: user?.name ?? "",
-		channelName: user?.channelName ?? "",
-		email: user?.email ?? "",
-		bio: user?.bio ?? "",
-		urls: [{ value: 'http://default.com' }],
-		// ToDo: fix this
-	};
+export function ProfileForm({
+  user,
+}: {
+  user: Awaited<ReturnType<typeof getUser>>;
+}) {
+  const defaultValues: ProfileFormValues = {
+    name: user?.name ?? "",
+    channelName: user?.channelName ?? "",
+    email: user?.email ?? "",
+    bio: user?.bio ?? "",
+    xUrl: user?.xUrl ?? "",
+    facebookUrl: user?.facebookUrl ?? "",
+    instagramUrl: user?.instagramUrl ?? "",
+    linkedinUrl: user?.linkedinUrl ?? "",
+    youtubeUrl: user?.youtubeUrl ?? "",
+    twitchUrl: user?.twitchUrl ?? "",
+    tiktokUrl: user?.tiktokUrl ?? "",
+  };
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema(defaultValues)),
     mode: "onChange",
   });
 
-  const { fields, append } = useFieldArray({
-    name: "urls",
-    control: form.control,
-  });
+  // const { fields, append } = useFieldArray({
+  //   name: "urls",
+  //   control: form.control,
+  // });
 
   function onSubmit(data: ProfileFormValues) {
     toast({
@@ -92,7 +121,7 @@ export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
             name="name"
@@ -102,13 +131,28 @@ export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>
                   Nome Completo
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} defaultValue={defaultValues.name}/>
+                  <Input {...field} defaultValue={defaultValues.name} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
+            name="channelName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-gray-500 dark:text-gray-400">
+                  Nickname
+                </FormLabel>
+                <FormControl>
+                  <Input {...field} defaultValue={defaultValues.channelName} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* <FormField
             control={form.control}
             name="email"
             render={({ field }) => (
@@ -117,13 +161,16 @@ export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>
                   Email
                 </FormLabel>
                 <FormControl>
-                   <Input {...field} defaultValue={defaultValues.email} disabled/>
+                  <Input
+                    {...field}
+                    defaultValue={defaultValues.email}
+                    disabled
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
-          />
-
+          /> */}
           <FormField
             control={form.control}
             name="bio"
@@ -137,46 +184,134 @@ export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>
                     placeholder="Conte um pouco sobre você..."
                     className=" w-full resize-none"
                     {...field}
-										defaultValue={defaultValues.bio}
+                    defaultValue={defaultValues.bio}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-
           <div>
-            {fields.map((field, index) => (
-              <FormField
-                control={form.control}
-                key={field.id}
-                name={`urls.${index}.value`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className={cn(index !== 0 && "sr-only")}>
-                      URLs
-                    </FormLabel>
-                    <FormDescription className={cn(index !== 0 && "sr-only")}>
-                      Adicione links de suas redes sociais, blogs ou websites
-                    </FormDescription>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-2"
-              onClick={() => append({ value: "" })}
-            >
-              Adicionar URL
-            </Button>
+            <h4>Social media:</h4>
+
+            <FormField
+              control={form.control}
+              name="xUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+                    {socialIcons("x")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} defaultValue={defaultValues.xUrl} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="facebookUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("facebook")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.facebookUrl}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="instagramUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("instagram")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.instagramUrl}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="linkedinUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("linkedin")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.linkedinUrl}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="youtubeUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("youtube")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} defaultValue={defaultValues.youtubeUrl} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="twitchUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("twitch")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} defaultValue={defaultValues.twitchUrl} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="tiktokUrl"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-center gap-4">
+                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
+									{socialIcons("tiktok")}
+                  </FormLabel>
+                  <FormControl>
+                    <Input {...field} defaultValue={defaultValues.tiktokUrl} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+
           <Button type="submit" className="mt-2">
             Salvar alterações
           </Button>
@@ -186,15 +321,20 @@ export function ProfileForm({ user }: { user: Awaited<ReturnType<typeof getUser>
   );
 }
 
-export function ProfileCard({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+export function ProfileCard({
+  user,
+}: {
+  user: Awaited<ReturnType<typeof getUser>>;
+}) {
   const name = user?.name ?? "";
   const email = user?.email ?? "";
-	const channelName = user?.channelName ?? "";
+  const channelName = user?.channelName ?? "";
+  const bio = user?.bio ?? "aaa";
 
   return (
     <>
-      <div className="">
-        <div className="flex flex-col gap-4 w-full items-center rounded-xl border bg-card text-card-foreground shadow p-4">
+      <div className="flex flex-col items-center gap-2">
+        <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-card p-4 text-card-foreground shadow">
           <div>
             <Image
               src={user?.image ?? "/bg.png"}
@@ -205,15 +345,73 @@ export function ProfileCard({ user }: { user: Awaited<ReturnType<typeof getUser>
             />
           </div>
           <div className="flex flex-col gap-1 text-center">
-            <h2 className="md:text-xl lg:text-2xl font-semibold leading-none tracking-tight">
+            <h2 className="font-semibold leading-none tracking-tight md:text-xl lg:text-2xl">
               {name}
             </h2>
-            <div className="text-sm flex flex-col gap-1 text-muted-foreground">
-							<p className="text-base">{channelName}</p>
-							<p>{email}</p>
+            <div className="flex flex-col gap-1 text-sm text-muted-foreground">
+              <p className="text-base">{channelName}</p>
+              <p>{email}</p>
             </div>
+            <AboutDialog user={user} />
           </div>
         </div>
+        <AlterInfoDialog user={user} />
+      </div>
+    </>
+  );
+}
+
+function AlterInfoDialog({
+  user,
+}: {
+  user: Awaited<ReturnType<typeof getUser>>;
+}) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Alterar informações</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Alterar informações</DialogTitle>
+        </DialogHeader>
+        <ProfileForm user={user} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function AboutDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="link">
+          Sobre
+          <ChevronRight />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Sobre</DialogTitle>
+        </DialogHeader>
+        <About user={user} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+  const bio = user?.bio ?? "";
+
+  return (
+    <>
+      {bio ? <p>{bio}</p> : <p>...</p>}
+      <h3 className="text-lg font-medium">Detalhes do usuário</h3>
+      <div className="flex items-center gap-x-2 dark:text-gray-300">
+        <Globe />
+        <p className="text-sm ">
+          http://localhost:3000/users/{user?.channelName}
+        </p>
       </div>
     </>
   );
