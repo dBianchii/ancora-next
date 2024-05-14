@@ -34,3 +34,22 @@ export const getUser = async () => {
 
   return user;
 };
+
+export const verifyIfChannelIsAvailable = async (channelName: string) => {
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        channelName,
+      },
+    });
+
+    if (user) {
+      throw new Error("Nome indisponível");
+    }
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};

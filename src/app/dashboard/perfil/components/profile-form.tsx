@@ -45,7 +45,10 @@ const profileFormSchema = (defaultValues: { name: string }) =>
       .default(defaultValues.name),
     channelName: z
       .string()
-      .min(2, { message: "O canal deve ter pelo menos 2 caracteres" }),
+      .min(2, { message: "O canal deve ter pelo menos 2 caracteres" })
+      .refine(value => /^[a-zA-Z0-9_]{1,15}$/.test(value), {
+        message: "O nome do canal deve conter apenas letras, números e sublinhados, e ter entre 1 e 15 caracteres",
+      }),
     email: z
       .string({
         required_error: "Por favor, informe um e-mail valido",
@@ -85,7 +88,7 @@ export function ProfileForm({
 }) {
   const defaultValues: ProfileFormValues = {
     name: user?.name ?? "",
-    channelName: user?.channelName ?? "",
+    channelName: user?.channelName?.replace("@", "") ?? "",
     email: user?.email ?? "",
     bio: user?.bio ?? "",
     xUrl: user?.xUrl ?? "",
@@ -102,11 +105,6 @@ export function ProfileForm({
     mode: "onChange",
   });
 
-  // const { fields, append } = useFieldArray({
-  //   name: "urls",
-  //   control: form.control,
-  // });
-
   function onSubmit(data: ProfileFormValues) {
     toast({
       title: "You submitted the following values:",
@@ -117,6 +115,10 @@ export function ProfileForm({
       ),
     });
   }
+
+	function handleVerificar() {
+		//ToDo: Implementar a verificação do nome do canal
+	}
 
   return (
     <>
@@ -146,12 +148,25 @@ export function ProfileForm({
                   Nickname
                 </FormLabel>
                 <FormControl>
-                  <Input {...field} defaultValue={defaultValues.channelName} />
+                  <div className="flex items-center gap-x-2">
+                    @
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.channelName}
+                      className="w-full"
+                    />
+                    <Button 
+											variant={"default"} 
+											type="button" 
+											onClick={handleVerificar}
+										>Verificar</Button>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           {/* <FormField
             control={form.control}
             name="email"
@@ -203,7 +218,11 @@ export function ProfileForm({
                     {socialIcons("x")}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} defaultValue={defaultValues.xUrl} />
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.xUrl}
+                      placeholder="https://x.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -216,12 +235,13 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("facebook")}
+                    {socialIcons("facebook")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       defaultValue={defaultValues.facebookUrl}
+                      placeholder="https://facebook.com"
                     />
                   </FormControl>
                   <FormMessage />
@@ -234,12 +254,13 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("instagram")}
+                    {socialIcons("instagram")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       defaultValue={defaultValues.instagramUrl}
+                      placeholder="https://instagram.com"
                     />
                   </FormControl>
                   <FormMessage />
@@ -253,12 +274,13 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("linkedin")}
+                    {socialIcons("linkedin")}
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       defaultValue={defaultValues.linkedinUrl}
+                      placeholder="https://linkedin.com"
                     />
                   </FormControl>
                   <FormMessage />
@@ -271,10 +293,14 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("youtube")}
+                    {socialIcons("youtube")}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} defaultValue={defaultValues.youtubeUrl} />
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.youtubeUrl}
+                      placeholder="https://youtube.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -286,10 +312,14 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("twitch")}
+                    {socialIcons("twitch")}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} defaultValue={defaultValues.twitchUrl} />
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.twitchUrl}
+                      placeholder="https://twitch.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -301,10 +331,14 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-									{socialIcons("tiktok")}
+                    {socialIcons("tiktok")}
                   </FormLabel>
                   <FormControl>
-                    <Input {...field} defaultValue={defaultValues.tiktokUrl} />
+                    <Input
+                      {...field}
+                      defaultValue={defaultValues.tiktokUrl}
+                      placeholder="https://tiktok.com"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -402,17 +436,78 @@ function AboutDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
 
 function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
   const bio = user?.bio ?? "";
+  const x = user?.xUrl ?? "";
+  const facebook = user?.facebookUrl ?? "";
+  const instagram = user?.instagramUrl ?? "";
+  const linkedin = user?.linkedinUrl ?? "";
+  const youtube = user?.youtubeUrl ?? "";
+  const twitch = user?.twitchUrl ?? "";
+  const tiktok = user?.tiktokUrl ?? "";
+
+  const isSocialMedia =
+    x || facebook || instagram || linkedin || youtube || twitch || tiktok;
 
   return (
-    <>
+    <div className="flex flex-col gap-6">
       {bio ? <p>{bio}</p> : <p>...</p>}
-      <h3 className="text-lg font-medium">Detalhes do usuário</h3>
-      <div className="flex items-center gap-x-2 dark:text-gray-300">
-        <Globe />
-        <p className="text-sm ">
-          http://localhost:3000/users/{user?.channelName}
-        </p>
+      <div className="flex flex-col gap-2">
+        <h3 className="text-lg font-medium">Detalhes do usuário</h3>
+        <div className="flex items-center gap-x-2 dark:text-gray-300">
+          <Globe />
+          <p className="text-sm ">
+            http://localhost:3000/users/{user?.channelName}
+          </p>
+        </div>
       </div>
-    </>
+      {isSocialMedia && (
+        <div className="flex flex-col gap-2">
+          <h3 className="text-lg font-medium">Social Media</h3>
+          <div className="flex flex-col gap-2">
+            {x && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("x")}
+                <p className="text-sm">{x}</p>
+              </div>
+            )}
+            {facebook && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("facebook")}
+                <p className="text-sm">{facebook}</p>
+              </div>
+            )}
+            {instagram && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("instagram")}
+                <p className="text-sm">{instagram}</p>
+              </div>
+            )}
+            {linkedin && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("linkedin")}
+                <p className="text-sm">{linkedin}</p>
+              </div>
+            )}
+            {youtube && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("youtube")}
+                <p className="text-sm">{youtube}</p>
+              </div>
+            )}
+            {twitch && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("twitch")}
+                <p className="text-sm">{twitch}</p>
+              </div>
+            )}
+            {tiktok && (
+              <div className="flex items-center gap-x-2 dark:text-gray-300">
+                {socialIcons("tiktok")}
+                <p className="text-sm">{tiktok}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
