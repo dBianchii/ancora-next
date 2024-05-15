@@ -3,6 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createEvent, getEvents } from "../../server/actions/stream";
 import { getTeams } from "../../server/actions/team";
+import { getUser } from "../../server/actions/user";
 import { toast } from "sonner";
 
 export const useEventsData = () => {
@@ -43,4 +44,13 @@ export const useTeamsData = () => {
   });
 
   return { query, mutation };
+};
+
+export const useUserData = () => {
+  const query = useQuery({
+    queryKey: ["getUser"],
+    queryFn: () => getUser(),
+  });
+
+  return { query };
 };

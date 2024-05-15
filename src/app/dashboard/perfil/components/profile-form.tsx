@@ -1,5 +1,5 @@
 "use client";
-
+import { useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,14 +25,16 @@ import {
 import { Input } from "~/components/ui/input";
 import { cn } from "~/components/ui/lib/utils";
 import { Textarea } from "~/components/ui/textarea";
-import { toast } from "~/components/ui/use-toast";
+import { toast } from "sonner";
 import Image from "next/image";
 import { type getUser } from "~/server/actions/user";
 
 import { ChevronRight, Globe } from "lucide-react";
 import { socialIcons } from "./socialIcons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {verifyIfChannelIsAvailable} from "~/server/actions/user";
 
-const profileFormSchema = (defaultValues: { name: string }) =>
+const profileFormSchema = () =>
   z.object({
     name: z
       .string()
@@ -42,29 +44,23 @@ const profileFormSchema = (defaultValues: { name: string }) =>
       .max(30, {
         message: "O nome do usuário precisa ser menor do que 30 caracteres",
       })
-      .default(defaultValues.name),
+			.optional(),
     channelName: z
       .string()
       .min(2, { message: "O canal deve ter pelo menos 2 caracteres" })
-      .refine(value => /^[a-zA-Z0-9_]{1,15}$/.test(value), {
+			.max(30, { message: "O canal deve ter no maximo 30 caracteres" })
+			.refine(value => /^[a-zA-Z0-9_]{1,30}$/.test(value), {
         message: "O nome do canal deve conter apenas letras, números e sublinhados, e ter entre 1 e 15 caracteres",
-      }),
-    email: z
-      .string({
-        required_error: "Por favor, informe um e-mail valido",
       })
-      .email()
-      .optional(),
+			.optional(),
     bio: z.string().max(160).optional(),
-    urls: z
-      .array(
-        z.object({
-          value: z
-            .string()
-            .url({ message: "Por favor, informe uma URL válida" }),
-        }),
-      )
-      .optional(),
+    xUrl: z.string().url().optional(),
+    facebookUrl: z.string().url().optional(),
+    instagramUrl: z.string().url().optional(),
+    linkedinUrl: z.string().url().optional(),
+    youtubeUrl: z.string().url().optional(),
+    twitchUrl: z.string().url().optional(),
+    tiktokUrl: z.string().url().optional(),
   });
 
 type ProfileFormValues = {
@@ -100,30 +96,42 @@ export function ProfileForm({
     tiktokUrl: user?.tiktokUrl ?? "",
   };
 
+	const [channel, setChannel] = useState(defaultValues.channelName);
+
   const form = useForm<ProfileFormValues>({
-    resolver: zodResolver(profileFormSchema(defaultValues)),
+    resolver: zodResolver(profileFormSchema()),
     mode: "onChange",
   });
 
-  function onSubmit(data: ProfileFormValues) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  function onSubmit() {
+		toast.success("You submitted the following values:");
   }
 
-	function handleVerificar() {
-		//ToDo: Implementar a verificação do nome do canal
+	const queryClient = useQueryClient();
+	const mutationAoVerificar = useMutation({
+		mutationFn: verifyIfChannelIsAvailable,
+		onSuccess: async () => {
+			toast.success(`Canal @${channel} disponível`);
+		},
+		onError: (error) => {
+			toast.error(error.message);
+		},
+	})
+
+  function handleVerificar() {
+		mutationAoVerificar.mutate(`@${channel}`);
+  }
+
+	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+		const value = e.target.value;
+		const filteredValue = value.replace(/[^A-Za-z0-9_]/g, '');
+		setChannel(filteredValue);
 	}
 
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[calc(100vh-96px)] overflow-y-auto px-1">
           <FormField
             control={form.control}
             name="name"
@@ -153,13 +161,17 @@ export function ProfileForm({
                     <Input
                       {...field}
                       defaultValue={defaultValues.channelName}
-                      className="w-full"
+                      onChange={(e) => handleChange(e)}
+											value={channel}
                     />
-                    <Button 
-											variant={"default"} 
-											type="button" 
-											onClick={handleVerificar}
-										>Verificar</Button>
+                    <Button
+                      variant={"default"}
+                      disabled={channel === defaultValues.channelName}
+                      type="button"
+                      onClick={handleVerificar}
+                    >
+                      Verificar
+                    </Button>
                   </div>
                 </FormControl>
                 <FormMessage />

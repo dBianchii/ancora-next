@@ -49,7 +49,36 @@ export const verifyIfChannelIsAvailable = async (channelName: string) => {
 
     return true;
   } catch (error) {
-    console.error(error);
     throw error;
   }
+};
+
+// ToDo: need to test and implement this function
+export const updateUser2 = async (values: Partial<User>) => {
+  const session = await enforceLoggedIn();
+
+  try {
+    const validData = {
+      name: values.name,
+      channelName: values.channelName,
+      bio: values.bio,
+      xUrl: values.xUrl,
+      facebookUrl: values.facebookUrl,
+      instagramUrl: values.instagramUrl,
+      linkedinUrl: values.linkedinUrl,
+      youtubeUrl: values.youtubeUrl,
+      twitchUrl: values.twitchUrl,
+      tiktokUrl: values.tiktokUrl,
+    };
+
+    const user = await db.user.update({
+      where: { id: session.user.id },
+      data: { ...validData },
+    });
+
+    return user;
+		
+  } catch (error) {
+		throw error;
+	}
 };
