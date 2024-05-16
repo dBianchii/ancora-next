@@ -1,13 +1,13 @@
 "use client";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "../../../../components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -23,16 +23,19 @@ import {
 } from "~/components/ui/dialog";
 
 import { Input } from "~/components/ui/input";
-import { cn } from "~/components/ui/lib/utils";
+// import { cn } from "~/components/ui/lib/utils";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "sonner";
 import Image from "next/image";
 import { type getUser } from "~/server/actions/user";
 
-import { ChevronRight, Globe } from "lucide-react";
+import { ChevronRight, Globe, Check, RefreshCw } from "lucide-react";
+
+// ToDo: remove this shitty socialIcons
 import { socialIcons } from "./socialIcons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import {verifyIfChannelIsAvailable} from "~/server/actions/user";
+import { verifyIfChannelIsAvailable } from "~/server/actions/user";
+import { updateUser2 } from "~/server/actions/user";
 
 const profileFormSchema = () =>
   z.object({
@@ -44,15 +47,16 @@ const profileFormSchema = () =>
       .max(30, {
         message: "O nome do usuário precisa ser menor do que 30 caracteres",
       })
-			.optional(),
+      .optional(),
     channelName: z
       .string()
       .min(2, { message: "O canal deve ter pelo menos 2 caracteres" })
-			.max(30, { message: "O canal deve ter no maximo 30 caracteres" })
-			.refine(value => /^[a-zA-Z0-9_]{1,30}$/.test(value), {
-        message: "O nome do canal deve conter apenas letras, números e sublinhados, e ter entre 1 e 15 caracteres",
+      .max(30, { message: "O canal deve ter no maximo 30 caracteres" })
+      .refine((value) => /^[a-zA-Z0-9_]{1,30}$/.test(value), {
+        message:
+          "O nome do canal deve conter apenas letras, números e sublinhados, e ter entre 1 e 15 caracteres",
       })
-			.optional(),
+      .optional(),
     bio: z.string().max(160).optional(),
     xUrl: z.string().url().optional(),
     facebookUrl: z.string().url().optional(),
@@ -96,7 +100,8 @@ export function ProfileForm({
     tiktokUrl: user?.tiktokUrl ?? "",
   };
 
-	const [channel, setChannel] = useState(defaultValues.channelName);
+  const [channel, setChannel] = useState(defaultValues.channelName);
+  const [verificado, setVerificado] = useState(false);
 
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema()),
@@ -104,34 +109,82 @@ export function ProfileForm({
   });
 
   function onSubmit() {
-		toast.success("You submitted the following values:");
+    const values = form.getValues();
+    const {
+      name,
+      bio,
+      xUrl,
+      facebookUrl,
+      instagramUrl,
+      linkedinUrl,
+      youtubeUrl,
+      twitchUrl,
+      tiktokUrl,
+    } = values;
+    const data: Partial<ProfileFormValues> = {
+      name,
+      bio,
+      xUrl,
+      facebookUrl,
+      instagramUrl,
+      linkedinUrl,
+      youtubeUrl,
+      twitchUrl,
+      tiktokUrl,
+    };
+    if (verificado) {
+      data.channelName = `@${channel}`;
+    }
+    toast.success(`${JSON.stringify(data)} atualizado`);
   }
 
-	const queryClient = useQueryClient();
-	const mutationAoVerificar = useMutation({
-		mutationFn: verifyIfChannelIsAvailable,
-		onSuccess: async () => {
-			toast.success(`Canal @${channel} disponível`);
-		},
-		onError: (error) => {
-			toast.error(error.message);
-		},
-	})
+  const queryClient = useQueryClient();
+
+  const mutationAoVerificar = useMutation({
+    mutationFn: verifyIfChannelIsAvailable,
+    onSuccess: async () => {
+      toast.success(`Canal @${channel} disponível`);
+      setVerificado(true);
+    },
+
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+	// ToDo: need to test and implement this function
+	// const mutationUpdateUser = useMutation({
+	// 	mutationFn: updateUser2,
+	// 	onSuccess: async () => {
+
+	// 	},
+	// 	onError: (error) => {
+	// 		toast.error(error.message);
+	// 	},
+	// });
 
   function handleVerificar() {
-		mutationAoVerificar.mutate(`@${channel}`);
+    if (channel.length >= 2 && channel.length <= 30) {
+      mutationAoVerificar.mutate(`@${channel}`);
+    } else {
+      toast.error("O canal deve ter entre 2 e 30 caracteres");
+    }
   }
 
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-		const value = e.target.value;
-		const filteredValue = value.replace(/[^A-Za-z0-9_]/g, '');
-		setChannel(filteredValue);
-	}
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    const filteredValue = value.replace(/[^A-Za-z0-9_]/g, "");
+    setChannel(filteredValue);
+    setVerificado(false);
+  }
 
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-h-[calc(100vh-96px)] overflow-y-auto px-1">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="max-h-[calc(100vh-96px)] space-y-4 overflow-y-auto px-1"
+        >
           <FormField
             control={form.control}
             name="name"
@@ -162,15 +215,23 @@ export function ProfileForm({
                       {...field}
                       defaultValue={defaultValues.channelName}
                       onChange={(e) => handleChange(e)}
-											value={channel}
+                      value={channel}
                     />
                     <Button
                       variant={"default"}
-                      disabled={channel === defaultValues.channelName}
+                      disabled={
+                        channel === defaultValues.channelName || verificado
+                      }
                       type="button"
                       onClick={handleVerificar}
                     >
-                      Verificar
+                      {channel === defaultValues.channelName || verificado ? (
+                        <Check />
+                      ) : mutationAoVerificar.isPending ? (
+                        <RefreshCw className="animate-spin" />
+                      ) : (
+                        <RefreshCw />
+                      )}
                     </Button>
                   </div>
                 </FormControl>
