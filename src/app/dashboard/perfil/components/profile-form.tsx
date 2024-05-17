@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { type User } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -29,10 +30,19 @@ import { toast } from "sonner";
 import Image from "next/image";
 import { type getUser } from "~/server/actions/user";
 
-import { ChevronRight, Globe, Check, RefreshCw } from "lucide-react";
+import {
+  ChevronRight,
+  Globe,
+  Check,
+  RefreshCw,
+  Twitter,
+  Facebook,
+  Instagram,
+  Linkedin,
+  Youtube,
+  Twitch,
+} from "lucide-react";
 
-// ToDo: remove this shitty socialIcons
-import { socialIcons } from "./socialIcons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { verifyIfChannelIsAvailable } from "~/server/actions/user";
 import { updateUser2 } from "~/server/actions/user";
@@ -108,6 +118,30 @@ export function ProfileForm({
     mode: "onChange",
   });
 
+  const queryClient = useQueryClient();
+
+  const mutationOnVerify = useMutation({
+    mutationFn: verifyIfChannelIsAvailable,
+    onSuccess: async () => {
+      toast.success(`Canal @${channel} disponível`);
+      setVerificado(true);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  const mutationUpdateUser = useMutation({
+  	mutationFn: updateUser2,
+  	onSuccess: async () => {
+			toast.success(`Informações atualizadas`);
+			void queryClient.invalidateQueries({ queryKey: ["getUser"] });
+  	},
+  	onError: (error) => {
+  		toast.error(error.message);
+  	},
+  });
+
   function onSubmit() {
     const values = form.getValues();
     const {
@@ -121,7 +155,7 @@ export function ProfileForm({
       twitchUrl,
       tiktokUrl,
     } = values;
-    const data: Partial<ProfileFormValues> = {
+    const data: Partial<User> = {
       name,
       bio,
       xUrl,
@@ -135,37 +169,16 @@ export function ProfileForm({
     if (verificado) {
       data.channelName = `@${channel}`;
     }
-    toast.success(`${JSON.stringify(data)} atualizado`);
+    if (JSON.stringify(data) === "{}") {
+      toast.success(`Nenhum dado foi alterado`);
+      return;
+    }
+    mutationUpdateUser.mutate(data);
   }
-
-  const queryClient = useQueryClient();
-
-  const mutationAoVerificar = useMutation({
-    mutationFn: verifyIfChannelIsAvailable,
-    onSuccess: async () => {
-      toast.success(`Canal @${channel} disponível`);
-      setVerificado(true);
-    },
-
-    onError: (error) => {
-      toast.error(error.message);
-    },
-  });
-
-	// ToDo: need to test and implement this function
-	// const mutationUpdateUser = useMutation({
-	// 	mutationFn: updateUser2,
-	// 	onSuccess: async () => {
-
-	// 	},
-	// 	onError: (error) => {
-	// 		toast.error(error.message);
-	// 	},
-	// });
 
   function handleVerificar() {
     if (channel.length >= 2 && channel.length <= 30) {
-      mutationAoVerificar.mutate(`@${channel}`);
+      mutationOnVerify.mutate(`@${channel}`);
     } else {
       toast.error("O canal deve ter entre 2 e 30 caracteres");
     }
@@ -227,7 +240,7 @@ export function ProfileForm({
                     >
                       {channel === defaultValues.channelName || verificado ? (
                         <Check />
-                      ) : mutationAoVerificar.isPending ? (
+                      ) : mutationOnVerify.isPending ? (
                         <RefreshCw className="animate-spin" />
                       ) : (
                         <RefreshCw />
@@ -288,7 +301,7 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("x")}
+                    <Twitter color="#5AA4D7" />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -308,7 +321,7 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("facebook")}
+                    <Facebook color="#0866FF" />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -327,7 +340,7 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("instagram")}
+                    <Instagram color="#DD3E7C" />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -347,7 +360,7 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("linkedin")}
+                    <Linkedin color="#0A66C2" />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -366,7 +379,7 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("youtube")}
+                    <Youtube color="#FF0000" />
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -385,32 +398,13 @@ export function ProfileForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-center gap-4">
                   <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("twitch")}
+                    <Twitch color="#8D44F8" />
                   </FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       defaultValue={defaultValues.twitchUrl}
                       placeholder="https://twitch.com"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="tiktokUrl"
-              render={({ field }) => (
-                <FormItem className="flex items-center justify-center gap-4">
-                  <FormLabel className="mt-1 text-gray-500 dark:text-gray-400">
-                    {socialIcons("tiktok")}
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      defaultValue={defaultValues.tiktokUrl}
-                      placeholder="https://tiktok.com"
                     />
                   </FormControl>
                   <FormMessage />
@@ -538,44 +532,38 @@ function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
           <div className="flex flex-col gap-2">
             {x && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("x")}
+                <Twitter color="#5AA4D7" />
                 <p className="text-sm">{x}</p>
               </div>
             )}
             {facebook && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("facebook")}
+                <Facebook color="#0866FF" />
                 <p className="text-sm">{facebook}</p>
               </div>
             )}
             {instagram && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("instagram")}
+                <Instagram color="#DD3E7C" />
                 <p className="text-sm">{instagram}</p>
               </div>
             )}
             {linkedin && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("linkedin")}
+                <Linkedin color="#0A66C2" />
                 <p className="text-sm">{linkedin}</p>
               </div>
             )}
             {youtube && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("youtube")}
+                <Youtube color="#FF0000" />
                 <p className="text-sm">{youtube}</p>
               </div>
             )}
             {twitch && (
               <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("twitch")}
+                <Twitch color="#8D44F8" />
                 <p className="text-sm">{twitch}</p>
-              </div>
-            )}
-            {tiktok && (
-              <div className="flex items-center gap-x-2 dark:text-gray-300">
-                {socialIcons("tiktok")}
-                <p className="text-sm">{tiktok}</p>
               </div>
             )}
           </div>

@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createEvent, getEvents } from "../../server/actions/stream";
 import { getTeams } from "../../server/actions/team";
-import { getUser } from "../../server/actions/user";
+import { getUser, updateUser2 } from "../../server/actions/user";
 import { toast } from "sonner";
 
 export const useEventsData = () => {
@@ -52,5 +52,16 @@ export const useUserData = () => {
     queryFn: () => getUser(),
   });
 
-  return { query };
+  const mutation = useMutation({
+    mutationFn: updateUser2,
+    onSuccess: async () => {
+      await query.refetch();
+      toast.success("Usuário atualizado com sucesso!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  return { query, mutation };
 };
