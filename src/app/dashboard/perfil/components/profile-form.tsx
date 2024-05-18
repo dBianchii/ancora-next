@@ -43,11 +43,13 @@ import {
   Youtube,
   Twitch,
   Loader2,
+  Pencil,
 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { verifyIfChannelIsAvailable } from "~/server/actions/user";
 import { updateUser2 } from "~/server/actions/user";
+import { UploadDropzone } from "~/server/utils/uploadthing";
 
 const profileFormSchema = () =>
   z.object({
@@ -94,10 +96,11 @@ type ProfileFormValues = {
 };
 
 export function ProfileForm({
-  user, closeRef,
+  user,
+  closeRef,
 }: {
-  user: Awaited<ReturnType<typeof getUser>>,
-	closeRef?: React.RefObject<HTMLButtonElement>;
+  user: Awaited<ReturnType<typeof getUser>>;
+  closeRef?: React.RefObject<HTMLButtonElement>;
 }) {
   const defaultValues: ProfileFormValues = {
     name: user?.name ?? "",
@@ -137,9 +140,9 @@ export function ProfileForm({
   const mutationUpdateUser = useMutation({
     mutationFn: updateUser2,
     onSuccess: async () => {
-			void queryClient.invalidateQueries({ queryKey: ["getUser"] });
+      void queryClient.invalidateQueries({ queryKey: ["getUser"] });
       toast.success(`Informações atualizadas`);
-			closeRef?.current?.click();
+      closeRef?.current?.click();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -424,19 +427,23 @@ export function ProfileCard({
   const name = user?.name ?? "";
   const email = user?.email ?? "";
   const channelName = user?.channelName ?? "";
+  const image = user?.image ?? "/bg.png";
 
   return (
     <>
       <div className="flex flex-col items-center gap-2">
         <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-card p-4 text-card-foreground shadow">
-          <div>
+          <div className="relative">
             <Image
-              src={user?.image ?? "/bg.png"}
-              alt={name}
+              src={image}
+              alt={`Imagem do usuário ${name}`}
               className="mx-auto h-32 w-32 rounded-full object-cover"
               width={120}
               height={120}
             />
+            <div className="absolute bottom-0 right-0">
+              <PhotoDialog user={user} />
+            </div>
           </div>
           <div className="flex flex-col gap-1 text-center">
             <h2 className="font-semibold leading-none tracking-tight md:text-xl lg:text-2xl">
@@ -471,7 +478,7 @@ function AlterInfoDialog({
           <DialogTitle>Alterar informações</DialogTitle>
         </DialogHeader>
         <ProfileForm user={user} closeRef={closeRef} />
-        <div className="absolute left-6 bottom-6">
+        <div className="absolute bottom-6 left-6">
           <DialogClose ref={closeRef} asChild>
             <Button type="button" variant="secondary">
               Cancelar
@@ -570,6 +577,60 @@ function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size={"icon"} variant="outline">
+          <Pencil />
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Editar imagem</DialogTitle>
+        </DialogHeader>
+        <Photo user={user} />
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function Photo({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+  const name = user?.name ?? "";
+  const image = user?.image ?? "/bg.png";
+
+  return (
+    <div>
+      <Image
+        src={image}
+        alt={`Imagem do usuário ${name}`}
+        className="mx-auto h-32 w-32 rounded-full object-cover"
+        width={120}
+        height={120}
+      />
+      {/* <div className="rounded-xl border outline-dashed outline-muted">
+        <UploadDropzone
+          input={{ id: streamId }}
+          endpoint="thumbnailEdit"
+          appearance={{
+            label: {
+              color: "#FFFFFF",
+            },
+            allowedContent: {
+              color: "#FFFFFF",
+            },
+          }}
+          onClientUploadComplete={(res) => {
+            res[0]?.url && setThumbnailUrl(res?.[0]?.url);
+            router.refresh();
+            closeRef?.current?.click();
+          }}
+        />
+      </div> */}
     </div>
   );
 }
