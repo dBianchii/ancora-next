@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { type ElementRef, useRef, useState } from "react";
 import { type User } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -17,6 +17,7 @@ import {
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -41,6 +42,7 @@ import {
   Linkedin,
   Youtube,
   Twitch,
+  Loader2,
 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -92,9 +94,10 @@ type ProfileFormValues = {
 };
 
 export function ProfileForm({
-  user,
+  user, closeRef,
 }: {
-  user: Awaited<ReturnType<typeof getUser>>;
+  user: Awaited<ReturnType<typeof getUser>>,
+	closeRef?: React.RefObject<HTMLButtonElement>;
 }) {
   const defaultValues: ProfileFormValues = {
     name: user?.name ?? "",
@@ -132,14 +135,15 @@ export function ProfileForm({
   });
 
   const mutationUpdateUser = useMutation({
-  	mutationFn: updateUser2,
-  	onSuccess: async () => {
-			toast.success(`Informações atualizadas`);
+    mutationFn: updateUser2,
+    onSuccess: async () => {
 			void queryClient.invalidateQueries({ queryKey: ["getUser"] });
-  	},
-  	onError: (error) => {
-  		toast.error(error.message);
-  	},
+      toast.success(`Informações atualizadas`);
+			closeRef?.current?.click();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
   });
 
   function onSubmit() {
@@ -252,26 +256,6 @@ export function ProfileForm({
               </FormItem>
             )}
           />
-
-          {/* <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-gray-500 dark:text-gray-400">
-                  Email
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    defaultValue={defaultValues.email}
-                    disabled
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> */}
           <FormField
             control={form.control}
             name="bio"
@@ -412,10 +396,20 @@ export function ProfileForm({
               )}
             />
           </div>
-
-          <Button type="submit" className="mt-2">
-            Salvar alterações
-          </Button>
+          {mutationUpdateUser.isPending ? (
+            <div className="flex justify-end">
+              <Button type="submit" className="mt-2" disabled>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Salvando...
+              </Button>
+            </div>
+          ) : (
+            <div className="flex justify-end">
+              <Button type="submit" className="mt-2">
+                Salvar alterações
+              </Button>
+            </div>
+          )}
         </form>
       </Form>
     </>
@@ -430,7 +424,6 @@ export function ProfileCard({
   const name = user?.name ?? "";
   const email = user?.email ?? "";
   const channelName = user?.channelName ?? "";
-  const bio = user?.bio ?? "aaa";
 
   return (
     <>
@@ -467,6 +460,7 @@ function AlterInfoDialog({
 }: {
   user: Awaited<ReturnType<typeof getUser>>;
 }) {
+  const closeRef = useRef<ElementRef<"button">>(null);
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -476,7 +470,14 @@ function AlterInfoDialog({
         <DialogHeader>
           <DialogTitle>Alterar informações</DialogTitle>
         </DialogHeader>
-        <ProfileForm user={user} />
+        <ProfileForm user={user} closeRef={closeRef} />
+        <div className="absolute left-6 bottom-6">
+          <DialogClose ref={closeRef} asChild>
+            <Button type="button" variant="secondary">
+              Cancelar
+            </Button>
+          </DialogClose>
+        </div>
       </DialogContent>
     </Dialog>
   );
