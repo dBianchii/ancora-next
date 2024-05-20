@@ -35,6 +35,28 @@ export const ourFileRouter = {
 
       return { fileUrl: file.url };
     }),
+  userImageEdit: f({
+    image: {
+      maxFileSize: "4MB",
+      maxFileCount: 1,
+    },
+  })
+    .input(z.object({ id: z.string() }))
+    .middleware(async ({ input }) => {
+      return { input };
+    })	
+    .onUploadComplete(async ({ metadata, file }) => {
+      await db.user.update({
+        where: {
+          id: metadata.input.id,
+        },
+        data: {
+          image: file.url,
+        },
+      });
+
+      return { fileUrl: file.url };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

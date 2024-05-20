@@ -1,5 +1,5 @@
 "use client";
-import { type ElementRef, useRef, useState } from "react";
+import { type ElementRef, useRef, useState, useTransition } from "react";
 import { type User } from "@prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,7 +29,7 @@ import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
 import { toast } from "sonner";
 import Image from "next/image";
-import { type getUser } from "~/server/actions/user";
+import { updateUserPhoto, type getUser } from "~/server/actions/user";
 
 import {
   ChevronRight,
@@ -44,12 +44,15 @@ import {
   Twitch,
   Loader2,
   Pencil,
+  Trash,
 } from "lucide-react";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { verifyIfChannelIsAvailable } from "~/server/actions/user";
 import { updateUser2 } from "~/server/actions/user";
 import { UploadDropzone } from "~/server/utils/uploadthing";
+import { useRouter } from "next/navigation";
+import { Hint } from "~/components/hint";
 
 const profileFormSchema = () =>
   z.object({
@@ -581,7 +584,94 @@ function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
   );
 }
 
+// function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+//   const name = user?.name ?? "";
+// 	const image = user?.image ?? "/bg.png";
+// 	const [isUploading, setIsUploading] = useState(false);
+
+//   return (
+//     <Dialog>
+//       <DialogTrigger asChild>
+//         <Button size={"icon"} variant="outline">
+//           <Pencil />
+//         </Button>
+//       </DialogTrigger>
+//       <DialogContent>
+//         <DialogHeader>
+//           <DialogTitle>Editar imagem</DialogTitle>
+//         </DialogHeader>
+//         <div className="relative">
+//         <Image
+//           src={image}
+//           alt={`Imagem do usuário ${name}`}
+//           className="mx-auto mb-6 h-32 w-32 rounded-full object-cover"
+//           width={120}
+//           height={120}
+//         />
+//         {!isUploading && (
+//           <div className="border border-dotted rounded-md ">
+//             <UploadDropzone
+//               input={{ id: user!.id }}
+//               endpoint="userImageEdit"
+//               appearance={{
+//                 label: {
+//                   color: "#FFFFFF",
+//                 },
+//                 allowedContent: {
+//                   color: "#FFFFFF",
+//                 },
+//               }}
+//               onClientUploadComplete={(res) => {
+// 								res[0]?.url && userImageEdit(res?.[0]?.url);
+// 								router.refresh();
+// 								closeRef?.current?.click();
+// 							}}
+//             />
+//           </div>
+//         )}
+//       </div>
+//       </DialogContent>
+//     </Dialog>
+//   );
+// }
+
 function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
+  const id = user?.id ?? "";
+  const image = user?.image ?? "/bg.png";
+
+	console.log(user!.image);
+
+  const closeRef = useRef<ElementRef<"button">>(null);
+  const [isPending, startTransition] = useTransition();
+
+  const [imageUrl, setImageUrl] = useState(image);
+
+  const onRemove = () => {
+    startTransition(() => {
+      updateUserPhoto(imageUrl)
+        .then(() => {
+          toast.success("Imagem removida. Selecione uma nova imagem.");
+          setImageUrl("");
+        })
+        .catch(() => toast.error("Ops! Ocorreu um erro."));
+    });
+  };
+
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    startTransition(() => {
+      updateUserPhoto(imageUrl)
+        .then(() => {
+          toast.success("Imagem atualizada");
+          closeRef?.current?.click();
+        })
+        .catch(() => toast.error("Ops! Ocorreu um erro."));
+    });
+  };
+
+  const router = useRouter();
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -591,46 +681,65 @@ function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar imagem</DialogTitle>
+          <DialogTitle>Editar informações do evento</DialogTitle>
         </DialogHeader>
-        <Photo user={user} />
+        <form onSubmit={onSubmit} className="space-y-14">
+          <div className="space-y-2">
+            {imageUrl ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10">
+                <div className="absolute right-2 top-2 z-[10]">
+                  <Hint label="Remove image" asChild side="left">
+                    <Button
+                      type="button"
+                      disabled={isPending}
+                      onClick={onRemove}
+                      className="h-auto w-auto p-1.5"
+                    >
+                      <Trash className="h-4 w-4" />
+                    </Button>
+                  </Hint>
+                </div>
+                <Image
+                  alt="Thumbnail"
+                  src={imageUrl}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="rounded-xl border outline-dashed outline-muted">
+                <UploadDropzone
+                  input={{ id: id }}
+                  endpoint="userImageEdit"
+                  appearance={{
+                    label: {
+                      color: "#FFFFFF",
+                    },
+                    allowedContent: {
+                      color: "#FFFFFF",
+                    },
+                  }}
+                  onClientUploadComplete={(res) => {
+                    res[0]?.url && setImageUrl(res?.[0]?.url);
+                    router.refresh();
+                    closeRef?.current?.click();
+                  }}
+                />
+              </div>
+            )}
+          </div>
+          <div className="flex justify-between">
+            <DialogClose ref={closeRef} asChild>
+              <Button type="button" variant="ghost">
+                Cancelar
+              </Button>
+            </DialogClose>
+            <Button disabled={isPending} type="submit">
+              Salvar
+            </Button>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function Photo({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
-  const name = user?.name ?? "";
-  const image = user?.image ?? "/bg.png";
-
-  return (
-    <div>
-      <Image
-        src={image}
-        alt={`Imagem do usuário ${name}`}
-        className="mx-auto h-32 w-32 rounded-full object-cover"
-        width={120}
-        height={120}
-      />
-      {/* <div className="rounded-xl border outline-dashed outline-muted">
-        <UploadDropzone
-          input={{ id: streamId }}
-          endpoint="thumbnailEdit"
-          appearance={{
-            label: {
-              color: "#FFFFFF",
-            },
-            allowedContent: {
-              color: "#FFFFFF",
-            },
-          }}
-          onClientUploadComplete={(res) => {
-            res[0]?.url && setThumbnailUrl(res?.[0]?.url);
-            router.refresh();
-            closeRef?.current?.click();
-          }}
-        />
-      </div> */}
-    </div>
   );
 }

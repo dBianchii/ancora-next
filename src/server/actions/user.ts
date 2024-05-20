@@ -53,23 +53,10 @@ export const verifyIfChannelIsAvailable = async (channelName: string) => {
   }
 };
 
-// ToDo: need to test and implement this function
 export const updateUser2 = async (values: Partial<User>) => {
   const session = await enforceLoggedIn();
 
-  try {
-    // const validData: Partial<User> = {};
-		// if (values.name) validData.name = values.name;
-		// if (values.channelName) validData.channelName = values.channelName;
-		// if (values.bio) validData.bio = values.bio;
-		// if (values.xUrl) validData.xUrl = values.xUrl;
-		// if (values.facebookUrl) validData.facebookUrl = values.facebookUrl;
-		// if (values.instagramUrl) validData.instagramUrl = values.instagramUrl;
-		// if (values.linkedinUrl) validData.linkedinUrl = values.linkedinUrl;
-		// if (values.youtubeUrl) validData.youtubeUrl = values.youtubeUrl;
-		// if (values.twitchUrl) validData.twitchUrl = values.twitchUrl;
-		// if (values.tiktokUrl) validData.tiktokUrl = values.tiktokUrl;
-		
+  try {		
 		const validData: Partial<User> = {
       name: values.name,
       channelName: values.channelName,
@@ -92,4 +79,13 @@ export const updateUser2 = async (values: Partial<User>) => {
   } catch (error) {
 		throw error;
 	}
+};
+
+export const updateUserPhoto = async (url: string) => {
+	const session = await enforceLoggedIn();
+	const user = await db.user.update({
+		where: { id: session.user.id },
+		data: { image: url },
+	});
+	return user;
 };
