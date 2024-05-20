@@ -439,7 +439,7 @@ export function ProfileCard({
           <div className="relative">
             <Image
               src={image}
-              alt={`Imagem do usuário ${name}`}
+              alt={name}
               className="mx-auto h-32 w-32 rounded-full object-cover"
               width={120}
               height={120}
@@ -584,90 +584,34 @@ function About({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
   );
 }
 
-// function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
-//   const name = user?.name ?? "";
-// 	const image = user?.image ?? "/bg.png";
-// 	const [isUploading, setIsUploading] = useState(false);
-
-//   return (
-//     <Dialog>
-//       <DialogTrigger asChild>
-//         <Button size={"icon"} variant="outline">
-//           <Pencil />
-//         </Button>
-//       </DialogTrigger>
-//       <DialogContent>
-//         <DialogHeader>
-//           <DialogTitle>Editar imagem</DialogTitle>
-//         </DialogHeader>
-//         <div className="relative">
-//         <Image
-//           src={image}
-//           alt={`Imagem do usuário ${name}`}
-//           className="mx-auto mb-6 h-32 w-32 rounded-full object-cover"
-//           width={120}
-//           height={120}
-//         />
-//         {!isUploading && (
-//           <div className="border border-dotted rounded-md ">
-//             <UploadDropzone
-//               input={{ id: user!.id }}
-//               endpoint="userImageEdit"
-//               appearance={{
-//                 label: {
-//                   color: "#FFFFFF",
-//                 },
-//                 allowedContent: {
-//                   color: "#FFFFFF",
-//                 },
-//               }}
-//               onClientUploadComplete={(res) => {
-// 								res[0]?.url && userImageEdit(res?.[0]?.url);
-// 								router.refresh();
-// 								closeRef?.current?.click();
-// 							}}
-//             />
-//           </div>
-//         )}
-//       </div>
-//       </DialogContent>
-//     </Dialog>
-//   );
-// }
-
 function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
   const id = user?.id ?? "";
   const image = user?.image ?? "/bg.png";
 
-	console.log(user!.image);
-
+  const queryClient = useQueryClient();
   const closeRef = useRef<ElementRef<"button">>(null);
-  const [isPending, startTransition] = useTransition();
-
   const [imageUrl, setImageUrl] = useState(image);
 
-  const onRemove = () => {
-    startTransition(() => {
-      updateUserPhoto(imageUrl)
-        .then(() => {
-          toast.success("Imagem removida. Selecione uma nova imagem.");
-          setImageUrl("");
-        })
-        .catch(() => toast.error("Ops! Ocorreu um erro."));
-    });
-  };
+  const mutationOnSubmit = useMutation({
+    mutationFn: updateUserPhoto,
+    onSuccess: async () => {
+			void queryClient.invalidateQueries({ queryKey: ["getUser"] });
+      toast.success("Imagem atualizada");
+      closeRef?.current?.click();
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+	const onRemove = () => {
+		setImageUrl("");
+		toast.success("Selecione uma nova imagem.");
+	};
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    startTransition(() => {
-      updateUserPhoto(imageUrl)
-        .then(() => {
-          toast.success("Imagem atualizada");
-          closeRef?.current?.click();
-        })
-        .catch(() => toast.error("Ops! Ocorreu um erro."));
-    });
+    mutationOnSubmit.mutate(imageUrl);
   };
 
   const router = useRouter();
@@ -688,19 +632,20 @@ function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
             {imageUrl ? (
               <div className="relative aspect-video overflow-hidden rounded-xl border border-white/10">
                 <div className="absolute right-2 top-2 z-[10]">
-                  <Hint label="Remove image" asChild side="left">
-                    <Button
-                      type="button"
-                      disabled={isPending}
-                      onClick={onRemove}
-                      className="h-auto w-auto p-1.5"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
+                  <Hint label="Remover imagem" asChild side="left">
+                   
+                      <Button
+                        type="button"
+                        onClick={onRemove}
+                        className="h-auto w-auto p-1.5"
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                  
                   </Hint>
                 </div>
                 <Image
-                  alt="Thumbnail"
+                  alt="Imagem do usuário"
                   src={imageUrl}
                   fill
                   className="object-cover"
@@ -734,9 +679,13 @@ function PhotoDialog({ user }: { user: Awaited<ReturnType<typeof getUser>> }) {
                 Cancelar
               </Button>
             </DialogClose>
-            <Button disabled={isPending} type="submit">
-              Salvar
-            </Button>
+            {mutationOnSubmit.isPending ? (
+              <Loader2 className="h-5 w-5 animate-spin" />
+            ) : (
+              <Button disabled type="submit">
+                Salvar
+              </Button>
+            )}
           </div>
         </form>
       </DialogContent>
