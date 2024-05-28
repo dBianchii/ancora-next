@@ -4,7 +4,7 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import { AdapterUser } from "next-auth/adapters";
+import { type AdapterUser } from "next-auth/adapters";
 
 import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
@@ -52,8 +52,20 @@ export const authOptions: NextAuthOptions = {
   adapter: {
     ...PrismaAdapter(db),
     createUser: async (data) => {
-      const channelName = `@${data.email?.split("@")[0]}`; 
-			// ToDo: verificar se channelName ja existe
+      let channelName = `@${data.email?.split("@")[0]}`;
+      const channelNameExists = !!(await db.user.findFirst({
+        where: {
+          channelName,
+        },
+        select: {
+          id: true,
+        },
+      }));
+
+      if (channelNameExists)
+        channelName = `${channelName}-${Math.random()
+          .toString(36)
+          .substring(7)}`;
 
       return db.user.create({
         data: {

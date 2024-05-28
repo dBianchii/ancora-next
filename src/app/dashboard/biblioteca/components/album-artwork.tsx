@@ -1,17 +1,15 @@
 import Image from "next/image";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
 
-import { cn } from "../../../../components/ui/lib/utils";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuSub,
-  ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "../../../../components/ui/context-menu";
+import { cn } from "../../../../components/ui/lib/utils";
 
 import { type Album } from "../data/albums";
 
