@@ -51,15 +51,15 @@ export function SidebarNav() {
     //     </div>
     //   ),
     // },
-    {
-      href: `${prefix}/destinos`,
-      title: (
-        <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
-          <RadioTowerIcon className="flex size-4 text-primary/70" />
-          <span className="hidden sm:block">Destinos</span>
-        </div>
-      ),
-    },
+    // {
+    //   href: `${prefix}/destinos`,
+    //   title: (
+    //     <div className="m-auto sm:m-0 sm:flex sm:items-center sm:gap-4 sm:align-middle">
+    //       <RadioTowerIcon className="flex size-4 text-primary/70" />
+    //       <span className="hidden sm:block">Destinos</span>
+    //     </div>
+    //   ),
+    // },
     {
       href: `${prefix}/equipes`,
       title: (
