@@ -26,6 +26,26 @@ export const getEvents = async () => {
   return events;
 };
 
+export const getEventsByChannelName = async (channelName: string) => {
+	const events = await db.stream.findMany({
+		where: {
+			User: {
+				channelName
+			}
+		},
+		include: {
+			User: {
+				select: {
+					name: true,
+					image: true,
+				},
+			},
+		},
+	})
+
+	return events;
+}
+
 export const createEvent = async (input: {
   title: string;
   datetime: Date;
