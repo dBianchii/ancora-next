@@ -1,6 +1,7 @@
 import { getUserByChannelName } from "~/server/actions/user";
 import { getEventsByChannelName } from "~/server/actions/stream";
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   Dialog,
@@ -23,24 +24,50 @@ import {
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
-
+import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 
 export default async function ChannelPage({
   params: { channelName },
 }: {
   params: { channelName: string };
 }) {
-  
-	const channel = channelName.replace("%40", "@");
-	const events = await getEventsByChannelName(channel);
+  const channel = channelName.replace("%40", "@");
+  const events = await getEventsByChannelName(channel);
   const user = await getUserByChannelName(channel);
 
-  return (
-		<ProfileCard user={user}/>
-	);
+  if (!user) return <NotFound channelName={channelName} />;
+
+  return <ProfileCard user={user} />;
 }
 
-
+function NotFound({ channelName }: { channelName: string }) {
+  const channel = channelName.replace("%40", "@");
+  return (
+    <div className="container relative m-auto mt-20 grid flex-col items-center justify-items-center">
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle className="font-extrabold md:text-xl lg:text-2xl">
+            Usuário não encontrado
+          </CardTitle>
+          <CardDescription>
+            {`Não foi possível encontrar ${channel ?? channelName}`}
+          </CardDescription>
+        </CardHeader>
+        <CardFooter>
+          <Button variant="link" className="m-0 p-0">
+            <Link href="/">Retornar para a página inicial</Link>
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}
 
 export function ProfileCard({
   user,
@@ -81,9 +108,11 @@ export function ProfileCard({
   );
 }
 
-
-
-function AboutDialog({ user }: { user: Awaited<ReturnType<typeof getUserByChannelName>> }) {
+function AboutDialog({
+  user,
+}: {
+  user: Awaited<ReturnType<typeof getUserByChannelName>>;
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -102,7 +131,11 @@ function AboutDialog({ user }: { user: Awaited<ReturnType<typeof getUserByChanne
   );
 }
 
-function About({ user }: { user: Awaited<ReturnType<typeof getUserByChannelName>> }) {
+function About({
+  user,
+}: {
+  user: Awaited<ReturnType<typeof getUserByChannelName>>;
+}) {
   const bio = user?.bio ?? "";
   const x = user?.xUrl ?? "";
   const facebook = user?.facebookUrl ?? "";
@@ -173,4 +206,3 @@ function About({ user }: { user: Awaited<ReturnType<typeof getUserByChannelName>
     </div>
   );
 }
-
