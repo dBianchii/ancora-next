@@ -8,7 +8,7 @@ export default function DestinosPage() {
         <h2 className="">Destinos</h2>
       </div>
       <div className="space-y-4">
-				<PlaceholderBanner text="Feature em desenvolvimento"/>
+				<PlaceholderBanner>Feature em desenvolvimento</PlaceholderBanner>
       </div>
     </div>
   );

@@ -34,6 +34,7 @@ import {
 import { CopyButton } from "../dashboard/chaves/_components/copy-button";
 import { PlaceholderBanner } from "./placeholder-banner";
 import { UpdateEventModal } from "./update-event-modal";
+import Link from "next/link";
 
 const TEN_MINUTES = 10 * 60 * 1000;
 const SIXTY_MINUTES = 60 * 60 * 1000;
@@ -76,9 +77,9 @@ export function EventsSection() {
               {query.data?.filter((event) => verifyEventTime(event)).length ===
               0 ? (
                 <div className="mt-4">
-                  <PlaceholderBanner
-                    text={"Não há eventos próximos criados por você"}
-                  />
+                  <PlaceholderBanner>
+                    Não há eventos próximos criados por você
+                  </PlaceholderBanner>
                 </div>
               ) : (
                 <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -93,9 +94,9 @@ export function EventsSection() {
             {query.data?.filter((event) => !verifyEventTime(event)).length ===
             0 ? (
               <div className="mt-4">
-                <PlaceholderBanner
-                  text={"Não há eventos antigos criados por você"}
-                />
+                <PlaceholderBanner>
+                  Não há eventos antigos criados por você
+                </PlaceholderBanner>
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
@@ -123,15 +124,15 @@ export function EventsSection() {
             <div className="space-y-2">
               {query.isError && <p>Erro ao carregar eventos</p>}
 
-              <PlaceholderBanner
-                text={"Você não possui eventos próximos inscritos"}
-              />
+              <PlaceholderBanner>
+                Você não possui eventos próximos inscritos
+              </PlaceholderBanner>
             </div>
           </TabsContent>
           <TabsContent value="antigos">
-            <PlaceholderBanner
-              text={"Você ainda não participou de nenhum evento"}
-            />
+            <PlaceholderBanner>
+              Você ainda não participou de nenhum evento
+            </PlaceholderBanner>
           </TabsContent>
         </Tabs>
       </section>
@@ -169,7 +170,7 @@ function verifyIfUserMayAccessLive(
   return true;
 }
 
-function EventCard({
+export function EventCard({
   event,
 }: {
   event: Awaited<ReturnType<typeof getEvents>>[number];
@@ -195,15 +196,20 @@ function EventCard({
               {dayjs(event.datetime).format("DD/MM/YYYY HH:mm")}
             </span>
           </p>
-          <div className="flex flex-row items-center">
-            <CopyButton
-              className="w-10"
-              value={`${getBaseUrl()}/participar-de-evento/${event.id}`}
-            />
-            <span className="text-sm font-semibold text-muted-foreground">
-              Link de inscrição
-            </span>
-          </div>
+
+					{/* CopyButton aparece apenas quando ainda é possível acessar a live */}
+          { verifyEventTime(event) && (
+            <div className="flex flex-row items-center">
+              <CopyButton
+                className="w-10"
+                value={`${getBaseUrl()}/participar-de-evento/${event.id}`}
+              />
+              <span className="text-sm font-semibold text-muted-foreground">
+                <Link target="_blank" href={`${getBaseUrl()}/participar-de-evento/${event.id}`}>Link de inscrição</Link>
+              </span>
+            </div>
+          )}
+
         </div>
         <div className="flex flex-col justify-between gap-2 p-1">
           {verifyEventTime(event) && <ConfigEvent event={event} />}

@@ -2,6 +2,8 @@ import { getUserByChannelName } from "~/server/actions/user";
 import { getEventsByChannelName } from "~/server/actions/stream";
 import Image from "next/image";
 import Link from "next/link";
+import { EventCard } from "~/app/_components/events-section";
+import { verifyEventTime } from "~/app/_components/verify-event-time";
 
 import {
   Dialog,
@@ -32,18 +34,29 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 
+
 export default async function ChannelPage({
   params: { channelName },
 }: {
   params: { channelName: string };
 }) {
   const channel = channelName.replace("%40", "@");
-  const events = await getEventsByChannelName(channel);
   const user = await getUserByChannelName(channel);
+  const allEvents = await getEventsByChannelName(channel);
+
+  // filtra eventos próximos e públicos
+  const events = allEvents
+    ?.filter((event) => verifyEventTime(event))
+    .filter((event) => event.invitedPrivateUsers.length === 0);
 
   if (!user) return <NotFound channelName={channelName} />;
 
-  return <ProfileCard user={user} />;
+  return (
+    <>
+      <ProfileCard user={user} />
+      <EventsSection events={events} />
+    </>
+  );
 }
 
 function NotFound({ channelName }: { channelName: string }) {
@@ -81,7 +94,7 @@ export function ProfileCard({
 
   return (
     <>
-      <div className="flex flex-col items-center gap-2">
+      <div className="mt-4 flex flex-col items-center gap-2">
         <div className="flex w-full flex-col items-center gap-4 rounded-xl border bg-card p-4 text-card-foreground shadow">
           <div className="relative">
             <Image
@@ -203,6 +216,19 @@ function About({
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function EventsSection({
+  events,
+}: {
+  events: Awaited<ReturnType<typeof getEventsByChannelName>>;
+}) {
+  return (
+    <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+      {events?.length > 0 &&
+        events.map((event) => <EventCard key={event.id} event={event} />)}
     </div>
   );
 }
