@@ -13,7 +13,7 @@ import {
 import * as React from "react";
 import { getBaseUrl } from "~/utils/getBaseUr";
 
-interface KoalaWelcomeEmailProps {
+interface AncWelcomeEmailProps {
   userFirstname: string;
   event: {
     id: string;
@@ -28,38 +28,30 @@ const baseUrl = process.env.VERCEL_URL
 export const ParticiparDeEventoEmail = ({
   userFirstname,
   event,
-}: KoalaWelcomeEmailProps) => (
+}: AncWelcomeEmailProps) => (
   <Html>
     <Head />
     <Preview>Obrigado por se inscrever no evento!</Preview>
     <Body style={main}>
       <Container style={container}>
         <Img
-          src={`${baseUrl}/static/koala-logo.png`}
+          src={`${baseUrl}/favicon.png`}
           width="170"
           height="50"
-          alt="Koala"
+          alt="Anc"
           style={logo}
         />
         <Text style={paragraph}>Olá {userFirstname},</Text>
         <Text style={paragraph}>
-          Obrigado por se inscrever no evento! Você pode acessar o evento{" "}
-          <a href={`${getBaseUrl()}/event/${event.id}`}>aqui</a>.
+          Obrigado por se inscrever no evento! Você pode acessar o evento aqui:
         </Text>
         <Section style={btnContainer}>
-          <Button style={button} href="https://getkoala.com">
+          <Button style={button} href={`${getBaseUrl()}/event/${event.id}`}>
             Get started
           </Button>
         </Section>
-        <Text style={paragraph}>
-          Best,
-          <br />
-          The Koala team
-        </Text>
+        <Text style={paragraph}>Time Ancora</Text>
         <Hr style={hr} />
-        <Text style={footer}>
-          470 Noor Ave STE B #1148, South San Francisco, CA 94080
-        </Text>
       </Container>
     </Body>
   </Html>
@@ -67,7 +59,7 @@ export const ParticiparDeEventoEmail = ({
 
 ParticiparDeEventoEmail.PreviewProps = {
   userFirstname: "Alan",
-} as KoalaWelcomeEmailProps;
+} as AncWelcomeEmailProps;
 
 export default ParticiparDeEventoEmail;
 

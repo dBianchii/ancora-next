@@ -1,13 +1,12 @@
-import { getUserByChannelName } from "~/server/actions/user";
-import { getEventsByChannelName } from "~/server/actions/stream";
 import Image from "next/image";
 import Link from "next/link";
 import { EventCard } from "~/app/_components/events-section";
 import { verifyEventTime } from "~/app/_components/verify-event-time";
+import { getEventsByChannelName } from "~/server/actions/stream";
+import { getUserByChannelName } from "~/server/actions/user";
 
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -16,13 +15,13 @@ import {
 
 import {
   ChevronRight,
-  Globe,
-  Twitter,
   Facebook,
+  Globe,
   Instagram,
   Linkedin,
-  Youtube,
   Twitch,
+  Twitter,
+  Youtube,
 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 
@@ -33,7 +32,6 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-
 
 export default async function ChannelPage({
   params: { channelName },
@@ -82,7 +80,7 @@ function NotFound({ channelName }: { channelName: string }) {
   );
 }
 
-export function ProfileCard({
+function ProfileCard({
   user,
 }: {
   user: Awaited<ReturnType<typeof getUserByChannelName>>;
