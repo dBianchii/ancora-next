@@ -8,8 +8,6 @@
 - extensão eslint para VSCode
 ```
 
-Para começar, copie as variáveis de ambiente do arquivo `.env.example` para um novo arquivo `.env` e preencha com as informações necessárias.
-
 ### Instalação:
 
 ```
@@ -20,5 +18,5 @@ pnpm prisma generate
 ### Rodando o projeto:
 
 ```
-pnpm dev
+pnpm run dev
 ```

@@ -71,9 +71,9 @@ export function DashboardSection() {
                 <Users className="dark:text-primary" size={"20px"} />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">3090</div>
+                <div className="text-2xl font-bold">0</div>
                 <p className="text-xs text-muted-foreground">
-                  +11.1% em relação ao mês passado
+                  +0% em relação ao mês passado
                 </p>
               </CardContent>
             </Card>
